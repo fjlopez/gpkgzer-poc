@@ -17,9 +17,6 @@ import reducer.State
 import reducer.UpdateTheme
 import reducer.store
 
-class SideRightProps : RProps {
-    lateinit var theme: Theme
-}
 
 class SideRight : RComponent<SideRightProps, RState>() {
     override fun RBuilder.render() {
@@ -31,6 +28,11 @@ class SideRight : RComponent<SideRightProps, RState>() {
         }
     }
 }
+
+interface SideRightProps : RProps {
+    var theme: Theme
+}
+
 
 private fun RDOMBuilder<DIV>.themeSwitcher(props: SideRightProps) {
     div("switch") {

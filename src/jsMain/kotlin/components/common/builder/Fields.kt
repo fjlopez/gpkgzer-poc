@@ -2,6 +2,7 @@ package components.common.builder
 
 import components.common.form.checkBoxGroup
 import components.common.form.radioGroup
+import kotlinext.js.jsObject
 import kotlinx.html.DIV
 import model.ContentTarget
 import model.Module
@@ -13,7 +14,7 @@ import react.dom.div
 import react.redux.rConnect
 import reducer.*
 
-class Fields : RComponent<FieldsProps, RState>() {
+private class Fields : RComponent<FieldsProps, RState>() {
     override fun RBuilder.render() {
         div("colset colset-main") {
             div("left") {
@@ -77,17 +78,27 @@ class Fields : RComponent<FieldsProps, RState>() {
             }
         }
     }
+
+    companion object {
+        @Suppress("unused")
+        val defaultProps = jsObject<FieldsProps> {
+            availableSpecs = emptyList()
+            availableTargets = emptyList()
+            availableContents = emptyList()
+            availableOptions = emptyList()
+        }
+    }
 }
 
-class FieldsProps : RProps {
-    var selectedSpec: Spec? = null
-    var availableSpecs: List<Spec> = emptyList()
-    var selectedTarget: OutputTarget? = null
-    var availableTargets: List<OutputTarget> = emptyList()
-    var selectedContent: ContentTarget? = null
-    var availableContents: List<ContentTarget> = emptyList()
-    var selectedOptions: List<Module> = emptyList()
-    var availableOptions: List<Module> = emptyList()
+interface FieldsProps : RProps {
+    var selectedSpec: Spec?
+    var availableSpecs: List<Spec>
+    var selectedTarget: OutputTarget?
+    var availableTargets: List<OutputTarget>
+    var selectedContent: ContentTarget?
+    var availableContents: List<ContentTarget>
+    var selectedOptions: List<Module>
+    var availableOptions: List<Module>
 }
 
 val fields: RClass<FieldsProps> = rConnect<State, RProps, FieldsProps>({ state, _ ->

@@ -1,5 +1,6 @@
 package components.common.form
 
+import kotlinext.js.jsObject
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.events.Event
 import react.RProps
@@ -11,11 +12,12 @@ enum class TickType {
     RADIO, CHECKBOX
 }
 
-internal fun <T: Any> tickInput(type: TickType) = functionalComponent<TickInputProps<T>> { props ->
-    val className = when(type) {
+internal fun <T : Any> tickInput(type: TickType) = functionalComponent<TickInputProps<T>> { props ->
+    val className = when (type) {
         TickType.RADIO -> "radio"
         TickType.CHECKBOX -> "checkbox"
     }
+
     fun onClick(value: T) = { event: Event ->
         event.preventDefault()
         props.handler(value)
@@ -34,16 +36,17 @@ internal fun <T: Any> tickInput(type: TickType) = functionalComponent<TickInputP
     }
 }.also {
     val component = it.asDynamic()
-    component.displayName = when(type) {
+    component.displayName = when (type) {
         TickType.RADIO -> "Radio"
         TickType.CHECKBOX -> "CheckBox"
     }
-    component.defaultProps = js("{}")
-    component.defaultProps.checked = false
-    component.defaultProps.text = ""
-    component.defaultProps.handler = {}
-    component.defaultProps.disabled = false
-    component.defaultProps.error = false
+    component.defaultProps = jsObject<TickInputProps<T>> {
+        checked = false
+        text = ""
+        handler = {}
+        disabled = false
+        error = false
+    }
 }
 
 interface TickInputProps<T : Any> : RProps {

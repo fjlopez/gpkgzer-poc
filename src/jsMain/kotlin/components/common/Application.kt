@@ -15,8 +15,8 @@ import react.dom.hr
 import react.redux.rConnect
 import reducer.State
 
-class ApplicationProps : RProps {
-    lateinit var theme: Theme
+interface ApplicationProps : RProps {
+    var theme: Theme
 }
 
 class Application : RComponent<ApplicationProps, RState>() {

@@ -6,14 +6,19 @@ import react.child
 import react.dom.img
 import react.functionalComponent
 
-private val logoComponent = { className: String? ->
-    functionalComponent<RProps> {
-        img(src = "./images/geopkg.png", classes = className) {
-            attrs.height = "60px" // TODO to remove
+private val logoComponent = functionalComponent<LogoComponentProps> { props ->
+    img(src = "./images/geopkg.png", classes = props.className) {
+        attrs {
+            height = "60px" // TODO to remove
         }
     }
 }
 
-fun RBuilder.logo(className: String? = null) = child(logoComponent(className)) {
+interface LogoComponentProps : RProps {
+    var className: String?
+}
+
+fun RBuilder.logo(className: String? = null) = child(logoComponent) {
+    attrs.className = className
 }
 

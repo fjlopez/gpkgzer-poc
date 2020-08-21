@@ -1,5 +1,6 @@
 package components.common.form
 
+import kotlinext.js.jsObject
 import react.RBuilder
 import react.RProps
 import react.child
@@ -7,47 +8,52 @@ import react.dom.div
 import react.functionalComponent
 
 
-private fun <T: Any> radioComponent() = functionalComponent<RadioProps<T>> { props ->
+private fun <T : Any> radioComponent() = functionalComponent<RadioProps<T>> { props ->
 
     div("group-radio") {
-        props.options.forEach { option ->
+        props.options.forEach {
             child(tickInput<T>(TickType.RADIO)) {
-                key = option.toString()
-                attrs.checked = props.error == null && option == props.selected
-                attrs.text = props.asText.invoke(option)
-                attrs.value = option
-                attrs.disabled = props.disabled
-                attrs.handler = props.onChange
+                key = it.toString()
+                attrs {
+                    checked = props.error == null && it == props.selected
+                    text = props.asText.invoke(it)
+                    value = it
+                    disabled = props.disabled
+                    handler = props.onChange
+                }
             }
         }
-        props.error?.let { error ->
+        props.error?.let {
             child(tickInput<T>(TickType.RADIO)) {
                 key = (props.options.size + 1).toString()
-                attrs.checked = true
-                attrs.text = error
-                attrs.disabled = props.disabled
-                attrs.error = true
+                attrs {
+                    checked = true
+                    text = it
+                    disabled = props.disabled
+                    error = true
+                }
             }
         }
     }
 }.also {
     val component = it.asDynamic()
     component.displayName = "RadioGroup"
-    component.defaultProps = js("{}")
-    component.defaultProps.name = ""
-    component.defaultProps.options = emptyList<T>()
-    component.defaultProps.onChange = {}
-    component.defaultProps.disabled = false
-    component.defaultProps.asText = { "replace me" }
+    component.defaultProps = jsObject<RadioProps<T>> {
+        name = ""
+        options = emptyList()
+        onChange = {}
+        disabled = false
+        asText = { "replace me" }
+    }
 }
 
-fun <T: Any> RBuilder.radioGroup(handler: RadioProps<T>.() -> Unit) = child(radioComponent<T>()) {
+fun <T : Any> RBuilder.radioGroup(handler: RadioProps<T>.() -> Unit) = child(radioComponent<T>()) {
     attrs {
         handler()
     }
 }
 
-interface RadioProps<T: Any> : RProps {
+interface RadioProps<T : Any> : RProps {
     var name: String
     var selected: T?
     var error: String?
