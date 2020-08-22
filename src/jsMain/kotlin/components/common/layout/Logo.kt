@@ -1,5 +1,6 @@
 package components.common.layout
 
+import components.utils.addDefaults
 import react.RBuilder
 import react.RProps
 import react.child
@@ -18,7 +19,7 @@ interface LogoComponentProps : RProps {
     var className: String?
 }
 
-fun RBuilder.logo(className: String? = null) = child(logoComponent) {
+fun RBuilder.logo(className: String? = null) = child(addDefaults(logoComponent, "Logo")) {
     attrs.className = className
 }
 

@@ -1,6 +1,6 @@
 package components.common.form
 
-import kotlinext.js.jsObject
+import components.utils.addDefaults
 import react.RBuilder
 import react.RProps
 import react.child
@@ -35,24 +35,24 @@ private fun <T : Any> checkBoxGroupComponent() = functionalComponent<CheckBoxGro
             }
         }
     }
-}.also {
-    val component = it.asDynamic()
-    component.displayName = "CheckBoxGroup"
-    component.defaultProps = jsObject<CheckBoxGroupProps<T>> {
+}
+
+fun <T : Any> RBuilder.checkBoxGroup(handler: CheckBoxGroupProps<T>.() -> Unit) =
+    child(addDefaults(
+        checkBoxGroupComponent<T>(),
+        name = "CheckBoxGroup"
+    ) {
         name = ""
         selected = emptyList()
         options = emptyList()
         onChange = {}
         disabled = false
         asText = { "replace me" }
+    }) {
+        attrs {
+            handler()
+        }
     }
-}
-
-fun <T : Any> RBuilder.checkBoxGroup(handler: CheckBoxGroupProps<T>.() -> Unit) = child(checkBoxGroupComponent<T>()) {
-    attrs {
-        handler()
-    }
-}
 
 interface CheckBoxGroupProps<T : Any> : RProps {
     var name: String

@@ -1,5 +1,6 @@
 package components.common.layout
 
+import components.utils.addDefaults
 import react.RBuilder
 import react.RProps
 import react.child
@@ -22,5 +23,5 @@ private val headerComponent = functionalComponent<RProps> {
     }
 }
 
-fun RBuilder.header() = child(headerComponent) {
+fun RBuilder.header() = child(addDefaults(headerComponent, "Header")) {
 }

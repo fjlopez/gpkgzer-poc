@@ -99,6 +99,7 @@ interface FieldsProps : RProps {
     var availableContents: List<ContentTarget>
     var selectedOptions: List<Module>
     var availableOptions: List<Module>
+    var refDependency: RMutableRef<Nothing?>
 }
 
 val fields: RClass<FieldsProps> = rConnect<State, RProps, FieldsProps>({ state, _ ->

@@ -1,6 +1,6 @@
 package components.common.form
 
-import kotlinext.js.jsObject
+import components.utils.addDefaults
 import react.RBuilder
 import react.RProps
 import react.child
@@ -35,23 +35,20 @@ private fun <T : Any> radioComponent() = functionalComponent<RadioProps<T>> { pr
             }
         }
     }
-}.also {
-    val component = it.asDynamic()
-    component.displayName = "RadioGroup"
-    component.defaultProps = jsObject<RadioProps<T>> {
+}
+
+fun <T : Any> RBuilder.radioGroup(handler: RadioProps<T>.() -> Unit) =
+    child(addDefaults(radioComponent<T>(), "RadioGroup") {
         name = ""
         options = emptyList()
         onChange = {}
         disabled = false
         asText = { "replace me" }
+    }) {
+        attrs {
+            handler()
+        }
     }
-}
-
-fun <T : Any> RBuilder.radioGroup(handler: RadioProps<T>.() -> Unit) = child(radioComponent<T>()) {
-    attrs {
-        handler()
-    }
-}
 
 interface RadioProps<T : Any> : RProps {
     var name: String

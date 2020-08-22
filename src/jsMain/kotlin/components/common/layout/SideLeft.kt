@@ -2,6 +2,7 @@ package components.common.layout
 
 import components.common.iconGitHub
 import components.common.iconTwitter
+import components.utils.addDefaults
 import kotlinx.html.DIV
 import kotlinx.html.js.onClickFunction
 import modules.react.transitiongroup.CssTransitionProps
@@ -100,4 +101,4 @@ private fun RDOMBuilder<DIV>.social() {
     }
 }
 
-fun RBuilder.sideLeft() = child(sideLeftComponent) {}
+fun RBuilder.sideLeft() = child(addDefaults(sideLeftComponent, "SideLeft")) {}
