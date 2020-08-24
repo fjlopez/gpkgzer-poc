@@ -56,6 +56,30 @@ body.dark {
     }
   }
 
+  .checkbox {
+    color: $dark-color;
+
+    .caret {
+      background: $dark-background;
+      border-color: $dark-color;
+    }
+
+    &:hover {
+      .caret {
+        border-color: $dark-primary;
+      }
+    }
+
+    &.checked {
+      color: $dark-primary;
+
+      .caret {
+        border-color: $dark-primary;
+        background: $dark-primary;
+      }
+    }
+  }
+
   .actions .actions-container {
     background: $dark-background-secondary;
   }

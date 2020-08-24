@@ -7,7 +7,12 @@ import react.RClass
 import react.RProps
 
 @JsName("TransitionGroup")
-external val transitionGroup: RClass<RProps>
+external val transitionGroup: RClass<TransitionGroupProps>
+
+external interface TransitionGroupProps : RProps {
+    var component: String?
+    var className: String?
+}
 
 @JsName("CSSTransition")
 external val cssTransition: RClass<CssTransitionProps>

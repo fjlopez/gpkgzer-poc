@@ -12,7 +12,7 @@ fun main() {
     val rootDiv = document.getElementById("app-root")
     render(rootDiv) {
         provider(store) {
-            application{
+            application {
             }
         }
     }

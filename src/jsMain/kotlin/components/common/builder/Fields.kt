@@ -1,11 +1,12 @@
 package components.common.builder
 
+import components.common.extension.extension
 import components.common.form.checkBoxGroup
 import components.common.form.radioGroup
 import kotlinext.js.jsObject
 import kotlinx.html.DIV
 import model.ContentTarget
-import model.Module
+import model.ModuleInstance
 import model.OutputTarget
 import model.Spec
 import react.*
@@ -26,7 +27,9 @@ private class Fields : RComponent<FieldsProps, RState>() {
                 }
             }
             div("right") {
-
+                extension {
+                    refButton = props.refDependency
+                }
             }
         }
     }
@@ -69,12 +72,12 @@ private class Fields : RComponent<FieldsProps, RState>() {
 
     private fun RDOMBuilder<DIV>.optionsField() {
         control("GeoPackage options") {
-            checkBoxGroup<Module> {
+            checkBoxGroup<ModuleInstance> {
                 name = "options"
                 selected = props.selectedOptions
                 options = props.availableOptions
                 onChange = { store.dispatch(ToggleProjectOption(it)) }
-                asText = { it.description }
+                asText = { it.module.title }
             }
         }
     }
@@ -97,8 +100,8 @@ interface FieldsProps : RProps {
     var availableTargets: List<OutputTarget>
     var selectedContent: ContentTarget?
     var availableContents: List<ContentTarget>
-    var selectedOptions: List<Module>
-    var availableOptions: List<Module>
+    var selectedOptions: List<ModuleInstance>
+    var availableOptions: List<ModuleInstance>
     var refDependency: RMutableRef<Nothing?>
 }
 
