@@ -28,7 +28,9 @@ private class Fields : RComponent<FieldsProps, RState>() {
             }
             div("right") {
                 extension {
-                    refButton = props.refDependency
+                    attrs {
+                        refButton = props.refDependency
+                    }
                 }
             }
         }

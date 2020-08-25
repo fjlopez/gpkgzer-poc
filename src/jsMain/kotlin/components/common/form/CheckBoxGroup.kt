@@ -1,17 +1,35 @@
 package components.common.form
 
-import components.utils.addDefaults
+import components.utils.functionalComponent
 import react.RBuilder
 import react.RProps
 import react.child
 import react.dom.div
-import react.functionalComponent
 
+interface CheckBoxGroupProps<T : Any> : RProps {
+    var name: String
+    var selected: List<T>
+    var error: String?
+    var onChange: (T) -> Unit
+    var options: List<T>
+    var disabled: Boolean
+    var asText: (T) -> String
+}
 
-private fun <T : Any> checkBoxGroupComponent() = functionalComponent<CheckBoxGroupProps<T>> { props ->
+private fun <T : Any> checkBoxGroupComponent() = functionalComponent<CheckBoxGroupProps<T>>(
+    displayName = "CheckBoxGroup",
+    defaultProps = {
+        name = ""
+        selected = emptyList()
+        options = emptyList()
+        onChange = {}
+        disabled = false
+        asText = { "replace me" }
+    }
+) { props ->
     div("group-radio") {
         props.options.forEach {
-            child(tickInput<T>(TickType.CHECKBOX)) {
+            child<TickInputProps<T>>(tickInput<T>(TickType.CHECKBOX)) {
                 key = it.toString()
                 attrs {
                     checked = props.error == null && it in props.selected
@@ -23,7 +41,7 @@ private fun <T : Any> checkBoxGroupComponent() = functionalComponent<CheckBoxGro
             }
         }
         props.error?.let {
-            child(tickInput<T>(TickType.CHECKBOX)) {
+            child<TickInputProps<T>>(tickInput<T>(TickType.CHECKBOX)) {
                 key = (props.options.size + 1).toString()
                 attrs {
                     checked = true
@@ -38,28 +56,9 @@ private fun <T : Any> checkBoxGroupComponent() = functionalComponent<CheckBoxGro
 }
 
 fun <T : Any> RBuilder.checkBoxGroup(handler: CheckBoxGroupProps<T>.() -> Unit) =
-    child(addDefaults(
-        checkBoxGroupComponent<T>(),
-        name = "CheckBoxGroup"
-    ) {
-        name = ""
-        selected = emptyList()
-        options = emptyList()
-        onChange = {}
-        disabled = false
-        asText = { "replace me" }
-    }) {
+    child(checkBoxGroupComponent<T>()) {
         attrs {
             handler()
         }
     }
 
-interface CheckBoxGroupProps<T : Any> : RProps {
-    var name: String
-    var selected: List<T>
-    var error: String?
-    var onChange: (T) -> Unit
-    var options: List<T>
-    var disabled: Boolean
-    var asText: (T) -> String
-}

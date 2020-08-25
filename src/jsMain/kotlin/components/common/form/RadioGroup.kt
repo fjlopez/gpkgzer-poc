@@ -1,18 +1,34 @@
 package components.common.form
 
-import components.utils.addDefaults
+import components.utils.functionalComponent
 import react.RBuilder
 import react.RProps
 import react.child
 import react.dom.div
-import react.functionalComponent
 
+interface RadioProps<T : Any> : RProps {
+    var name: String
+    var selected: T?
+    var error: String?
+    var onChange: (T) -> Unit
+    var options: List<T>
+    var disabled: Boolean
+    var asText: (T) -> String
+}
 
-private fun <T : Any> radioComponent() = functionalComponent<RadioProps<T>> { props ->
-
+private fun <T : Any> radioComponent() = functionalComponent<RadioProps<T>>(
+    displayName = "RadioGroup",
+    defaultProps = {
+        name = ""
+        options = emptyList()
+        onChange = {}
+        disabled = false
+        asText = { "replace me" }
+    }
+) { props ->
     div("group-radio") {
         props.options.forEach {
-            child(tickInput<T>(TickType.RADIO)) {
+            child<TickInputProps<T>>(tickInput<T>(TickType.RADIO)) {
                 key = it.toString()
                 attrs {
                     checked = props.error == null && it == props.selected
@@ -24,7 +40,7 @@ private fun <T : Any> radioComponent() = functionalComponent<RadioProps<T>> { pr
             }
         }
         props.error?.let {
-            child(tickInput<T>(TickType.RADIO)) {
+            child<TickInputProps<T>>(tickInput<T>(TickType.RADIO)) {
                 key = (props.options.size + 1).toString()
                 attrs {
                     checked = true
@@ -38,25 +54,10 @@ private fun <T : Any> radioComponent() = functionalComponent<RadioProps<T>> { pr
 }
 
 fun <T : Any> RBuilder.radioGroup(handler: RadioProps<T>.() -> Unit) =
-    child(addDefaults(radioComponent<T>(), "RadioGroup") {
-        name = ""
-        options = emptyList()
-        onChange = {}
-        disabled = false
-        asText = { "replace me" }
-    }) {
+    child(radioComponent<T>()) {
         attrs {
             handler()
         }
     }
 
-interface RadioProps<T : Any> : RProps {
-    var name: String
-    var selected: T?
-    var error: String?
-    var onChange: (T) -> Unit
-    var options: List<T>
-    var disabled: Boolean
-    var asText: (T) -> String
-}
 

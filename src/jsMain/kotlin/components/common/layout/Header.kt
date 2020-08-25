@@ -1,13 +1,12 @@
 package components.common.layout
 
-import components.utils.addDefaults
+import components.utils.functionalComponent
 import react.RBuilder
 import react.RProps
 import react.child
 import react.dom.*
-import react.functionalComponent
 
-private val headerComponent = functionalComponent<RProps> {
+private val headerComponent = functionalComponent<RProps>("Header") {
     header {
         attrs["id"] = "header"
         div("not-mobile") {
@@ -23,5 +22,5 @@ private val headerComponent = functionalComponent<RProps> {
     }
 }
 
-fun RBuilder.header() = child(addDefaults(headerComponent, "Header")) {
+fun RBuilder.header() = child(headerComponent) {
 }

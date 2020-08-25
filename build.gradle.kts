@@ -6,6 +6,7 @@ val kotlinVersion = "1.4.0"
 val reactVersion = "16.13.1"
 val reduxVersion = "5.0.7"
 val extensionsVersion = "1.0.1"
+val preVersion = "112"
 
 group = "es.iaaa"
 version = "0.1-SNAPSHOT"
@@ -38,12 +39,12 @@ kotlin {
         js().compilations["main"].defaultSourceSet {
             dependencies {
                 // kotlin-extensions
-                implementation("org.jetbrains:kotlin-extensions:$extensionsVersion-pre.111-kotlin-$kotlinVersion")
+                implementation("org.jetbrains:kotlin-extensions:$extensionsVersion-pre.$preVersion-kotlin-$kotlinVersion")
 
                 // kotlin-react
-                implementation("org.jetbrains:kotlin-react:$reactVersion-pre.111-kotlin-$kotlinVersion")
-                implementation("org.jetbrains:kotlin-react-dom:$reactVersion-pre.111-kotlin-$kotlinVersion")
-                implementation("org.jetbrains:kotlin-react-redux:$reduxVersion-pre.111-kotlin-$kotlinVersion")
+                implementation("org.jetbrains:kotlin-react:$reactVersion-pre.$preVersion-kotlin-$kotlinVersion")
+                implementation("org.jetbrains:kotlin-react-dom:$reactVersion-pre.$preVersion-kotlin-$kotlinVersion")
+                implementation("org.jetbrains:kotlin-react-redux:$reduxVersion-pre.$preVersion-kotlin-$kotlinVersion")
 
                 // react
                 implementation(npm("react", reactVersion))

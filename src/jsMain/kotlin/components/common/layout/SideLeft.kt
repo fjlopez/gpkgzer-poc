@@ -2,7 +2,7 @@ package components.common.layout
 
 import components.common.iconGitHub
 import components.common.iconTwitter
-import components.utils.addDefaults
+import components.utils.functionalComponent
 import kotlinx.html.DIV
 import kotlinx.html.js.onClickFunction
 import modules.react.transitiongroup.CssTransitionProps
@@ -11,7 +11,7 @@ import modules.react.transitiongroup.transitionGroup
 import react.*
 import react.dom.*
 
-val sideLeftComponent = functionalComponent<RProps> {
+val sideLeftComponent = functionalComponent<RProps>("SideLeft") {
     var open by useState(false)
     var nav by useState(false)
     val wrapper = useRef(null)
@@ -101,4 +101,4 @@ private fun RDOMBuilder<DIV>.social() {
     }
 }
 
-fun RBuilder.sideLeft() = child(addDefaults(sideLeftComponent, "SideLeft")) {}
+fun RBuilder.sideLeft() = child(sideLeftComponent) {}

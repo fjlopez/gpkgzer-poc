@@ -5,7 +5,7 @@ import components.common.form.close
 import components.common.layout.header
 import components.common.layout.sideLeft
 import components.common.layout.sideRight
-import components.utils.addDefaults
+import components.utils.functionalComponent
 import components.utils.invoke
 import config.Configuration
 import kotlinx.browser.document
@@ -15,7 +15,6 @@ import react.RProps
 import react.dom.div
 import react.dom.form
 import react.dom.hr
-import react.functionalComponent
 import react.redux.rConnect
 import react.useRef
 import reducer.State
@@ -24,7 +23,7 @@ interface ApplicationProps : RProps {
     var theme: Theme
 }
 
-val applicationComponent = functionalComponent<ApplicationProps> { props ->
+val applicationComponent = functionalComponent<ApplicationProps>("Application") { props ->
     val buttonDependency = useRef(null)
     document.body?.className = props.theme.className
     sideLeft()
@@ -56,5 +55,5 @@ val applicationComponent = functionalComponent<ApplicationProps> { props ->
 
 val application: RClass<ApplicationProps> = rConnect<State, RProps, ApplicationProps>({ state, _ ->
     theme = state.theme
-})(addDefaults(applicationComponent, "Application"))
+})(applicationComponent)
 
