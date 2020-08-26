@@ -53,6 +53,9 @@ kotlin {
                 implementation(npm("react-transition-group", "4.3.0"))
                 implementation(npm("react-hotkeys", "2.0.0"))
 
+                // jsearch
+                implementation(npm("js-search", "2.0.0"))
+
                 // css
                 implementation(npm("hamburgers", "1.1.3"))
 

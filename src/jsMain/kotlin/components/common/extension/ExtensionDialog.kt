@@ -6,13 +6,16 @@ import components.utils.KeyCodes
 import components.utils.functionalComponent
 import components.utils.invoke
 import components.utils.useWindowsUtils
+import kotlinext.js.jsObject
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.html.id
+import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onKeyDownFunction
 import kotlinx.html.js.onKeyUpFunction
 import model.ModuleInstance
+import modules.jsearch.Search
 import modules.react.transitiongroup.cssTransition
 import modules.react.transitiongroup.transitionGroup
 import org.w3c.dom.HTMLElement
@@ -32,9 +35,16 @@ interface ExtensionDialogProps : RProps {
     var extensions: List<ModuleInstance>
 }
 
+interface Document {
+    var instance: ModuleInstance
+    var name: String
+    var description: String
+    var group: String
+}
+
 val extensionDialogComponent = functionalComponent<ExtensionDialogProps>("ExtensionDialog") { props ->
-    val computeGroups = {
-        props.extensions.groupBy { it.module.group }
+    val computeGroups = { list: List<ModuleInstance> ->
+        list.groupBy { it.module.group }
             .entries
             .sortedBy { it.key }
     }
@@ -42,12 +52,37 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogProps>("Extens
     val dialog = useRef<HTMLElement?>(null)
     val wrapper = useRef<HTMLElement?>(null)
     val input = useRef<HTMLElement?>(null)
-    val query by useState("")
     val windowsUtils = useWindowsUtils()
 
+    var query by useState("")
     var multiple by useState(false)
     var selected by useState(0)
-    var groups by useState(computeGroups())
+    var groups by useState(computeGroups(props.extensions))
+    var search by useState<Search<Document>?>(null)
+
+    useEffect(listOf(props.extensions)) {
+        val newSearch = Search<Document>("name")
+        newSearch.addIndex("name")
+        newSearch.addIndex("description")
+        newSearch.addIndex("group")
+        props.extensions.map {
+            jsObject<Document> {
+                instance = it
+                name = it.module.title
+                description = it.module.description ?: ""
+                group = it.module.group.title
+            }
+        }.forEach { newSearch.addDocument(it) }
+        search = newSearch
+    }
+
+    useEffect(listOf(query)) {
+        groups = computeGroups(if (query.isNotEmpty()) {
+            search?.search(query.trim())?.map { it.instance } ?: emptyList()
+        } else {
+            props.extensions
+        })
+    }
 
     val textFocus = { ->
         input.current?.let {
@@ -61,8 +96,7 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogProps>("Extens
             val selectedElement = wrapperElement.querySelector("a.selected")?.parentElement.unsafeCast<HTMLElement>()
             val position = selectedElement.offsetTop - wrapperElement.scrollTop
             if (position - 50 < 0 || dialog.current?.clientHeight?.minus(160)?.let { it < position } == true) {
-                // const top = query.trim() === '' ? 50 : 10
-                val top = 50.0
+                val top = if (query.isBlank()) 50.0 else 10.0
                 wrapperElement.scrollTop = selectedElement.offsetTop - top
             }
         }
@@ -153,8 +187,9 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogProps>("Extens
                 attrs {
                     onEnter = {
                         multiple = false
+                        query = ""
                         selected = 0
-                        groups = computeGroups()
+                        groups = computeGroups(props.extensions)
                         textFocus()
                         Unit
                     }
@@ -170,6 +205,11 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogProps>("Extens
                                 placeholder = "Metadata, Schema, Features, Tiles, ..."
                                 onKeyUpFunction = keyUp
                                 onKeyDownFunction = keyDown
+                                value = query
+                                onChangeFunction = { event ->
+                                    query = event.target.asDynamic().value as String
+                                    selected = 0
+                                }
                             }
                             ref = input
                             attrs["query"] = query
@@ -192,7 +232,17 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogProps>("Extens
                                     textFocus()
                                     if (itemGroup.valid) {
                                         store.dispatch(AddExtension(itemGroup))
-                                        props.onClose(event)
+                                        if (!multiple) {
+                                            props.onClose(event)
+                                        } else {
+                                            groups = groups
+                                                .map { (key, value) -> key to value.filter { it != itemGroup } }
+                                                .filter { (_, value) -> value.isNotEmpty() }
+                                                .toMap()
+                                                .entries
+                                                .sortedBy { it.key }
+                                            selected = -1
+                                        }
                                     }
                                 }
                                 li {
