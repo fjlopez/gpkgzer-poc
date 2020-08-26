@@ -16,8 +16,10 @@ data class State(
         spec = Configuration.supportedSpecifications.find { it.default },
         content = Configuration.supportedContents.find { it.default },
         options = Configuration.options.filter { it.default },
-        extensions = Configuration.supportedExtensions.map { ModuleInstance(it) }
-    )
+        extensions = emptyList()
+    ),
+    val showExtensionsDialog: Boolean = false,
+    val availableExtensions: List<ModuleInstance> = Configuration.supportedExtensions.map { ModuleInstance(it) }
 )
 
 class UpdateTheme(val theme: Theme) : RAction
@@ -26,6 +28,9 @@ class UpdateProjectTarget(val outputTarget: OutputTarget) : RAction
 class UpdateProjectContent(val target: ContentTarget) : RAction
 class ToggleProjectOption(val target: ModuleInstance) : RAction
 class RemoveExtension(val target: ModuleInstance) : RAction
+class AddExtension(val target: ModuleInstance) : RAction
+object ShowExtensions : RAction
+object CloseExtensions : RAction
 
 val stateReducer = { state: State, action: RAction ->
     when (action) {
@@ -46,7 +51,18 @@ val stateReducer = { state: State, action: RAction ->
                 state.project.options + action.target
             state.copy(project = state.project.copy(options = newOptions))
         }
-        is RemoveExtension -> state.copy(project = state.project.copy(extensions = state.project.extensions.filter { it != action.target }))
+        is RemoveExtension ->
+            state.copy(
+                project = state.project.copy(extensions = state.project.extensions - action.target),
+                availableExtensions = state.availableExtensions + action.target
+            )
+        is AddExtension ->
+            state.copy(
+                project = state.project.copy(extensions = state.project.extensions + action.target),
+                availableExtensions = state.availableExtensions - action.target
+            )
+        is ShowExtensions -> state.copy(showExtensionsDialog = true)
+        is CloseExtensions -> state.copy(showExtensionsDialog = false)
         else -> state
     }
 }
@@ -54,57 +70,66 @@ val stateReducer = { state: State, action: RAction ->
 val validateState = { state: State, _: RAction ->
     val currentSpec = state.project.spec
     if (currentSpec != null) {
-        val newExtensions = state.project.extensions.map {
-            val reasons = mutableListOf<String>()
-            // Check Spec
-            when {
-                it.module.deprecatedBy == null && it.module.officialSince > currentSpec ->
-                    reasons += "GeoPackage >= ${it.module.officialSince.key}"
-                it.module.deprecatedBy != null && it.module.officialSince > currentSpec && it.module.deprecatedBy <= currentSpec ->
-                    reasons += "GeoPackage >= ${it.module.officialSince.key} and < ${it.module.deprecatedBy.key}"
-                it.module.deprecatedBy != null && it.module.officialSince <= currentSpec && it.module.deprecatedBy <= currentSpec ->
-                    reasons += "GeoPackage < ${it.module.deprecatedBy.key}"
-            }
-            // Extensions is required
-            if (!state.project.options.any { option -> option.module == Modules.extensions }) {
-                reasons += "Extensions option"
-            }
-            // Some option is required
-            if (it.module.dependsOn is AtLeastOneRule) {
-                val options = it.module.dependsOn.modules
-                if (!state.project.options.any { option -> option.module in options }) {
-                    when {
-                        options.size > 1 -> {
-                            val (head, last) = options.map { option -> option.title }.chunked(options.size - 1)
-                            reasons += "at least one of ${head.joinToString(separator = " option, ")} or ${last.first()} option"
-                        }
-                        options.size == 1 -> {
-                            reasons += options.first().title + " option"
-                        }
+        val newExtensions = state.project.extensions.validate(state.project)
+        val newAvailableExtensions = state.availableExtensions.validate(state.project)
+        state.copy(
+            project = state.project.copy(extensions = newExtensions),
+            availableExtensions = newAvailableExtensions
+        )
+    } else state
+}
+
+private fun List<ModuleInstance>.validate(project: Project): List<ModuleInstance> {
+    require(project.spec != null)
+    return map {
+        val reasons = mutableListOf<String>()
+        // Check Spec
+        when {
+            it.module.deprecatedBy == null && it.module.officialSince > project.spec ->
+                reasons += "GeoPackage >= ${it.module.officialSince.key}"
+            it.module.deprecatedBy != null && it.module.officialSince > project.spec && it.module.deprecatedBy <= project.spec ->
+                reasons += "GeoPackage >= ${it.module.officialSince.key} and < ${it.module.deprecatedBy.key}"
+            it.module.deprecatedBy != null && it.module.officialSince <= project.spec && it.module.deprecatedBy <= project.spec ->
+                reasons += "GeoPackage < ${it.module.deprecatedBy.key}"
+        }
+        // Extensions is required
+        if (!project.options.any { option -> option.module == Modules.extensions }) {
+            reasons += "Extensions option"
+        }
+        // Some option is required
+        if (it.module.dependsOn is AtLeastOneRule) {
+            val options = it.module.dependsOn.modules
+            if (!project.options.any { option -> option.module in options }) {
+                when {
+                    options.size > 1 -> {
+                        val (head, last) = options.map { option -> option.title }.chunked(options.size - 1)
+                        reasons += "at least one of ${head.joinToString(separator = " option, ")} or ${last.first()} option"
+                    }
+                    options.size == 1 -> {
+                        reasons += options.first().title + " option"
                     }
                 }
             }
-            if (it.module.requireUdt && state.project.content == ContentTargets.metadata) {
-                reasons += "User Tables (example)"
-            }
-            // Reasons
-            when {
-                reasons.size > 1 -> {
-                    val (head, last) = reasons.chunked(reasons.size - 1)
-                    it.copy(
-                        valid = false,
-                        invalid = "Requires ${head.joinToString(separator = ", ")}, and ${last.first()}"
-                    )
-                }
-                reasons.size == 1 -> {
-                    it.copy(valid = false, invalid = "Requires ${reasons.first()}")
-                }
-                !it.valid -> it.copy(valid = true)
-                else -> it
-            }
         }
-        state.copy(project = state.project.copy(extensions = newExtensions))
-    } else state
+        if (it.module.requireUdt && project.content == ContentTargets.metadata) {
+            reasons += "User Tables (example)"
+        }
+        // Reasons
+        when {
+            reasons.size > 1 -> {
+                val (head, last) = reasons.chunked(reasons.size - 1)
+                it.copy(
+                    valid = false,
+                    invalid = "Requires ${head.joinToString(separator = ", ")}, and ${last.first()}"
+                )
+            }
+            reasons.size == 1 -> {
+                it.copy(valid = false, invalid = "Requires ${reasons.first()}")
+            }
+            !it.valid -> it.copy(valid = true)
+            else -> it
+        }
+    }
 }
 
 

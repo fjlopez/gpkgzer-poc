@@ -9,6 +9,7 @@ import model.ContentTarget
 import model.ModuleInstance
 import model.OutputTarget
 import model.Spec
+import org.w3c.dom.HTMLElement
 import react.*
 import react.dom.RDOMBuilder
 import react.dom.div
@@ -29,7 +30,7 @@ private class Fields : RComponent<FieldsProps, RState>() {
             div("right") {
                 extension {
                     attrs {
-                        refButton = props.refDependency
+                        refButton = props.refExtension
                     }
                 }
             }
@@ -104,7 +105,7 @@ interface FieldsProps : RProps {
     var availableContents: List<ContentTarget>
     var selectedOptions: List<ModuleInstance>
     var availableOptions: List<ModuleInstance>
-    var refDependency: RMutableRef<Nothing?>
+    var refExtension: RMutableRef<HTMLElement?>
 }
 
 val fields: RClass<FieldsProps> = rConnect<State, RProps, FieldsProps>({ state, _ ->

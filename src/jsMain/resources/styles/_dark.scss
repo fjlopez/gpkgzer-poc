@@ -213,6 +213,10 @@ body.dark {
     color: $dark-background;
   }
 
+  ul.dependencies-list li div.disabled strong {
+    color: rgba($dark-color, 0.3);
+  }
+
   ul.dependencies-list li {
     border-color: $dark-border;
   }
@@ -461,6 +465,10 @@ body.dark {
   ul.dependencies-list li div span.group,
   .dialog-dependencies ul li a.dependency span.group {
     background: $dark-primary;
+  }
+
+  .dialog-dependencies ul li a.dependency .icon-enter {
+    fill: white;
   }
 
   .dialog-dependencies ul li a.dependency.selected span.group {

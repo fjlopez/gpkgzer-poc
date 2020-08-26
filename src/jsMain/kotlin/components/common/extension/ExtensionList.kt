@@ -47,7 +47,7 @@ val extensionListComponent = functionalComponent<ExtensionListProps>("ExtensionL
     }
 }
 
-private fun RDOMBuilder<LI>.item(item: ModuleInstance) {
+internal fun RDOMBuilder<LI>.item(item: ModuleInstance) {
     div("dependency-item ${if (!item.valid) "disabled" else ""}") {
         strong {
             +(item.module.title + " ")

@@ -208,7 +208,6 @@ body {
     }
 
     span {
-      font-weight: 400;
       font-size: 22px;
       line-height: 2rem;
       font-weight: 600;
@@ -735,11 +734,9 @@ button.button {
 .warnings {
   $color: #e8ba00;
   position: relative;
-  margin-bottom: $spring-8points;
   padding: $spring-8points * 2;
   line-height: 26px;
-  margin: 0 auto;
-  margin-bottom: 1rem;
+  margin: 0 auto $spring-8points;
 
   border: 1px solid $light-border;
   border-left: 6px solid $color;
@@ -1055,9 +1052,7 @@ button.button {
         }
 
         .icon-enter {
-          display: none;
           $height: 18px;
-          fill: #fff;
           position: absolute;
           top: 50%;
           margin-top: -($height/2);
@@ -1143,10 +1138,9 @@ button.button {
         font-size: $spring-font-size - 2;
         padding: 4px 0.6rem 1px;
         line-height: 18px;
-        margin-left: 0.6rem;
         text-transform: uppercase;
         font-weight: 600;
-        margin: 12px;
+        margin: 12px 12px 12px 0.6rem;
       }
     }
   }

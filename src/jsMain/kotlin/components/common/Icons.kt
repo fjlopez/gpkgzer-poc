@@ -76,6 +76,21 @@ fun RBuilder.iconRemove() = svg("icon-twitter") {
     )
 }
 
+fun RBuilder.iconEnter() = svg("icon-enter") {
+    attrs["viewBox"] = "0 0 128 128"
+    child(
+        createGraph(
+            "Layer_3_1_",
+            createPolygon(
+                """
+                112.5,23.3 112.5,75.8 37.5,75.8 37.5,56 0.5,83.3 37.5,110.7 37.5,90.8 112.5,90.8 
+                112.5,90.8 127.5,90.8 127.5,23.3""", "Layer_3_1_1"
+            )
+
+        )
+    )
+}
+
 interface LineProps : RProps {
     var className: String
     var x1: Double
@@ -89,6 +104,11 @@ interface PathProps : RProps {
     var fill: String
     var d: String
     var className: String
+    var key: String?
+}
+
+interface Polygon : RProps {
+    var points: String
     var key: String?
 }
 
@@ -118,6 +138,14 @@ fun createPath(d: String, fill: String? = null, className: String? = null, key: 
         }
     )
 
+fun createPolygon(points: String, key: String? = null) =
+    createElement("polygon",
+        jsObject<Polygon> {
+            key?.let { this.key = it }
+            this.points = points
+        }
+    )
+
 fun createGraph(id: String? = null, vararg child: Any?) =
     createElement(
         "g",
@@ -126,3 +154,4 @@ fun createGraph(id: String? = null, vararg child: Any?) =
         },
         child
     )
+

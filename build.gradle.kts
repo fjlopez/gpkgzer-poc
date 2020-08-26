@@ -51,6 +51,7 @@ kotlin {
                 implementation(npm("react-dom", reactVersion))
                 implementation(npm("react-toastify", "6.0.8"))
                 implementation(npm("react-transition-group", "4.3.0"))
+                implementation(npm("react-hotkeys", "2.0.0"))
 
                 // css
                 implementation(npm("hamburgers", "1.1.3"))
