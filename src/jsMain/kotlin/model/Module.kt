@@ -9,6 +9,22 @@ data class AtLeastOneRule(var modules: List<Module>) : Rule()
 @Suppress("FunctionName")
 fun AtLeastOneRule(vararg modules: Module) = AtLeastOneRule(modules.asList())
 
+data class Group(
+    val key: String,
+    val title: String
+) : Comparable<Group> {
+    override fun compareTo(other: Group): Int = key.compareTo(other.key)
+}
+
+object Groups {
+    val options = Group("0-options", "Options")
+    val general = Group("1-general", "General")
+    val srs = Group("2-srs", "Spatial Reference Systems")
+    val features = Group("3-features", "Features")
+    val tiles = Group("4-tiles", "Tiles")
+    val coverages = Group("5-coverages", "Coverages")
+    val relatedTables = Group("6-relatedTables", "Related Tables")
+}
 
 data class Module(
     val key: String,
@@ -18,7 +34,7 @@ data class Module(
     val extension: Boolean = false,
     val officialSince: Spec,
     val deprecatedBy: Spec? = null,
-    val group: String,
+    val group: Group,
     val requireUdt: Boolean = false,
 )
 
@@ -28,28 +44,28 @@ object Modules {
         key = "features",
         title = "Features",
         officialSince = Specs.spec100,
-        group = "Options",
+        group = Groups.options,
     )
 
     val tiles = Module(
         key = "tiles",
         title = "Tiles",
         officialSince = Specs.spec100,
-        group = "Options",
+        group = Groups.options,
     )
 
     val attributes = Module(
         key = "attributes",
         title = "Attributes",
         officialSince = Specs.spec100,
-        group = "Options",
+        group = Groups.options,
     )
 
     val extensions = Module(
         key = "extensions",
         title = "Extensions",
         officialSince = Specs.spec100,
-        group = "Options",
+        group = Groups.options,
     )
 
     val nonLinearGeometryTypes = Module(
@@ -61,7 +77,7 @@ object Modules {
             Support for the CircularString, CompoundCurve, CurvePolygon, MultiCurve, 
             MultiSurface, Curve, and Surface geometry types in user feature tables.
             """.trimIndent(),
-        group = "Features",
+        group = Groups.features,
         extension = true,
         requireUdt = true,
     )
@@ -73,7 +89,7 @@ object Modules {
         officialSince = Specs.spec100,
         deprecatedBy = Specs.spec120,
         description = "Support for user defined geometry types in user feature tables.",
-        group = "Features",
+        group = Groups.features,
         extension = true,
         requireUdt = true,
     )
@@ -84,7 +100,7 @@ object Modules {
         dependsOn = AtLeastOneRule(features),
         officialSince = Specs.spec100,
         description = "Provides a means to encode an RTree index for geometry values in user feature tables.",
-        group = "Features",
+        group = Groups.features,
         extension = true,
         requireUdt = true,
     )
@@ -100,7 +116,7 @@ object Modules {
             not assignable to the geometry type specified for the column
             in user feature tables.
             """.trimIndent(),
-        group = "Features",
+        group = Groups.features,
         extension = true,
         requireUdt = true,
     )
@@ -115,7 +131,7 @@ object Modules {
             Prevents the storage in a geometry column of geometries with SRS
             different to the SRS specified for the column in user feature tables.
             """.trimIndent(),
-        group = "Features",
+        group = Groups.features,
         extension = true,
         requireUdt = true,
     )
@@ -126,7 +142,7 @@ object Modules {
         dependsOn = AtLeastOneRule(tiles),
         officialSince = Specs.spec110,
         description = "Allows zoom level intervals other than a factor of two in user tile tables.",
-        group = "Tiles",
+        group = Groups.tiles,
         extension = true,
         requireUdt = true,
     )
@@ -137,7 +153,7 @@ object Modules {
         dependsOn = AtLeastOneRule(tiles),
         officialSince = Specs.spec110,
         description = "Allows encoding of tile images in WebP format in user tile tables.",
-        group = "Tiles",
+        group = Groups.tiles,
         extension = true,
         requireUdt = true,
     )
@@ -147,17 +163,16 @@ object Modules {
         title = "Metadata",
         officialSince = Specs.spec100,
         description = "Provides a means of storing metadata.",
-        group = "General",
+        group = Groups.general,
         extension = true,
     )
 
     val schema = Module(
         key = "gpkg-schema",
         title = "Schema",
-        dependsOn = AtLeastOneRule(features, attributes),
         officialSince = Specs.spec100,
         description = "Provides a means to describe the columns of tables.",
-        group = "General",
+        group = Groups.general,
         extension = true,
     )
 
@@ -169,7 +184,7 @@ object Modules {
         description = """
             Provides support for SRS encoded in WKT conform to" OGC Well known text representation of Coordinate
             Reference Systems".""".trimIndent(),
-        group = "Spatial Reference Systems",
+        group = Groups.srs,
         extension = true,
     )
 
@@ -181,7 +196,7 @@ object Modules {
         description = """
             Provides support for or encoding and storing 16-bit and 32-bit tiled regular grid coverages composed of
             regular gridded data".""".trimIndent(),
-        group = "Coverages",
+        group = Groups.coverages,
         extension = true,
     )
 
@@ -191,7 +206,7 @@ object Modules {
         dependsOn = AtLeastOneRule(features, attributes, tiles),
         officialSince = Specs.spec130,
         description = "Allows to establish many-to-many relationships.",
-        group = "Related Tables",
+        group = Groups.relatedTables,
         extension = true,
     )
 }

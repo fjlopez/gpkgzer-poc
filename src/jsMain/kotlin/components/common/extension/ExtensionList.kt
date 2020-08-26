@@ -52,7 +52,7 @@ internal fun RDOMBuilder<LI>.item(item: ModuleInstance) {
         strong {
             +(item.module.title + " ")
             span("group") {
-                +item.module.group
+                +item.module.group.title
             }
         }
         if (item.valid && item.module.description != null) {
