@@ -2,22 +2,23 @@ package components.utils
 
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
-import react.RCleanup
-import react.useEffectWithCleanup
-import react.useState
+import react.*
 
-data class Window(
-    val symb: String,
-    val origin: String,
-    val height: Int,
-    val width: Int
-)
+class Window(
+    symb: Pair<String, RSetState<String>>,
+    origin: Pair<String, RSetState<String>>,
+    height: Pair<Int, RSetState<Int>>,
+    width: Pair<Int, RSetState<Int>>
+) {
+    val symb by symb
+    val origin by origin
+    val height by height
+    val width by width
+}
 
 fun useWindowsUtils(): Window {
     val isClient = js("typeof window === 'object'").unsafeCast<Boolean>()
-    val symb = useState(
-        if (window.navigator.userAgent.toLowerCase().contains("mac")) "⌘" else "Ctrl"
-    )
+    val symb = useState(if (window.navigator.userAgent.toLowerCase().contains("mac")) "⌘" else "Ctrl")
     val origin = useState(window.location.origin)
     val height = useState(window.innerHeight)
     val width = useState(window.innerWidth)
@@ -33,5 +34,5 @@ fun useWindowsUtils(): Window {
             cleanup(handleResize)
         } else { -> }
     }
-    return Window(symb.first, origin.first, height.first, width.first)
+    return Window(symb, origin, height, width)
 }
