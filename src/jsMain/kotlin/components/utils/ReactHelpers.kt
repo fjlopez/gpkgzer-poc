@@ -9,10 +9,29 @@ interface FunctionalComponentDefaults<T> {
     var defaultProps: T
 }
 
-operator fun <P : RProps, R : RProps> HOC<P, R>.invoke(component: FunctionalComponent<P>): RClass<R> =
+operator fun <P : RProps, R : RProps> HOC<P, R>.invoke(
+    component: FunctionalComponent<P>,
+    displayName: String,
+    defaultProps: P.() -> Unit = {}
+): RClass<R> =
     call(null, { props: P ->
         component(props)
-    })
+    }).also {
+        Object.assign(
+            it,
+            jsObject<FunctionalComponentDefaults<P>> {
+                this.displayName = "RConnect ($displayName)"
+            }
+        )
+        Object.assign(
+            it.asDynamic().WrappedComponent as FunctionalComponent<P>,
+            jsObject<FunctionalComponentDefaults<P>> {
+                this.displayName = displayName
+                this.defaultProps = jsObject(defaultProps)
+            }
+        )
+    }
+
 
 fun <P : RProps> functionalComponent(
     displayName: String,

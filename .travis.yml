@@ -1,0 +1,18 @@
+language: java
+jdk:
+  - openjdk8
+cache:
+  directories:
+    - ./build/js/node_modules
+    - ./build/js/packages_imported
+install:
+  - ./gradlew assemble
+script:
+  - ./gradlew jsBrowserDistribution
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $github_token
+  local_dir: build/distributions
+  on:
+    branch: master

@@ -10,6 +10,7 @@ import react.child
 
 interface HotKeysProps : RProps {
     var onExtensions: (Event) -> Unit
+    var onGenerate: (Event) -> Unit
 }
 
 private val hotkeys = functionalComponent<HotKeysProps>(
@@ -19,9 +20,11 @@ private val hotkeys = functionalComponent<HotKeysProps>(
         attrs {
             keyMap = jsObject {
                 extension = arrayOf("command+b", "ctrl+b")
+                generate = arrayOf("command+i", "ctrl+i")
             }
             handlers = jsObject {
                 extension = props.onExtensions
+                generate = props.onGenerate
             }
         }
     }

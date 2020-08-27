@@ -49,5 +49,5 @@ private val extensionComponent = functionalComponent<ExtensionProps>("Extension"
 
 fun RBuilder.extension(handler: ExtensionProps.() -> Unit) =
     child(extensionComponent) {
-        handler(attrs)
+        attrs.handler()
     }

@@ -1,7 +1,6 @@
 package components.common.extension
 
 import components.common.iconRemove
-import components.utils.functionalComponent
 import components.utils.invoke
 import kotlinx.html.LI
 import kotlinx.html.js.onClickFunction
@@ -12,6 +11,7 @@ import org.w3c.dom.events.Event
 import react.RClass
 import react.RProps
 import react.dom.*
+import react.functionalComponent
 import react.redux.rConnect
 import reducer.RemoveExtension
 import reducer.State
@@ -21,7 +21,7 @@ interface ExtensionListProps : RProps {
     var extensions: List<ModuleInstance>
 }
 
-val extensionListComponent = functionalComponent<ExtensionListProps>("ExtensionList") { props ->
+val extensionListComponent = functionalComponent<ExtensionListProps> { props ->
     if (props.extensions.isEmpty()) {
         div("no-dependency") {
             +"No extension selected"
@@ -80,4 +80,4 @@ internal fun RDOMBuilder<LI>.item(item: ModuleInstance) {
 
 val extensionList: RClass<ExtensionListProps> = rConnect<State, RProps, ExtensionListProps>({ state, _ ->
     extensions = state.project.extensions
-})(extensionListComponent)
+})(extensionListComponent, "ExtensionList")

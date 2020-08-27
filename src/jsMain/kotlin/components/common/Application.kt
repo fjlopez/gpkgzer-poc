@@ -7,7 +7,6 @@ import components.common.form.close
 import components.common.layout.header
 import components.common.layout.sideLeft
 import components.common.layout.sideRight
-import components.utils.functionalComponent
 import components.utils.invoke
 import config.Configuration
 import kotlinx.browser.document
@@ -19,6 +18,7 @@ import react.RProps
 import react.dom.div
 import react.dom.form
 import react.dom.hr
+import react.functionalComponent
 import react.redux.rConnect
 import react.useRef
 import reducer.CloseExtensions
@@ -29,8 +29,9 @@ interface ApplicationProps : RProps {
     var theme: Theme
 }
 
-val applicationComponent = functionalComponent<ApplicationProps>("Application") { props ->
+val applicationComponent = functionalComponent<ApplicationProps> { props ->
     val buttonExtension = useRef<HTMLElement?>(null)
+    val buttonGenerate = useRef<HTMLElement?>(null)
 
     val onEscape: (Event) -> Unit = {
         store.dispatch(CloseExtensions)
@@ -40,6 +41,7 @@ val applicationComponent = functionalComponent<ApplicationProps>("Application") 
 
     hotkeys {
         onExtensions = { _: Event -> buttonExtension.current?.click() }
+        onGenerate = { _: Event -> buttonGenerate.current?.click() }
     }
     sideLeft()
     div {
@@ -54,6 +56,7 @@ val applicationComponent = functionalComponent<ApplicationProps>("Application") 
                     availableContents = Configuration.supportedContents
                     availableOptions = Configuration.options
                     refExtension = buttonExtension
+                    refGenerate = buttonGenerate
                 }
             }
             extensionDialog {
@@ -75,5 +78,5 @@ val applicationComponent = functionalComponent<ApplicationProps>("Application") 
 
 val application: RClass<ApplicationProps> = rConnect<State, RProps, ApplicationProps>({ state, _ ->
     theme = state.theme
-})(applicationComponent)
+})(applicationComponent, "Application")
 

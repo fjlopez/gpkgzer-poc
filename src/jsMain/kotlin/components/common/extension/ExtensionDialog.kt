@@ -3,7 +3,6 @@ package components.common.extension
 import components.common.form.overlay
 import components.common.iconEnter
 import components.utils.KeyCodes
-import components.utils.functionalComponent
 import components.utils.invoke
 import components.utils.useWindowsUtils
 import kotlinext.js.jsObject
@@ -42,7 +41,7 @@ interface Document {
     var group: String
 }
 
-val extensionDialogComponent = functionalComponent<ExtensionDialogProps>("ExtensionDialog") { props ->
+val extensionDialogComponent = functionalComponent<ExtensionDialogProps> { props ->
     val computeGroups = { list: List<ModuleInstance> ->
         list.groupBy { it.module.group }
             .entries
@@ -285,4 +284,4 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogProps>("Extens
 val extensionDialog: RClass<ExtensionDialogProps> = rConnect<State, RProps, ExtensionDialogProps>({ state, _ ->
     isShown = state.showExtensionsDialog
     extensions = state.availableExtensions
-})(extensionDialogComponent)
+})(extensionDialogComponent, "ExtensionDialog")
