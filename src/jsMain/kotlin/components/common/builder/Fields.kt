@@ -10,9 +10,12 @@ import model.ModuleInstance
 import model.OutputTarget
 import model.Spec
 import org.w3c.dom.HTMLElement
-import react.*
+import react.RClass
+import react.RMutableRef
+import react.RProps
 import react.dom.RDOMBuilder
 import react.dom.div
+import react.functionalComponent
 import react.redux.rConnect
 import reducer.*
 

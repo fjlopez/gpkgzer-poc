@@ -1,8 +1,10 @@
 package components.common.builder
 
+import components.utils.disableTab
 import components.utils.functionalComponent
 import kotlinx.html.ButtonType
 import kotlinx.html.SPAN
+import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.events.Event
 import react.RBuilder
@@ -36,12 +38,12 @@ private val button = functionalComponent<ButtonProps>(
         classes = "button ${if (props.primary) "primary" else ""}",
         type = ButtonType.button
     ) {
-        attrs["id"] = props.id
+        attrs.id = props.id
         attrs.disabled = props.disabled
         attrs.onClickFunction = props.onClick
         props.refButton?.let { ref = it }
         span("button-content") {
-            attrs["tabIndex"] = -1
+            attrs.disableTab()
             span(block = props.block)
             props.hotkey?.let {
                 if (it.isNotEmpty()) {

@@ -2,8 +2,10 @@ package components.common.layout
 
 import components.common.iconGitHub
 import components.common.iconTwitter
+import components.utils.disableTab
 import components.utils.functionalComponent
 import kotlinx.html.DIV
+import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import modules.react.transitiongroup.CssTransitionProps
 import modules.react.transitiongroup.cssTransition
@@ -16,13 +18,13 @@ val sideLeftComponent = functionalComponent<RProps>("SideLeft") {
     var nav by useState(false)
     val wrapper = useRef(null)
     div(if (open) "is-open" else "") {
-        attrs["id"] = "side-left"
+        attrs.id = "side-left"
         div("side-container") {
             div("navigation-action") {
                 button(classes = "hamburger hamburger--spin ${if (nav) "is-active" else ""}") {
                     attrs.onClickFunction = { nav = !nav }
                     span("hamburger-box") {
-                        attrs["tabIndex"] = "-1"
+                        attrs.disableTab()
                         span("hamburger-inner") {}
                     }
                 }
@@ -87,14 +89,14 @@ private fun RDOMBuilder<DIV>.social() {
         a(target = "_blank", href = "https://github.com/spring-io/start.spring.io") {
             attrs.rel = "noreferrer noopener"
             span("a-content") {
-                attrs["tabIndex"] = "-1"
+                attrs.disableTab()
                 iconGitHub()
             }
         }
         a(target = "_blank", href = "https://github.com/spring-io/start.spring.io") {
             attrs.rel = "noreferrer noopener"
             span("a-content") {
-                attrs["tabIndex"] = "-1"
+                attrs.disableTab()
                 iconTwitter()
             }
         }

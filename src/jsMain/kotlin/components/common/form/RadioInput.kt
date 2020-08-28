@@ -1,5 +1,6 @@
 package components.common.form
 
+import components.utils.disableTab
 import components.utils.functionalComponent
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.events.Event
@@ -44,13 +45,13 @@ internal fun <T : Any> tickInput(type: TickType) = functionalComponent<TickInput
     }
     if (props.disabled || props.error) {
         span(classes = "$className ${if (props.checked) "checked" else ""} ${if (props.error) "err" else ""}") {
-            span("caret") { attrs["tabIndex"] = -1 }
+            span("caret") { attrs.disableTab() }
             span("$className-content") { +props.text }
         }
     } else {
         a("/", classes = "$className ${if (props.checked) "checked" else ""}") {
             attrs.onClickFunction = onClick(props.value)
-            span("caret") { attrs["tabIndex"] = -1 }
+            span("caret") { attrs.disableTab() }
             span("$className-content") { +props.text }
         }
     }

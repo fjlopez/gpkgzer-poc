@@ -10,6 +10,7 @@ import components.common.layout.sideRight
 import components.utils.invoke
 import config.Configuration
 import kotlinx.browser.document
+import kotlinx.html.id
 import modules.react.toastify.toastContainer
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
@@ -45,7 +46,7 @@ val applicationComponent = functionalComponent<ApplicationProps> { props ->
     }
     sideLeft()
     div {
-        attrs["id"] = "main"
+        attrs.id = "main"
         header()
         hr("divider") { }
         form("form") {

@@ -22,7 +22,7 @@ private val control = functionalComponent<ControlProps>(
 ) { props ->
     div("control") {
         label("label") {
-            props.labelFor?.let { attrs["htmlFor"] = it }
+            props.labelFor?.let { attrs.htmlFor = it }
             +props.text
         }
         div("control-element") {

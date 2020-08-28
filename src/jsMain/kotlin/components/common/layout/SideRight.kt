@@ -5,7 +5,9 @@ import components.common.Theme.DARK
 import components.common.Theme.LIGHT
 import components.common.iconMoon
 import components.common.iconSun
+import components.utils.disableTab
 import kotlinx.html.DIV
+import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import react.*
 import react.dom.RDOMBuilder
@@ -21,7 +23,7 @@ import reducer.store
 class SideRight : RComponent<SideRightProps, RState>() {
     override fun RBuilder.render() {
         div {
-            attrs["id"] = "side-right"
+            attrs.id = "side-right"
             div("side-container") {
                 themeSwitcher(props)
             }
@@ -48,7 +50,7 @@ private fun RDOMBuilder<DIV>.setDarkThemeButton(props: SideRightProps) {
             store.dispatch(UpdateTheme(DARK))
         }
         span(classes = "button-content") {
-            attrs["tabIndex"] = -1
+            attrs.disableTab()
             iconMoon()
         }
     }
@@ -61,7 +63,7 @@ private fun RDOMBuilder<DIV>.setLightThemeButton(props: SideRightProps) {
             store.dispatch(UpdateTheme(LIGHT))
         }
         span(classes = "button-content") {
-            attrs["tabIndex"] = -1
+            attrs.disableTab()
             iconSun()
         }
     }

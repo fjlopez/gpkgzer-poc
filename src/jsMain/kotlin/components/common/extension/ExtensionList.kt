@@ -1,6 +1,7 @@
 package components.common.extension
 
 import components.common.iconRemove
+import components.utils.disableTab
 import components.utils.invoke
 import kotlinx.html.LI
 import kotlinx.html.js.onClickFunction
@@ -62,7 +63,7 @@ internal fun RDOMBuilder<LI>.item(item: ModuleInstance) {
         }
         a(href = "", classes = "icon") {
             span("a-content") {
-                attrs["tabIndex"] = -1
+                attrs.disableTab()
                 attrs.onClickFunction = { event: Event ->
                     event.preventDefault()
                     store.dispatch(RemoveExtension(item))
