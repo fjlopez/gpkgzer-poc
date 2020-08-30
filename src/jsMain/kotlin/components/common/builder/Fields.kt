@@ -1,14 +1,14 @@
 package components.common.builder
 
+import com.github.gpkg4all.common.ContentTarget
+import com.github.gpkg4all.common.ModuleInstance
+import com.github.gpkg4all.common.OutputTarget
+import com.github.gpkg4all.common.Spec
 import components.common.extension.extension
 import components.common.form.checkBoxGroup
 import components.common.form.radioGroup
 import components.utils.invoke
 import kotlinx.html.DIV
-import model.ContentTarget
-import model.ModuleInstance
-import model.OutputTarget
-import model.Spec
 import org.w3c.dom.HTMLElement
 import react.RClass
 import react.RMutableRef

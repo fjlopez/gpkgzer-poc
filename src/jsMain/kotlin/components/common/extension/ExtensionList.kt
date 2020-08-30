@@ -1,11 +1,11 @@
 package components.common.extension
 
+import com.github.gpkg4all.common.ModuleInstance
 import components.common.iconRemove
 import components.utils.disableTab
 import components.utils.invoke
 import kotlinx.html.LI
 import kotlinx.html.js.onClickFunction
-import model.ModuleInstance
 import modules.react.transitiongroup.cssTransition
 import modules.react.transitiongroup.transitionGroup
 import org.w3c.dom.events.Event

@@ -1,4 +1,4 @@
-package model
+package com.github.gpkg4all.common
 
 data class ContentTarget(
     val key: String,

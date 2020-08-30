@@ -1,5 +1,6 @@
 package components.common.extension
 
+import com.github.gpkg4all.common.ModuleInstance
 import components.common.form.overlay
 import components.common.iconEnter
 import components.utils.KeyCodes
@@ -13,7 +14,6 @@ import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onKeyDownFunction
 import kotlinx.html.js.onKeyUpFunction
-import model.ModuleInstance
 import modules.jsearch.Search
 import modules.react.transitiongroup.cssTransition
 import modules.react.transitiongroup.transitionGroup
