@@ -28,7 +28,7 @@ private fun <T : Any> radioComponent() = functionalComponent<RadioProps<T>>(
 ) { props ->
     div("group-radio") {
         props.options.forEach {
-            child<TickInputProps<T>>(tickInput<T>(TickType.RADIO)) {
+            child(tickInput<T>(TickType.RADIO)) {
                 key = it.toString()
                 attrs {
                     checked = props.error == null && it == props.selected
@@ -40,7 +40,7 @@ private fun <T : Any> radioComponent() = functionalComponent<RadioProps<T>>(
             }
         }
         props.error?.let {
-            child<TickInputProps<T>>(tickInput<T>(TickType.RADIO)) {
+            child(tickInput<T>(TickType.RADIO)) {
                 key = (props.options.size + 1).toString()
                 attrs {
                     checked = true
@@ -55,9 +55,7 @@ private fun <T : Any> radioComponent() = functionalComponent<RadioProps<T>>(
 
 fun <T : Any> RBuilder.radioGroup(handler: RadioProps<T>.() -> Unit) =
     child(radioComponent<T>()) {
-        attrs {
-            handler()
-        }
+        attrs.handler()
     }
 
 

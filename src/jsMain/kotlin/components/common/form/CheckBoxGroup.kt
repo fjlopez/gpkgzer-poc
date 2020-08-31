@@ -29,7 +29,7 @@ private fun <T : Any> checkBoxGroupComponent() = functionalComponent<CheckBoxGro
 ) { props ->
     div("group-radio") {
         props.options.forEach {
-            child<TickInputProps<T>>(tickInput<T>(TickType.CHECKBOX)) {
+            child(tickInput<T>(TickType.CHECKBOX)) {
                 key = it.toString()
                 attrs {
                     checked = props.error == null && it in props.selected
@@ -41,7 +41,7 @@ private fun <T : Any> checkBoxGroupComponent() = functionalComponent<CheckBoxGro
             }
         }
         props.error?.let {
-            child<TickInputProps<T>>(tickInput<T>(TickType.CHECKBOX)) {
+            child(tickInput<T>(TickType.CHECKBOX)) {
                 key = (props.options.size + 1).toString()
                 attrs {
                     checked = true
@@ -57,8 +57,6 @@ private fun <T : Any> checkBoxGroupComponent() = functionalComponent<CheckBoxGro
 
 fun <T : Any> RBuilder.checkBoxGroup(handler: CheckBoxGroupProps<T>.() -> Unit) =
     child(checkBoxGroupComponent<T>()) {
-        attrs {
-            handler()
-        }
+        attrs.handler()
     }
 

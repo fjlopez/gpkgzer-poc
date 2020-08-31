@@ -38,7 +38,6 @@ private val generate = functionalComponent<GenerateProps>("Generate") { props ->
 
     val onSubmit = { event: Event ->
         event.preventDefault()
-        console.info("click")
         if (!generating) {
             generating = true
             CoroutineScope(Dispatchers.Default).launch {

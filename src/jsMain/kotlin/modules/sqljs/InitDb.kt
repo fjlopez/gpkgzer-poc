@@ -27,7 +27,3 @@ fun createInstance(type: dynamic, vararg args: dynamic): dynamic {
 
 fun initDb(config: Config? = jsObject()): Promise<SqlJsStatic> = initSqlJs(config)
 
-class SqliteDriver(private val db: Database) {
-    fun exec(sql: String): Array<QueryResults> = db.exec(sql)
-    fun export(): Uint8Array = db.export()
-}

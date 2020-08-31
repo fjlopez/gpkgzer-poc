@@ -32,9 +32,7 @@ private val hotkeys = functionalComponent<HotKeysProps>(
 
 fun RBuilder.hotkeys(handler: HotKeysProps.() -> Unit) =
     child(hotkeys) {
-        attrs {
-            handler()
-        }
+        attrs.handler()
     }
 
 

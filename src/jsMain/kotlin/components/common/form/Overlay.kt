@@ -21,7 +21,6 @@ private val overlayComponent = functionalComponent<OverlayProps>("Overlay") { pr
                     timeout = 100
                 }
                 div("overlay") {
-
                 }
             }
         }
@@ -29,7 +28,5 @@ private val overlayComponent = functionalComponent<OverlayProps>("Overlay") { pr
 }
 
 fun RBuilder.overlay(handler: OverlayProps.() -> Unit) = child(overlayComponent) {
-    attrs {
-        handler()
-    }
+    attrs.handler()
 }

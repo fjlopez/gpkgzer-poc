@@ -2,7 +2,9 @@ package components.utils
 
 import kotlinext.js.Object
 import kotlinext.js.jsObject
+import kotlinx.html.LABEL
 import react.*
+import react.dom.RDOMBuilder
 
 interface FunctionalComponentDefaults<T> {
     var displayName: String
@@ -44,3 +46,7 @@ fun <P : RProps> functionalComponent(
         this.defaultProps = jsObject(defaultProps)
     })
 
+/**
+ * In react "htmlFor" is used instead "for" because it is a JS reserved keyword.
+ */
+fun RDOMBuilder<LABEL>.attrsHtmlFor(label: String?) = label?.let { attrs["htmlFor"] = it }

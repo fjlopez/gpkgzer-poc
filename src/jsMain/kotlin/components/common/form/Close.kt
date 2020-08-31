@@ -28,8 +28,6 @@ external interface CloseProps : RProps {
 }
 
 fun RBuilder.close(handler: CloseProps.() -> Unit) = child(Close::class) {
-    attrs {
-        handler()
-    }
+    attrs.handler()
 }
 

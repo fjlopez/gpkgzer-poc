@@ -1,10 +1,13 @@
 package components.common.builder
 
+import components.utils.attrsHtmlFor
 import components.utils.functionalComponent
+import kotlinx.html.LABEL
 import react.RBuilder
 import react.RProps
 import react.buildElement
 import react.child
+import react.dom.RDOMBuilder
 import react.dom.div
 import react.dom.label
 
@@ -22,7 +25,7 @@ private val control = functionalComponent<ControlProps>(
 ) { props ->
     div("control") {
         label("label") {
-            props.labelFor?.let { attrs.htmlFor = it }
+            attrsHtmlFor(props.labelFor)
             +props.text
         }
         div("control-element") {
