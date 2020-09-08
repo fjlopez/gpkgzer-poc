@@ -2,6 +2,7 @@ package components.common.builder
 
 import components.utils.disableTab
 import components.utils.functionalComponent
+import kotlinext.js.js
 import kotlinx.html.ButtonType
 import kotlinx.html.SPAN
 import kotlinx.html.id
@@ -25,15 +26,16 @@ interface ButtonProps : RProps {
     var onClick: (Event) -> Unit
 }
 
-private val button = functionalComponent<ButtonProps>(
+private val button = functionalComponent(
     displayName = "Button",
-    defaultProps = {
+    defaultProps = js {
         hotkey = ""
         block = {}
         primary = false
         disabled = false
         onClick = { console.info("Clicked!") }
-    }) { props ->
+    }.unsafeCast<ButtonProps>()
+) { props ->
     button(
         classes = "button ${if (props.primary) "primary" else ""}",
         type = ButtonType.button

@@ -1,4 +1,3 @@
-@file:JsQualifier("SqlJs")
 @file:Suppress(
     "INTERFACE_WITH_SUPERCLASS",
     "OVERRIDING_FINAL_MEMBER",

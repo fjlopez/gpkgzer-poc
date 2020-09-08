@@ -2,6 +2,7 @@ package components.common.form
 
 import components.utils.disableTab
 import components.utils.functionalComponent
+import kotlinext.js.jsObject
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.events.Event
 import react.RProps
@@ -21,12 +22,12 @@ interface TickInputProps<T : Any> : RProps {
     var error: Boolean
 }
 
-internal fun <T : Any> tickInput(type: TickType) = functionalComponent<TickInputProps<T>>(
+internal fun <T : Any> tickInput(type: TickType) = functionalComponent(
     displayName = when (type) {
         TickType.RADIO -> "Radio"
         TickType.CHECKBOX -> "CheckBox"
     },
-    defaultProps = {
+    defaultProps = jsObject<TickInputProps<T>> {
         checked = false
         text = ""
         handler = {}

@@ -1,6 +1,7 @@
 package components.common.form
 
 import components.utils.functionalComponent
+import kotlinext.js.jsObject
 import react.RBuilder
 import react.RProps
 import react.child
@@ -16,9 +17,9 @@ interface RadioProps<T : Any> : RProps {
     var asText: (T) -> String
 }
 
-private fun <T : Any> radioComponent() = functionalComponent<RadioProps<T>>(
+private fun <T : Any> radioComponent() = functionalComponent(
     displayName = "RadioGroup",
-    defaultProps = {
+    defaultProps = jsObject<RadioProps<T>> {
         name = ""
         options = emptyList()
         onChange = {}

@@ -8,6 +8,7 @@ import components.common.extension.extension
 import components.common.form.checkBoxGroup
 import components.common.form.radioGroup
 import components.utils.invoke
+import kotlinext.js.js
 import kotlinx.html.DIV
 import org.w3c.dom.HTMLElement
 import react.RClass
@@ -112,10 +113,10 @@ val fields: RClass<FieldsProps> = rConnect<State, RProps, FieldsProps>({ state, 
     selectedTarget = state.project.outputTarget
     selectedContent = state.project.content
     selectedOptions = state.project.options
-})(fieldsComponent, "Fields") {
-    availableSpecs = emptyList()
-    availableTargets = emptyList()
-    availableContents = emptyList()
-    availableOptions = emptyList()
-}
+})(fieldsComponent, "Fields", js {
+    availableSpecs = emptyList<Spec>()
+    availableTargets = emptyList<OutputTarget>()
+    availableContents = emptyList<ContentTarget>()
+    availableOptions = emptyList<ModuleInstance>()
+}.unsafeCast<FieldsProps>())
 

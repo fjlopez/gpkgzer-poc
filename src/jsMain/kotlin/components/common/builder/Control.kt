@@ -2,12 +2,11 @@ package components.common.builder
 
 import components.utils.attrsHtmlFor
 import components.utils.functionalComponent
-import kotlinx.html.LABEL
+import kotlinext.js.js
 import react.RBuilder
 import react.RProps
 import react.buildElement
 import react.child
-import react.dom.RDOMBuilder
 import react.dom.div
 import react.dom.label
 
@@ -17,11 +16,11 @@ interface ControlProps : RProps {
     var text: String
 }
 
-private val control = functionalComponent<ControlProps>(
+private val control = functionalComponent(
     displayName = "Control",
-    defaultProps = {
+    defaultProps = js {
         labelFor = ""
-    }
+    }.unsafeCast<ControlProps>()
 ) { props ->
     div("control") {
         label("label") {
@@ -34,9 +33,11 @@ private val control = functionalComponent<ControlProps>(
     }
 }
 
-fun RBuilder.control(text: String, labelFor: String? = null, handler: RBuilder.() -> Unit) =
+fun RBuilder.control(label: String, htmlLabelFor: String? = null, handler: RBuilder.() -> Unit) =
     child(control) {
-        attrs.text = text
-        labelFor?.let { attrs.labelFor = it }
-        attrs.children = handler
+        attrs {
+            text = label
+            htmlLabelFor?.let { labelFor = it }
+            children = handler
+        }
     }

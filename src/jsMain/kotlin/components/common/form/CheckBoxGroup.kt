@@ -1,6 +1,7 @@
 package components.common.form
 
 import components.utils.functionalComponent
+import kotlinext.js.js
 import react.RBuilder
 import react.RProps
 import react.child
@@ -16,16 +17,16 @@ interface CheckBoxGroupProps<T : Any> : RProps {
     var asText: (T) -> String
 }
 
-private fun <T : Any> checkBoxGroupComponent() = functionalComponent<CheckBoxGroupProps<T>>(
+private fun <T : Any> checkBoxGroupComponent() = functionalComponent(
     displayName = "CheckBoxGroup",
-    defaultProps = {
+    defaultProps = js {
         name = ""
-        selected = emptyList()
-        options = emptyList()
+        selected = emptyList<T>()
+        options = emptyList<T>()
         onChange = {}
         disabled = false
         asText = { "replace me" }
-    }
+    }.unsafeCast<CheckBoxGroupProps<T>>()
 ) { props ->
     div("group-radio") {
         props.options.forEach {

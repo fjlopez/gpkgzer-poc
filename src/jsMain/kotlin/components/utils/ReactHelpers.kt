@@ -6,30 +6,25 @@ import kotlinx.html.LABEL
 import react.*
 import react.dom.RDOMBuilder
 
-interface FunctionalComponentDefaults<T> {
-    var displayName: String
-    var defaultProps: T
-}
-
 operator fun <P : RProps, R : RProps> HOC<P, R>.invoke(
     component: FunctionalComponent<P>,
     displayName: String,
-    defaultProps: P.() -> Unit = {}
+    defaultProps: P? = null
 ): RClass<R> =
     call(null, { props: P ->
         component(props)
     }).also {
         Object.assign(
             it,
-            jsObject<FunctionalComponentDefaults<P>> {
+            jsObject {
                 this.displayName = "RConnect ($displayName)"
             }
         )
         Object.assign(
-            it.asDynamic().WrappedComponent as FunctionalComponent<P>,
-            jsObject<FunctionalComponentDefaults<P>> {
+            it.asDynamic().WrappedComponent.unsafeCast<RClass<P>>(),
+            jsObject {
                 this.displayName = displayName
-                this.defaultProps = jsObject(defaultProps)
+                this.defaultProps = defaultProps
             }
         )
     }
@@ -37,14 +32,16 @@ operator fun <P : RProps, R : RProps> HOC<P, R>.invoke(
 
 fun <P : RProps> functionalComponent(
     displayName: String,
-    defaultProps: P.() -> Unit = {},
+    defaultProps: P? = null,
     func: RBuilder.(props: P) -> Unit
-): FunctionalComponent<P> = Object.assign(
-    functionalComponent(func),
-    jsObject<FunctionalComponentDefaults<P>> {
-        this.displayName = displayName
-        this.defaultProps = jsObject(defaultProps)
-    })
+): FunctionalComponent<P> = functionalComponent(func).also {
+    Object.assign(
+        it.unsafeCast<RClass<P>>(),
+        jsObject {
+            this.displayName = displayName
+            this.defaultProps = defaultProps
+        })
+}
 
 /**
  * In react "htmlFor" is used instead "for" because it is a JS reserved keyword.
