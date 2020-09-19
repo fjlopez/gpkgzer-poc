@@ -13,7 +13,7 @@ enum class TickType {
     RADIO, CHECKBOX
 }
 
-interface TickInputProps<T : Any> : RProps {
+external interface TickInputProps<T : Any> : RProps {
     var checked: Boolean
     var text: String
     var value: T

@@ -7,42 +7,29 @@ import components.common.form.close
 import components.common.layout.header
 import components.common.layout.sideLeft
 import components.common.layout.sideRight
-import components.utils.invoke
 import config.Configuration
 import kotlinx.browser.document
 import kotlinx.html.id
 import modules.react.toastify.toastContainer
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
-import react.RClass
-import react.RProps
 import react.dom.div
 import react.dom.form
 import react.dom.hr
 import react.functionalComponent
-import react.redux.rConnect
 import react.useRef
-import reducer.CloseExtensions
-import reducer.State
-import reducer.store
 
-interface ApplicationProps : RProps {
-    var theme: Theme
-}
+interface ApplicationComponentProps : ApplicationStateProps, ApplicationDispatchProps
 
-val applicationComponent = functionalComponent<ApplicationProps> { props ->
+val applicationComponent = functionalComponent<ApplicationComponentProps> { props ->
+
     val buttonExtension = useRef<HTMLElement?>(null)
-    val buttonGenerate = useRef<HTMLElement?>(null)
-
-    val onEscape: (Event) -> Unit = {
-        store.dispatch(CloseExtensions)
-    }
 
     document.body?.className = props.theme.className
 
     hotkeys {
         onExtensions = { _: Event -> buttonExtension.current?.click() }
-        onGenerate = { _: Event -> buttonGenerate.current?.click() }
+        onGenerate = { _: Event -> buttonExtension.current?.click() }
     }
     sideLeft()
     div {
@@ -57,12 +44,12 @@ val applicationComponent = functionalComponent<ApplicationProps> { props ->
                     availableContents = Configuration.supportedContents
                     availableOptions = Configuration.options
                     refExtension = buttonExtension
-                    refGenerate = buttonGenerate
+                    refGenerate = buttonExtension
                 }
             }
             extensionDialog {
                 attrs {
-                    onClose = onEscape
+                    onClose = { props.onEscape() }
                 }
             }
         }
@@ -77,7 +64,4 @@ val applicationComponent = functionalComponent<ApplicationProps> { props ->
     }
 }
 
-val application: RClass<ApplicationProps> = rConnect<State, RProps, ApplicationProps>({ state, _ ->
-    theme = state.theme
-})(applicationComponent, "Application")
 

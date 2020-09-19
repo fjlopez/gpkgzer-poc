@@ -7,7 +7,7 @@ import react.RProps
 import react.child
 import react.dom.div
 
-interface CheckBoxGroupProps<T : Any> : RProps {
+external interface CheckBoxGroupProps<T : Any> : RProps {
     var name: String
     var selected: List<T>
     var error: String?

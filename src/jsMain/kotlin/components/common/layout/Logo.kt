@@ -14,7 +14,7 @@ private val logoComponent = functionalComponent<LogoComponentProps>("Logo") { pr
     }
 }
 
-interface LogoComponentProps : RProps {
+external interface LogoComponentProps : RProps {
     var className: String?
 }
 

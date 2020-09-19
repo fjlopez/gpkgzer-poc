@@ -8,7 +8,7 @@ import react.RBuilder
 import react.RProps
 import react.child
 
-interface HotKeysProps : RProps {
+external interface HotKeysProps : RProps {
     var onExtensions: (Event) -> Unit
     var onGenerate: (Event) -> Unit
 }

@@ -7,7 +7,7 @@ import react.RProps
 import react.child
 import react.dom.div
 
-interface RadioProps<T : Any> : RProps {
+external interface RadioProps<T : Any> : RProps {
     var name: String
     var selected: T?
     var error: String?

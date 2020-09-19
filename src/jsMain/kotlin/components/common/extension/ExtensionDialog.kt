@@ -4,7 +4,6 @@ import com.github.gpkg4all.common.ModuleInstance
 import components.common.form.overlay
 import components.common.iconEnter
 import components.utils.KeyCodes
-import components.utils.invoke
 import components.utils.useWindowsUtils
 import kotlinext.js.jsObject
 import kotlinx.browser.document
@@ -23,25 +22,17 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import react.*
 import react.dom.*
-import react.redux.rConnect
-import reducer.AddExtension
-import reducer.State
-import reducer.store
 
-interface ExtensionDialogProps : RProps {
-    var onClose: (Event) -> Unit
-    var isShown: Boolean
-    var extensions: List<ModuleInstance>
-}
+interface ExtensionDialogComponentProps : ExtensionDialogProps, ExtensionDialogStateProps, ExtensionDialogDispatchProps
 
-interface Document {
+external interface Document {
     var instance: ModuleInstance
     var name: String
     var description: String
     var group: String
 }
 
-val extensionDialogComponent = functionalComponent<ExtensionDialogProps> { props ->
+val extensionDialogComponent = functionalComponent<ExtensionDialogComponentProps> { props ->
     val computeGroups = { list: List<ModuleInstance> ->
         list.groupBy { it.module.group }
             .entries
@@ -137,7 +128,7 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogProps> { props
                                 .toMap()
                                 .entries
                                 .sortedBy { it.key }
-                            store.dispatch(AddExtension(instance))
+                            props.onAddExtension(instance)
                         }
                     }
                 if (!multiple) {
@@ -230,7 +221,7 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogProps> { props
                                     event.preventDefault()
                                     textFocus()
                                     if (itemGroup.valid) {
-                                        store.dispatch(AddExtension(itemGroup))
+                                        props.onAddExtension(itemGroup)
                                         if (!multiple) {
                                             props.onClose(event)
                                         } else {
@@ -281,7 +272,3 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogProps> { props
     }
 }
 
-val extensionDialog: RClass<ExtensionDialogProps> = rConnect<State, RProps, ExtensionDialogProps>({ state, _ ->
-    isShown = state.showExtensionsDialog
-    extensions = state.availableExtensions
-})(extensionDialogComponent, "ExtensionDialog")

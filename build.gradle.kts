@@ -1,12 +1,12 @@
 plugins {
-    kotlin("multiplatform") version "1.4.0"
+    kotlin("multiplatform") version "1.4.10"
 }
 
-val kotlinVersion = "1.4.0"
+val kotlinVersion = "1.4.10"
 val reactVersion = "16.13.1"
 val reduxVersion = "5.0.7"
 val extensionsVersion = "1.0.1"
-val preVersion = "112"
+val preVersion = "115"
 
 group = "es.iaaa"
 version = "0.1-SNAPSHOT"
@@ -18,7 +18,7 @@ repositories {
 }
 
 kotlin {
-    js {
+    js(IR) {
         browser {}
         useCommonJs()
         binaries.executable()

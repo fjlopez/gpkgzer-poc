@@ -10,34 +10,34 @@ import react.child
 import react.dom.div
 import react.dom.label
 
-interface ControlProps : RProps {
-    var children: RBuilder.() -> Unit
+external interface ControlProps : RProps {
     var labelFor: String?
     var text: String
 }
 
-private val control = functionalComponent(
-    displayName = "Control",
-    defaultProps = js {
-        labelFor = ""
-    }.unsafeCast<ControlProps>()
-) { props ->
-    div("control") {
-        label("label") {
-            attrsHtmlFor(props.labelFor)
-            +props.text
-        }
-        div("control-element") {
-            child(buildElement(props.children))
+private val controlComponent = { children: RBuilder.() -> Unit ->
+    functionalComponent(
+        displayName = "Control",
+        defaultProps = js {
+            labelFor = ""
+        }.unsafeCast<ControlProps>()
+    ) { props ->
+        div("control") {
+            label("label") {
+                attrsHtmlFor(props.labelFor)
+                +props.text
+            }
+            div("control-element") {
+                child(buildElement(children))
+            }
         }
     }
 }
 
 fun RBuilder.control(label: String, htmlLabelFor: String? = null, handler: RBuilder.() -> Unit) =
-    child(control) {
+    child(controlComponent(handler)) {
         attrs {
             text = label
             htmlLabelFor?.let { labelFor = it }
-            children = handler
         }
     }

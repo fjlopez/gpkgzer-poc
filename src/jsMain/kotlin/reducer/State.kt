@@ -3,11 +3,11 @@ package reducer
 import com.github.gpkg4all.common.*
 import components.common.Theme
 import config.Configuration
+import kotlinext.js.Object
+import kotlinext.js.asJsObject
+import kotlinext.js.assign
 import modules.react.toastify.warning
-import redux.RAction
-import redux.Reducer
-import redux.createStore
-import redux.rEnhancer
+import redux.*
 
 data class State(
     val theme: Theme = Configuration.theme,
@@ -75,6 +75,35 @@ object Reducers {
 }
 
 
+
 val store = createStore(
-    with(Reducers) { stateReducer + validateState }, State(), rEnhancer()
+    with(Reducers) { stateReducer + validateState },
+    State(),
+    rEnhancer()
 )
+
+fun <S> rEnhancer(): Enhancer<S, Action, Action, RAction, WrapperAction> = { next ->
+    { reducer, initialState ->
+        fun wrapperReducer(reducer: Reducer<S, RAction>): Reducer<S, WrapperAction> {
+            return { state, action ->
+                reducer(state, (action.asDynamic().action ?: action).unsafeCast<RAction>())
+            }
+        }
+
+        val store = (next.unsafeCast<StoreCreator<S, WrapperAction, WrapperAction>>())(wrapperReducer(reducer), initialState)
+        val dispatch = { action: RAction ->
+            val result = store.dispatch(kotlinext.js.js {
+                type = action::class.simpleName
+                this.action = action
+            }.unsafeCast<WrapperAction>())
+            result
+        }
+        val replaceReducer = { nextReducer: Reducer<S, RAction> ->
+            store.replaceReducer(wrapperReducer(nextReducer))
+        }
+        assign(Object.assign(kotlinext.js.js {}, store)) {
+            this.dispatch = dispatch
+            this.replaceReducer = replaceReducer
+        }.unsafeCast<Store<S, RAction, WrapperAction>>()
+    }
+}

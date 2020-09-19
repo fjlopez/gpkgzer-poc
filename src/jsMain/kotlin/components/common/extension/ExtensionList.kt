@@ -3,26 +3,16 @@ package components.common.extension
 import com.github.gpkg4all.common.ModuleInstance
 import components.common.iconRemove
 import components.utils.disableTab
-import components.utils.invoke
 import kotlinx.html.LI
 import kotlinx.html.js.onClickFunction
 import modules.react.transitiongroup.cssTransition
 import modules.react.transitiongroup.transitionGroup
-import org.w3c.dom.events.Event
-import react.RClass
-import react.RProps
+import react.*
 import react.dom.*
-import react.functionalComponent
-import react.redux.rConnect
-import reducer.RemoveExtension
-import reducer.State
-import reducer.store
 
-interface ExtensionListProps : RProps {
-    var extensions: List<ModuleInstance>
-}
+interface ExtensionListComponentProps : ExtensionListStateProps, ExtensionListDispatchProps
 
-val extensionListComponent = functionalComponent<ExtensionListProps> { props ->
+val extensionListComponent = functionalComponent<ExtensionListComponentProps> { props ->
     if (props.extensions.isEmpty()) {
         div("no-dependency") {
             +"No extension selected"
@@ -40,7 +30,7 @@ val extensionListComponent = functionalComponent<ExtensionListProps> { props ->
                         classNames = "fade"
                     }
                     li {
-                        item(item)
+                        item(props, item)
                     }
                 }
             }
@@ -48,7 +38,7 @@ val extensionListComponent = functionalComponent<ExtensionListProps> { props ->
     }
 }
 
-internal fun RDOMBuilder<LI>.item(item: ModuleInstance) {
+internal fun RDOMBuilder<LI>.item(props: ExtensionListComponentProps, item: ModuleInstance) {
     div("dependency-item ${if (!item.valid) "disabled" else ""}") {
         strong {
             +(item.module.title + " ")
@@ -64,10 +54,7 @@ internal fun RDOMBuilder<LI>.item(item: ModuleInstance) {
         a(href = "", classes = "icon") {
             span("a-content") {
                 attrs.disableTab()
-                attrs.onClickFunction = { event: Event ->
-                    event.preventDefault()
-                    store.dispatch(RemoveExtension(item))
-                }
+                attrs.onClickFunction = props.onRemoveExtension(item)
                 iconRemove()
             }
         }
@@ -79,6 +66,3 @@ internal fun RDOMBuilder<LI>.item(item: ModuleInstance) {
     }
 }
 
-val extensionList: RClass<ExtensionListProps> = rConnect<State, RProps, ExtensionListProps>({ state, _ ->
-    extensions = state.project.extensions
-})(extensionListComponent, "ExtensionList")

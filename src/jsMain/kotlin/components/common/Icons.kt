@@ -91,7 +91,7 @@ fun RBuilder.iconEnter() = svg("icon-enter") {
     )
 }
 
-interface LineProps : RProps {
+external interface LineProps : RProps {
     var className: String
     var x1: Double
     var y1: Double
@@ -100,19 +100,19 @@ interface LineProps : RProps {
     var key: String?
 }
 
-interface PathProps : RProps {
+external interface PathProps : RProps {
     var fill: String
     var d: String
     var className: String
     var key: String?
 }
 
-interface Polygon : RProps {
+external interface Polygon : RProps {
     var points: String
     var key: String?
 }
 
-interface GraphProps : RProps {
+external interface GraphProps : RProps {
     var id: String?
 }
 

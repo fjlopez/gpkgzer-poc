@@ -7,34 +7,15 @@ import com.github.gpkg4all.common.Spec
 import components.common.extension.extension
 import components.common.form.checkBoxGroup
 import components.common.form.radioGroup
-import components.utils.invoke
-import kotlinext.js.js
+import kotlinext.js.jsObject
 import kotlinx.html.DIV
-import org.w3c.dom.HTMLElement
-import react.RClass
-import react.RMutableRef
-import react.RProps
+import react.*
 import react.dom.RDOMBuilder
 import react.dom.div
-import react.functionalComponent
-import react.redux.rConnect
-import reducer.*
 
+interface FieldsComponentProps : FieldsProps, FieldsStateProps, FieldsDispatchProps
 
-interface FieldsProps : RProps {
-    var selectedSpec: Spec?
-    var availableSpecs: List<Spec>
-    var selectedTarget: OutputTarget?
-    var availableTargets: List<OutputTarget>
-    var selectedContent: ContentTarget?
-    var availableContents: List<ContentTarget>
-    var selectedOptions: List<ModuleInstance>
-    var availableOptions: List<ModuleInstance>
-    var refExtension: RMutableRef<HTMLElement?>
-    var refGenerate: RMutableRef<HTMLElement?>
-}
-
-val fieldsComponent = functionalComponent<FieldsProps> { props ->
+val fieldsComponent = functionalComponent<FieldsComponentProps> { props ->
     div("colset colset-main") {
         div("left") {
             div("col-sticky") {
@@ -46,77 +27,67 @@ val fieldsComponent = functionalComponent<FieldsProps> { props ->
         }
         div("right") {
             extension {
-                refButton = props.refExtension
+                attrs {
+                    refButton = props.refExtension
+                }
             }
         }
     }
     div("actions") {
         div("actions-container") {
-            generate {
+            generate(jsObject {
                 refButton = props.refGenerate
-            }
+            })
         }
     }
 }
 
 
-private fun RDOMBuilder<DIV>.packagingField(props: FieldsProps) {
+private fun RDOMBuilder<DIV>.packagingField(props: FieldsComponentProps) {
     control("Packaging") {
         radioGroup<OutputTarget> {
             name = "packaging"
             selected = props.selectedTarget
             options = props.availableTargets
-            onChange = { if (props.selectedTarget != it) store.dispatch(UpdateProjectTarget(it)) }
+            onChange = props.onChangeTarget
             asText = { it.description }
         }
     }
 }
 
-private fun RDOMBuilder<DIV>.contentField(props: FieldsProps) {
+private fun RDOMBuilder<DIV>.contentField(props: FieldsComponentProps) {
     control("GeoPackage content") {
         radioGroup<ContentTarget> {
             name = "content"
             selected = props.selectedContent
             options = props.availableContents
-            onChange = { if (props.selectedContent != it) store.dispatch(UpdateProjectContent(it)) }
+            onChange = props.onChangeContent
             asText = { it.description }
         }
     }
 }
 
-private fun RDOMBuilder<DIV>.conformanceField(props: FieldsProps) {
+private fun RDOMBuilder<DIV>.conformanceField(props: FieldsComponentProps) {
     control("GeoPackage conformance") {
         radioGroup<Spec> {
             name = "conformance"
             selected = props.selectedSpec
             options = props.availableSpecs
-            onChange = { if (props.selectedSpec != it) store.dispatch(UpdateProjectSpecification(it)) }
+            onChange = props.onChangeSpecs
             asText = { it.description }
         }
     }
 }
 
-private fun RDOMBuilder<DIV>.optionsField(props: FieldsProps) {
+private fun RDOMBuilder<DIV>.optionsField(props: FieldsComponentProps) {
     control("GeoPackage options") {
         checkBoxGroup<ModuleInstance> {
             name = "options"
             selected = props.selectedOptions
             options = props.availableOptions
-            onChange = { store.dispatch(ToggleProjectOption(it)) }
+            onChange = props.onChangeOptions
             asText = { it.module.title }
         }
     }
 }
-
-val fields: RClass<FieldsProps> = rConnect<State, RProps, FieldsProps>({ state, _ ->
-    selectedSpec = state.project.spec
-    selectedTarget = state.project.outputTarget
-    selectedContent = state.project.content
-    selectedOptions = state.project.options
-})(fieldsComponent, "Fields", js {
-    availableSpecs = emptyList<Spec>()
-    availableTargets = emptyList<OutputTarget>()
-    availableContents = emptyList<ContentTarget>()
-    availableOptions = emptyList<ModuleInstance>()
-}.unsafeCast<FieldsProps>())
 

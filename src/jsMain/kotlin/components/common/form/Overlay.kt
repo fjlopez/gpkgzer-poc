@@ -8,7 +8,7 @@ import react.RProps
 import react.child
 import react.dom.div
 
-interface OverlayProps : RProps {
+external interface OverlayProps : RProps {
     var open: Boolean
 }
 

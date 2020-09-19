@@ -6,6 +6,7 @@ import components.common.Theme.LIGHT
 import components.common.iconMoon
 import components.common.iconSun
 import components.utils.disableTab
+import components.utils.invoke
 import kotlinx.html.DIV
 import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
@@ -15,39 +16,34 @@ import react.dom.a
 import react.dom.div
 import react.dom.span
 import react.redux.rConnect
-import reducer.State
-import reducer.UpdateTheme
-import reducer.store
+import reducer.*
+import redux.RAction
+import redux.WrapperAction
 
+interface SideRightComponentProps : SideRightStateProps, SideRightDispatchProps
 
-class SideRight : RComponent<SideRightProps, RState>() {
-    override fun RBuilder.render() {
-        div {
-            attrs.id = "side-right"
-            div("side-container") {
-                themeSwitcher(props)
-            }
+val sideRightComponent = functionalComponent<SideRightComponentProps> { props ->
+    div {
+        attrs.id = "side-right"
+        div("side-container") {
+            themeSwitcher(props)
         }
     }
 }
 
-interface SideRightProps : RProps {
-    var theme: Theme
-}
 
-
-private fun RDOMBuilder<DIV>.themeSwitcher(props: SideRightProps) {
+private fun RDOMBuilder<DIV>.themeSwitcher(props: SideRightComponentProps) {
     div("switch") {
         setLightThemeButton(props)
         setDarkThemeButton(props)
     }
 }
 
-private fun RDOMBuilder<DIV>.setDarkThemeButton(props: SideRightProps) {
+private fun RDOMBuilder<DIV>.setDarkThemeButton(props: SideRightComponentProps) {
     a(href = "/", classes = "button inverse ${if (props.theme == DARK) "active" else ""}") {
         attrs.onClickFunction = {
             it.preventDefault()
-            store.dispatch(UpdateTheme(DARK))
+            props.onUpdateTheme(DARK)
         }
         span(classes = "button-content") {
             attrs.disableTab()
@@ -56,11 +52,11 @@ private fun RDOMBuilder<DIV>.setDarkThemeButton(props: SideRightProps) {
     }
 }
 
-private fun RDOMBuilder<DIV>.setLightThemeButton(props: SideRightProps) {
+private fun RDOMBuilder<DIV>.setLightThemeButton(props: SideRightComponentProps) {
     a(href = "/", classes = "button inverse top ${if (props.theme == LIGHT) "active" else ""}") {
         attrs.onClickFunction = {
             it.preventDefault()
-            store.dispatch(UpdateTheme(LIGHT))
+            props.onUpdateTheme(LIGHT)
         }
         span(classes = "button-content") {
             attrs.disableTab()
@@ -69,6 +65,20 @@ private fun RDOMBuilder<DIV>.setLightThemeButton(props: SideRightProps) {
     }
 }
 
-val sideRight: RClass<SideRightProps> = rConnect<State, RProps, SideRightProps>({ state, _ ->
-    theme = state.theme
-})(SideRight::class.rClass)
+external interface SideRightStateProps : RProps {
+    var theme: Theme
+}
+
+external interface SideRightDispatchProps : RProps {
+    var onUpdateTheme : (Theme) -> Unit
+}
+
+fun RBuilder.sideRight(handler: RHandler<RProps> = {}) =
+    rConnect<State, RAction, WrapperAction, RProps, SideRightStateProps, SideRightDispatchProps, SideRightComponentProps>(
+        { state, _ ->
+            theme = state.theme
+        },
+        { dispatch, _ ->
+            onUpdateTheme = { dispatch(UpdateTheme(it)) }
+        }
+    ).invoke(sideRightComponent, "SideRight").invoke(handler)

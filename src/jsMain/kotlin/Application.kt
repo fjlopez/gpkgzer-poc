@@ -1,4 +1,4 @@
-import components.common.application
+import components.common.app
 import kotlinext.js.require
 import kotlinx.browser.document
 import modules.react.toastify.toastRequires
@@ -12,8 +12,7 @@ fun main() {
     val rootDiv = document.getElementById("app-root")
     render(rootDiv) {
         provider(store) {
-            application {
-            }
+            app()
         }
     }
 }

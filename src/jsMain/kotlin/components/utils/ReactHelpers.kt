@@ -6,27 +6,20 @@ import kotlinx.html.LABEL
 import react.*
 import react.dom.RDOMBuilder
 
+
 operator fun <P : RProps, R : RProps> HOC<P, R>.invoke(
     component: FunctionalComponent<P>,
-    displayName: String,
+    displayName: String? = null,
     defaultProps: P? = null
 ): RClass<R> =
     call(null, { props: P ->
         component(props)
-    }).also {
-        Object.assign(
-            it,
-            jsObject {
-                this.displayName = "RConnect ($displayName)"
-            }
-        )
-        Object.assign(
-            it.asDynamic().WrappedComponent.unsafeCast<RClass<P>>(),
-            jsObject {
-                this.displayName = displayName
-                this.defaultProps = defaultProps
-            }
-        )
+    }).apply {
+        asDynamic().displayName = displayName?.let { "RConnect ($displayName)" } ?: "RConnect (Component)"
+        asDynamic().WrappedComponent.unsafeCast<RClass<P>>().apply {
+            this.displayName = displayName ?: "Anonymous"
+            this.defaultProps = defaultProps
+        }
     }
 
 
