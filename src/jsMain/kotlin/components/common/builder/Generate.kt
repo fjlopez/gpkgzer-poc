@@ -1,6 +1,5 @@
 package components.common.builder
 
-import components.common.extension.ExtensionProps
 import components.utils.functionalComponent
 import kotlinx.browser.document
 import kotlinx.coroutines.CoroutineScope

@@ -3,6 +3,8 @@ package components.common.extension
 import com.github.gpkg4all.common.ModuleInstance
 import components.common.iconRemove
 import components.utils.disableTab
+import connectors.ExtensionListDispatchProps
+import connectors.ExtensionListStateProps
 import kotlinx.html.LI
 import kotlinx.html.js.onClickFunction
 import modules.react.transitiongroup.cssTransition

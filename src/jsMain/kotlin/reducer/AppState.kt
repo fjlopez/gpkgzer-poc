@@ -4,12 +4,11 @@ import com.github.gpkg4all.common.*
 import components.common.Theme
 import config.Configuration
 import kotlinext.js.Object
-import kotlinext.js.asJsObject
 import kotlinext.js.assign
 import modules.react.toastify.warning
 import redux.*
 
-data class State(
+data class AppState(
     val theme: Theme = Configuration.theme,
     val project: Project = Project(
         outputTarget = Configuration.supportedTargets.find { it.default },
@@ -33,7 +32,7 @@ object ShowExtensions : RAction
 object CloseExtensions : RAction
 
 object Reducers {
-    val stateReducer = { state: State, action: RAction ->
+    val stateReducer = { state: AppState, action: RAction ->
         when (action) {
             is UpdateTheme -> state.copy(theme = action.theme)
             is UpdateProjectSpecification -> {
@@ -62,7 +61,7 @@ object Reducers {
         }
     }
 
-    val validateState = { state: State, _: RAction ->
+    val validateState = { state: AppState, _: RAction ->
         state.copy(
             project = updateExtensionValidity(state.project),
             availableExtensions = validateExtensions(state.project, state.availableExtensions)
@@ -78,7 +77,7 @@ object Reducers {
 
 val store = createStore(
     with(Reducers) { stateReducer + validateState },
-    State(),
+    AppState(),
     rEnhancer()
 )
 

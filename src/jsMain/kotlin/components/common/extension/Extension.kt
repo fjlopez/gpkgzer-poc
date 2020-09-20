@@ -3,6 +3,9 @@ package components.common.extension
 import components.common.builder.button
 import components.utils.functionalComponent
 import components.utils.useWindowsUtils
+import connectors.ExtensionDispatchProps
+import connectors.ExtensionProps
+import connectors.extensionList
 import react.dom.div
 import react.dom.span
 

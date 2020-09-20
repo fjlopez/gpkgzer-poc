@@ -5,6 +5,9 @@ import components.common.form.overlay
 import components.common.iconEnter
 import components.utils.KeyCodes
 import components.utils.useWindowsUtils
+import connectors.ExtensionDialogDispatchProps
+import connectors.ExtensionDialogProps
+import connectors.ExtensionDialogStateProps
 import kotlinext.js.jsObject
 import kotlinx.browser.document
 import kotlinx.browser.window

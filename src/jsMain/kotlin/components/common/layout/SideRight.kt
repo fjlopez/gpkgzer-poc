@@ -1,12 +1,12 @@
 package components.common.layout
 
-import components.common.Theme
 import components.common.Theme.DARK
 import components.common.Theme.LIGHT
 import components.common.iconMoon
 import components.common.iconSun
 import components.utils.disableTab
-import components.utils.invoke
+import connectors.SideRightDispatchProps
+import connectors.SideRightStateProps
 import kotlinx.html.DIV
 import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
@@ -15,10 +15,6 @@ import react.dom.RDOMBuilder
 import react.dom.a
 import react.dom.div
 import react.dom.span
-import react.redux.rConnect
-import reducer.*
-import redux.RAction
-import redux.WrapperAction
 
 interface SideRightComponentProps : SideRightStateProps, SideRightDispatchProps
 
@@ -65,20 +61,3 @@ private fun RDOMBuilder<DIV>.setLightThemeButton(props: SideRightComponentProps)
     }
 }
 
-external interface SideRightStateProps : RProps {
-    var theme: Theme
-}
-
-external interface SideRightDispatchProps : RProps {
-    var onUpdateTheme : (Theme) -> Unit
-}
-
-fun RBuilder.sideRight(handler: RHandler<RProps> = {}) =
-    rConnect<State, RAction, WrapperAction, RProps, SideRightStateProps, SideRightDispatchProps, SideRightComponentProps>(
-        { state, _ ->
-            theme = state.theme
-        },
-        { dispatch, _ ->
-            onUpdateTheme = { dispatch(UpdateTheme(it)) }
-        }
-    ).invoke(sideRightComponent, "SideRight").invoke(handler)

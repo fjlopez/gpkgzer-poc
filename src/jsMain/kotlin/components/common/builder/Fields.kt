@@ -4,9 +4,12 @@ import com.github.gpkg4all.common.ContentTarget
 import com.github.gpkg4all.common.ModuleInstance
 import com.github.gpkg4all.common.OutputTarget
 import com.github.gpkg4all.common.Spec
-import components.common.extension.extension
+import connectors.extension
 import components.common.form.checkBoxGroup
 import components.common.form.radioGroup
+import connectors.FieldsDispatchProps
+import connectors.FieldsProps
+import connectors.FieldsStateProps
 import kotlinext.js.jsObject
 import kotlinx.html.DIV
 import react.*

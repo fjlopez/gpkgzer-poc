@@ -1,4 +1,4 @@
-import components.common.app
+import connectors.app
 import kotlinext.js.require
 import kotlinx.browser.document
 import modules.react.toastify.toastRequires

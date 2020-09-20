@@ -6,11 +6,10 @@ import kotlinx.html.LABEL
 import react.*
 import react.dom.RDOMBuilder
 
-
 operator fun <P : RProps, R : RProps> HOC<P, R>.invoke(
     component: FunctionalComponent<P>,
     displayName: String? = null,
-    defaultProps: P? = null
+    defaultProps: P.() -> Unit = {}
 ): RClass<R> =
     call(null, { props: P ->
         component(props)
@@ -18,7 +17,7 @@ operator fun <P : RProps, R : RProps> HOC<P, R>.invoke(
         asDynamic().displayName = displayName?.let { "RConnect ($displayName)" } ?: "RConnect (Component)"
         asDynamic().WrappedComponent.unsafeCast<RClass<P>>().apply {
             this.displayName = displayName ?: "Anonymous"
-            this.defaultProps = defaultProps
+            this.defaultProps =  kotlinext.js.js(defaultProps).unsafeCast<P>()
         }
     }
 

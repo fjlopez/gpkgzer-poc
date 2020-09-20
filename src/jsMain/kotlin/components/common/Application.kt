@@ -1,13 +1,15 @@
 package components.common
 
-import components.common.builder.fields
+import connectors.fields
 import components.common.builder.hotkeys
-import components.common.extension.extensionDialog
+import connectors.extensionDialog
 import components.common.form.close
 import components.common.layout.header
 import components.common.layout.sideLeft
-import components.common.layout.sideRight
+import connectors.sideRight
 import config.Configuration
+import connectors.ApplicationDispatchProps
+import connectors.ApplicationStateProps
 import kotlinx.browser.document
 import kotlinx.html.id
 import modules.react.toastify.toastContainer
