@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED_VARIABLE")
+
 plugins {
     kotlin("multiplatform") version "1.4.10"
 }
@@ -25,18 +27,18 @@ kotlin {
     }
 
     sourceSets {
-        commonMain {
+        val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
             }
         }
-        commonTest {
+        val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
             }
         }
-        js().compilations["main"].defaultSourceSet {
+        val jsMain by getting {
             dependencies {
                 // kotlin-extensions
                 implementation("org.jetbrains:kotlin-extensions:$extensionsVersion-pre.$preVersion-kotlin-$kotlinVersion")
@@ -70,6 +72,11 @@ kotlin {
                 implementation(npm("html-webpack-plugin", "4.3.0"))
                 implementation(npm("file-loader", "6.0.0"))
                 implementation(npm("sass", "1.26.10"))
+            }
+            val jsTest by getting {
+                dependencies {
+                    implementation(kotlin("test-js"))
+                }
             }
         }
     }
