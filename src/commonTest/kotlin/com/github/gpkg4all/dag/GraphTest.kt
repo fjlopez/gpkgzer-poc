@@ -26,19 +26,19 @@ class GraphTest {
         )
 
         private val edges = mutableListOf(
-            2 to 0, 2 to 14, 2 to 13, 2 to 4, 2 to 3, 2 to 12, 2 to 1,
-            3 to 1, 3 to 10, 3 to 11,
-            4 to 1, 4 to 10,
-            5 to 0, 5 to 14, 5 to 10, 5 to 4, 5 to 3, 5 to 1, 5 to 11,
-            6 to 1, 6 to 3, 6 to 10, 6 to 11,
-            7 to 1, 7 to 10,
-            8 to 1, 8 to 10,
-            9 to 1, 9 to 10,
-            10 to 1,
-            11 to 1,
-            12 to 0, 12 to 1,
-            13 to 1
-        ).map { (i, r) -> Pair(vertices[i], vertices[r]) }
+            2 after 0, 2 after 14, 2 after 13, 2 after 4, 2 after 3, 2 after 12, 2 after 1,
+            3 after 1, 3 after 10, 3 after 11,
+            4 after 1, 4 after 10,
+            5 after 0, 5 after 14, 5 after 10, 5 after 4, 5 after 3, 5 after 1, 5 after 11,
+            6 after 1, 6 after 3, 6 after 10, 6 after 11,
+            7 after 1, 7 after 10,
+            8 after 1, 8 after 10,
+            9 after 1, 9 after 10,
+            10 after 1,
+            11 after 1,
+            12 after 0, 12 after 1,
+            13 after 1
+        ).map { (i, r) -> DirectedEdge(vertices[i], vertices[r]) }
 
         val sut = Graph(vertices, edges)
     }

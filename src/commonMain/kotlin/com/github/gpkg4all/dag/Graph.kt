@@ -6,7 +6,7 @@ package com.github.gpkg4all.dag
  */
 data class Graph<T>(
     val vertices: List<T>,
-    val edges: List<Pair<T, T>>
+    val edges: List<DirectedEdge<T>>
 )
 
 /**
@@ -15,7 +15,7 @@ data class Graph<T>(
  * Each edge (u,v) implies u comes after v in the ordering.
  */
 fun <T> Graph<T>.topoSortOrNull(): List<T>? = runCatching {
-    val edgesIdx = edges.map { Pair(vertices.indexOf(it.first), vertices.indexOf(it.second)) }
+    val edgesIdx = edges.map { DirectedEdge(vertices.indexOf(it.u), vertices.indexOf(it.v)) }
     val adjacency = List(vertices.size) { BooleanArray(vertices.size) }
     for ((i, r) in edgesIdx) adjacency[i][r] = true
     val todo = IntRange(0, vertices.size - 1).toMutableList()
