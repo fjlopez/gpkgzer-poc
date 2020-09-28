@@ -5,7 +5,8 @@ data class Spec(
     val description: String,
     val deprecated: Boolean = false,
     val development: Boolean = false,
-    val default: Boolean = false
+    val default: Boolean = false,
+    val features: List<Feature> = emptyList()
 ) : Comparable<Spec> {
     override fun compareTo(other: Spec): Int = key.compareTo(other.key)
 }
@@ -13,8 +14,24 @@ data class Spec(
 object Specs {
     val spec131 = Spec("1.3.1", "1.3.1 (SNAPSHOT)", development = true)
     val spec130 = Spec("1.3.0", "1.3.0 IS", default = true)
-    val spec121 = Spec("1.2.1", "1.2.1 ISc")
-    val spec120 = Spec("1.2.0", "1.2.0 IS")
+    val spec121 = Spec("1.2.1", "1.2.1 ISc", features = listOf(
+        Feature(value = applicationId),
+        Feature(value = userVersion121),
+        Feature(value = gpkgSpatialRefSys121),
+        Feature(value = wgs84geodetic),
+        Feature(value = undefinedCartesianSRS),
+        Feature(value = undefinedGeographicSRS),
+        Feature(value = gpkgContents121)
+    ))
+    val spec120 = Spec("1.2.0", "1.2.0 IS", features = listOf(
+        Feature(value = applicationId),
+        Feature(value = userVersion120),
+        Feature(value = gpkgSpatialRefSys121),
+        Feature(value = wgs84geodetic),
+        Feature(value = undefinedCartesianSRS),
+        Feature(value = undefinedGeographicSRS),
+        Feature(value = gpkgContents121)
+    ))
     val spec110 = Spec("1.1.0", "1.1.0 IS")
     val spec101 = Spec("1.0.1", "1.0.1 D-ISc", deprecated = true)
     val spec100 = Spec("1.0.0", "1.0.0 D-IS", deprecated = true)

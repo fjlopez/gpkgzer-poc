@@ -36,23 +36,27 @@ class NodeTest {
     companion object {
         class FixtureAddFeature(
             private val name: String,
-            override val before: List<Node> = emptyList(),
-            override val after: List<Node> = emptyList()) : AddFeature {
+            override val before: List<Node<Any>> = emptyList(),
+            override val after: List<Node<Any>> = emptyList()) : Node<Any> {
             override fun toString(): String = name
+            override val value: Any
+                get() = TODO("Not yet implemented")
         }
-        class FixtureReplaceFeature(
+        class FixtureNodeUpdate(
             private val name: String,
-            override val before: List<Node> = emptyList(),
-            override val after: List<Node> = emptyList(),
-            override val deprecates: List<Node> = emptyList()
-        ) : ReplaceFeature {
+            override val before: List<Node<Any>> = emptyList(),
+            override val after: List<Node<Any>> = emptyList(),
+            override val deprecates: List<Node<Any>> = emptyList()
+        ) : NodeUpdate<Any> {
             override fun toString(): String = name
+            override val value: Any
+                get() = TODO("Not yet implemented")
         }
 
 
         val first = FixtureAddFeature("first")
         val second = FixtureAddFeature("second", after = listOf(first))
-        val third = FixtureReplaceFeature("third", after = listOf(first), deprecates = listOf(first))
+        val third = FixtureNodeUpdate("third", after = listOf(first), deprecates = listOf(first))
         val fourth = FixtureAddFeature("fourth", after = listOf(second, third))
     }
 }
