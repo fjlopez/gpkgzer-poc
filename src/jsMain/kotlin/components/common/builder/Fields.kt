@@ -4,19 +4,15 @@ import com.github.gpkg4all.common.ContentTarget
 import com.github.gpkg4all.common.ModuleInstance
 import com.github.gpkg4all.common.OutputTarget
 import com.github.gpkg4all.common.Spec
-import connectors.extension
 import components.common.form.checkBoxGroup
 import components.common.form.radioGroup
-import connectors.FieldsDispatchProps
-import connectors.FieldsProps
-import connectors.FieldsStateProps
-import kotlinext.js.jsObject
+import connectors.*
 import kotlinx.html.DIV
 import react.*
 import react.dom.RDOMBuilder
 import react.dom.div
 
-interface FieldsComponentProps : FieldsProps, FieldsStateProps, FieldsDispatchProps
+external interface FieldsComponentProps : FieldsProps, FieldsStateProps, FieldsDispatchProps
 
 val fieldsComponent = functionalComponent<FieldsComponentProps> { props ->
     div("colset colset-main") {
@@ -38,9 +34,11 @@ val fieldsComponent = functionalComponent<FieldsComponentProps> { props ->
     }
     div("actions") {
         div("actions-container") {
-            generate(jsObject {
-                refButton = props.refGenerate
-            })
+            generate {
+                attrs {
+                    refButton = props.refGenerate
+                }
+            }
         }
     }
 }

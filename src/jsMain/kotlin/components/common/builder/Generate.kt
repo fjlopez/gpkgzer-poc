@@ -1,6 +1,10 @@
 package components.common.builder
 
+import builders.generateGeoPackage
+import com.github.gpkg4all.common.Project
 import components.utils.functionalComponent
+import connectors.GenerateProps
+import connectors.GenerateStateProps
 import kotlinx.browser.document
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -8,51 +12,40 @@ import kotlinx.coroutines.await
 import kotlinx.coroutines.launch
 import kotlinx.html.dom.create
 import kotlinx.html.js.a
-import modules.sqljs.SqliteDriver
+import modules.sqljs.SqlJsStatic
 import modules.sqljs.initDb
-import modules.sqljs.invoke
-import org.w3c.dom.HTMLElement
+import org.khronos.webgl.Uint8Array
 import org.w3c.dom.events.Event
 import org.w3c.dom.url.URL
 import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
-import react.*
+import react.getValue
+import react.setValue
+import react.useEffect
+import react.useState
 
-external interface GenerateProps : RProps {
-    var refButton: RMutableRef<HTMLElement?>
-}
+external interface GenerateComponentProps : GenerateProps, GenerateStateProps
 
-private val generateComponent = functionalComponent<GenerateProps>("Generate") { props ->
+val generateComponent = functionalComponent<GenerateComponentProps>("Generate") { props ->
 
     var loaded by useState(false)
-    var db by useState<SqliteDriver?>(null)
+    var initDb by useState<SqlJsStatic?>(null)
     var generating by useState(false)
 
     useEffect(listOf(loaded)) {
         CoroutineScope(Dispatchers.Default).launch {
-            val initDb = initDb().await()
-            db = SqliteDriver(initDb.Database.invoke())
+            initDb = initDb().await()
             loaded = true
         }
     }
 
     val onSubmit = { event: Event ->
         event.preventDefault()
-        if (!generating) {
+        if (loaded && !generating) {
             generating = true
-            CoroutineScope(Dispatchers.Default).launch {
-                db?.export()?.let { export ->
-                    val blob = Blob(arrayOf(export), BlobPropertyBag(type = "octet/stream"))
-                    val url = URL.createObjectURL(blob)
-                    val link = document.create.a()
-                    link.style.display = "none"
-                    link.href = url
-                    link.download = "sqlite.db"
-                    link.click()
-                    URL.revokeObjectURL(url)
-                }
-                generating = false
-            }
+            CoroutineScope(Dispatchers.Default)
+                .launch(block = launchGenerator(initDb, props.project))
+                .invokeOnCompletion { generating = false }
         }
     }
 
@@ -66,17 +59,35 @@ private val generateComponent = functionalComponent<GenerateProps>("Generate") {
             +"Building GeoPackage ..."
         }
         else -> {
-                button({
-                    id = "generate-project"
-                    primary = true
-                    disabled = generating
-                    onClick = onSubmit
-                    refButton = props.refButton
-                }) {
-                    +"Build GeoPackage"
-                }
+            button({
+                id = "generate-project"
+                primary = true
+                disabled = generating
+                onClick = onSubmit
+                refButton = props.refButton
+            }) {
+                +"Build GeoPackage"
+            }
         }
     }
 }
 
-fun RBuilder.generate(props: GenerateProps) = child(generateComponent, props)
+fun launchGenerator(initDb: SqlJsStatic?, project: Project) : suspend CoroutineScope.()->Unit =
+    when {
+        initDb == null -> {{}}
+        project.spec == null -> {{}}
+        else -> {{
+            generateGeoPackage(initDb, project.spec) { export: Uint8Array ->
+                val blob = Blob(arrayOf(export), BlobPropertyBag(type = "octet/stream"))
+                val url = URL.createObjectURL(blob)
+                val link = document.create.a()
+                link.style.display = "none"
+                link.href = url
+                link.download = "sqlite.db"
+                link.click()
+                URL.revokeObjectURL(url)
+            }
+        }}
+    }
+
+
