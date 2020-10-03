@@ -10,7 +10,7 @@ object Configuration {
         OutputTargets.sql,
     )
     val supportedSpecifications = listOf(
-        Specs.spec131, Specs.spec130, Specs.spec121, Specs.spec120, Specs.spec110, Specs.spec101, Specs.spec100
+        Specs.spec130, Specs.spec121, Specs.spec120, Specs.spec110, Specs.spec101,
     )
     val supportedContents = listOf(
         ContentTargets.metadata,

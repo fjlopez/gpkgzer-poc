@@ -24,28 +24,28 @@ object Modules {
     val features = Module(
         key = "features",
         title = "Features",
-        officialSince = Specs.spec100,
+        officialSince = Specs.spec101,
         group = Groups.options,
     )
 
     val tiles = Module(
         key = "tiles",
         title = "Tiles",
-        officialSince = Specs.spec100,
+        officialSince = Specs.spec101,
         group = Groups.options,
     )
 
     val attributes = Module(
         key = "attributes",
         title = "Attributes",
-        officialSince = Specs.spec100,
+        officialSince = Specs.spec101,
         group = Groups.options,
     )
 
     val extensions = Module(
         key = "extensions",
         title = "Extensions",
-        officialSince = Specs.spec100,
+        officialSince = Specs.spec101,
         group = Groups.options,
     )
 
@@ -53,7 +53,7 @@ object Modules {
         key = "gpkg-geom",
         title = "Non-Linear Geometry Types",
         dependsOn = AtLeastOneRule(features),
-        officialSince = Specs.spec100,
+        officialSince = Specs.spec101,
         description = """
             Support for the CircularString, CompoundCurve, CurvePolygon, MultiCurve, 
             MultiSurface, Curve, and Surface geometry types in user feature tables.
@@ -67,7 +67,7 @@ object Modules {
         key = "author-geom",
         title = "User Defined Geometry Types",
         dependsOn = AtLeastOneRule(features),
-        officialSince = Specs.spec100,
+        officialSince = Specs.spec101,
         deprecatedBy = Specs.spec120,
         description = "Support for user defined geometry types in user feature tables.",
         group = Groups.features,
@@ -79,7 +79,7 @@ object Modules {
         key = "gpkg-rtree-index",
         title = "RTree Spatial Indexes",
         dependsOn = AtLeastOneRule(features),
-        officialSince = Specs.spec100,
+        officialSince = Specs.spec101,
         description = "Provides a means to encode an RTree index for geometry values in user feature tables.",
         group = Groups.features,
         extension = true,
@@ -90,7 +90,7 @@ object Modules {
         key = "gpkg-geometry-type-trigger",
         title = "Geometry Type Triggers",
         dependsOn = AtLeastOneRule(features),
-        officialSince = Specs.spec100,
+        officialSince = Specs.spec101,
         deprecatedBy = Specs.spec120,
         description = """
             Prevents the storage in a geometry column of geometries of types
@@ -106,7 +106,7 @@ object Modules {
         key = "gpkg-srs-id-trigger",
         title = "Geometry SRS ID Triggers",
         dependsOn = AtLeastOneRule(features),
-        officialSince = Specs.spec100,
+        officialSince = Specs.spec101,
         deprecatedBy = Specs.spec120,
         description = """
             Prevents the storage in a geometry column of geometries with SRS
@@ -142,7 +142,7 @@ object Modules {
     val metadata = Module(
         key = "gpkg-metadata",
         title = "Metadata",
-        officialSince = Specs.spec100,
+        officialSince = Specs.spec101,
         description = "Provides a means of storing metadata.",
         group = Groups.general,
         extension = true,
@@ -151,7 +151,7 @@ object Modules {
     val schema = Module(
         key = "gpkg-schema",
         title = "Schema",
-        officialSince = Specs.spec100,
+        officialSince = Specs.spec101,
         description = "Provides a means to describe the columns of tables.",
         group = Groups.general,
         extension = true,

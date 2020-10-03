@@ -33,8 +33,19 @@ class UpdateFeature(
     override val deprecates: List<Node<DatabaseObject>>
 ) : AbstractFeature(), NodeUpdate<DatabaseObject>
 
+val applicationId101 = DatabaseObject(
+    type = PRAGMA,
+    name = "application_id",
+    definition = "PRAGMA application_id=0x47503130;"
+)
 
-val applicationId = DatabaseObject(
+val applicationId110 = DatabaseObject(
+    type = PRAGMA,
+    name = "application_id",
+    definition = "PRAGMA application_id=0x47503131;"
+)
+
+val applicationId120 = DatabaseObject(
     type = PRAGMA,
     name = "application_id",
     definition = "PRAGMA application_id=0x47504B47;"
@@ -52,7 +63,14 @@ val userVersion121 = DatabaseObject(
     definition = "PRAGMA user_version=10201;"
 )
 
-val wgs84geodetic = DatabaseObject(
+
+val userVersion130 = DatabaseObject(
+    type = PRAGMA,
+    name = "user_version",
+    definition = "PRAGMA user_version=10300;"
+)
+
+val wgs84geodetic120 = DatabaseObject(
     type = INSERT,
     name = "gpkg_spatial_ref_sys#4326",
     definition = """
@@ -66,7 +84,35 @@ val wgs84geodetic = DatabaseObject(
             );""".trimIndent()
 )
 
-val undefinedCartesianSRS = DatabaseObject(
+val wgs84geodetic101 = DatabaseObject(
+    type = INSERT,
+    name = "gpkg_spatial_ref_sys#4326",
+    definition = """
+            INSERT INTO gpkg_spatial_ref_sys values(
+                'WGS 84 geodetic',
+                4326,
+                'EPSG',
+                4326,
+                'GEOGCS["WGS 84",DATUM["World Geodetic System 1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.017453292519943278,AUTHORITY["EPSG","9102"]],AUTHORITY["EPSG","4326"]',
+                'longitude/latitude coordinates in decimal degrees on the WGS 84 spheroid'
+            );""".trimIndent()
+)
+
+val undefinedCartesianSRS101 = DatabaseObject(
+    type = INSERT,
+    name = "gpkg_spatial_ref_sys#-1",
+    definition = """
+            INSERT INTO gpkg_spatial_ref_sys values(
+                'Undefined cartesian SRS',
+                -1,
+                'NONE',
+                -1,
+                'Undefined',
+                'undefined cartesian coordinate reference system'
+            );""".trimIndent()
+)
+
+val undefinedCartesianSRS110 = DatabaseObject(
     type = INSERT,
     name = "gpkg_spatial_ref_sys#-1",
     definition = """
@@ -80,7 +126,21 @@ val undefinedCartesianSRS = DatabaseObject(
             );""".trimIndent()
 )
 
-val undefinedGeographicSRS = DatabaseObject(
+val undefinedGeographicSRS101 = DatabaseObject(
+    type = INSERT,
+    name = "gpkg_spatial_ref_sys#0",
+    definition = """
+            INSERT INTO gpkg_spatial_ref_sys values(
+                'Undefined geographic SRS',
+                0,
+                'NONE',
+                0,
+                'Undefined',
+                'undefined geographic coordinate reference system'
+            );""".trimIndent()
+)
+
+val undefinedGeographicSRS110 = DatabaseObject(
     type = INSERT,
     name = "gpkg_spatial_ref_sys#0",
     definition = """
@@ -98,7 +158,7 @@ val undefinedGeographicSRS = DatabaseObject(
  * `pkg_spatial_ref_sys` Table Definition SQL for version
  * [1.2.1](https://www.geopackage.org/spec121/#_gpkg_spatial_ref_sys).
  */
-val gpkgSpatialRefSys121 = DatabaseObject(
+val gpkgSpatialRefSys101 = DatabaseObject(
     type = TABLE,
     name = "gpkg_spatial_ref_sys",
     definition = """
@@ -159,7 +219,7 @@ val spatialRefSys121 = DatabaseObject(
  * `gpkg_contents` Table Definition SQL for version
  * [1.2.1](https://www.geopackage.org/spec121/#_gpkg_contents).
  */
-val gpkgContents121 = DatabaseObject(
+val gpkgContents101 = DatabaseObject(
     type = TABLE,
     name = "gpkg_contents",
     definition = """

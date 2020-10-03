@@ -44,6 +44,7 @@ open external class Database() {
     open fun export(): Uint8Array
     open fun close()
     open fun getRowsModified(): Number
+    @Suppress("FunctionName")
     open fun create_function(name: String, func: Function<*>)
 }
 
@@ -67,6 +68,7 @@ open external class Statement {
     open fun free(): Boolean
 }
 
+@Suppress("PropertyName")
 external interface SqlJsStatic {
     var Database: InitDatabaseJsStatic
     var Statement: InitStatementJsStatic

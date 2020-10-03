@@ -5,19 +5,19 @@ import org.khronos.webgl.Uint8Array
 import kotlin.js.Promise
 
 operator fun InitStatementJsStatic.invoke(): Statement =
-    createInstance(this)
+    createInstance(this).unsafeCast<Statement>()
 
 operator fun InitDatabaseJsStatic.invoke(): Database =
-    createInstance(this)
+    createInstance(this).unsafeCast<Database>()
 
 operator fun InitDatabaseJsStatic.invoke(data: Array<Number>): Database =
-    createInstance(this, data)
+    createInstance(this, data).unsafeCast<Database>()
 
 operator fun InitDatabaseJsStatic.invoke(data: Uint8Array): Database =
-    createInstance(this, data)
+    createInstance(this, data).unsafeCast<Database>()
 
-operator fun InitSqlJsStatic.invoke(): Promise<SqlJsStatic> = asDynamic()()
-operator fun InitSqlJsStatic.invoke(config: Config?): Promise<SqlJsStatic> = asDynamic()(config)
+operator fun InitSqlJsStatic.invoke(): Promise<SqlJsStatic> = asDynamic()().unsafeCast<Promise<SqlJsStatic>>()
+operator fun InitSqlJsStatic.invoke(config: Config?): Promise<SqlJsStatic> = asDynamic()(config).unsafeCast<Promise<SqlJsStatic>>()
 
 @Suppress("UNUSED_VARIABLE", "UNUSED_PARAMETER")
 fun createInstance(type: dynamic, vararg args: dynamic): dynamic {
