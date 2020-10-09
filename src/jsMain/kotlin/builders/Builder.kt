@@ -10,7 +10,7 @@ fun generateGeoPackage(sqlJs: SqlJsStatic, spec: Spec, exporter: (Uint8Array) ->
 
     with(SqliteDriver(sqlJs)) {
         val statements = builder(spec)
-        statements.forEach { stmt -> exec(stmt) }
+        statements.forEach { stmt -> exec(stmt.body) }
         exporter(export())
         close()
     }

@@ -9,8 +9,9 @@ import react.RProps
 import react.child
 
 external interface HotKeysProps : RProps {
-    var onExtensions: (Event) -> Unit
-    var onGenerate: (Event) -> Unit
+    var onExtensions: () -> Unit
+    var onGenerate: () -> Unit
+    var onExplore: () -> Unit
 }
 
 private val hotkeys = functionalComponent<HotKeysProps>(
@@ -21,10 +22,12 @@ private val hotkeys = functionalComponent<HotKeysProps>(
             keyMap = jsObject {
                 extension = arrayOf("command+b", "ctrl+b")
                 generate = arrayOf("command+i", "ctrl+i")
+                explore = arrayOf("ctrl+space")
             }
             handlers = jsObject {
                 extension = props.onExtensions
                 generate = props.onGenerate
+                explore = props.onExplore
             }
         }
     }

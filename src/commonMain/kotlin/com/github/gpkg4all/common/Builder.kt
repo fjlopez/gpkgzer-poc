@@ -1,5 +1,10 @@
 package com.github.gpkg4all.common
 
+data class File(
+    val name: String,
+    val body: String
+)
+
 /**
  * GeoPackage Builder.
  *
@@ -13,6 +18,8 @@ fun builder(
     level: ContentTarget = ContentTargets.metadata,
     options: List<Module> = emptyList(),
     extensions: List<Module> = emptyList()
-): List<String> {
-    return core.features.map { it.value.definition }
+): List<File> {
+    return listOf(File(
+        name = "metadata.sql",
+        body = core.features.joinToString(separator = "\n") { it.value.definition }))
 }

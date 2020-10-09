@@ -27,7 +27,7 @@ val fieldsComponent = functionalComponent<FieldsComponentProps> { props ->
         div("right") {
             extension {
                 attrs {
-                    refButton = props.refExtension
+                    refButton = props.refExtensions
                 }
             }
         }
@@ -37,6 +37,11 @@ val fieldsComponent = functionalComponent<FieldsComponentProps> { props ->
             generate {
                 attrs {
                     refButton = props.refGenerate
+                }
+            }
+            explore {
+                attrs {
+                    refButton = props.refExplore
                 }
             }
         }

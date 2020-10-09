@@ -60,6 +60,8 @@ kotlin {
                 // jsearch
                 implementation(npm("js-search", "2.0.0"))
 
+                implementation(npm("body-scroll-lock", "3.0.1"))
+
                 // css
                 implementation(npm("hamburgers", "1.1.3"))
 

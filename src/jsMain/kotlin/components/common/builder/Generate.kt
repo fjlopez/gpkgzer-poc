@@ -3,6 +3,7 @@ package components.common.builder
 import builders.generateGeoPackage
 import com.github.gpkg4all.common.Project
 import components.utils.functionalComponent
+import components.utils.useWindowsUtils
 import connectors.GenerateProps
 import connectors.GenerateStateProps
 import kotlinx.browser.document
@@ -28,6 +29,7 @@ external interface GenerateComponentProps : GenerateProps, GenerateStateProps
 
 val generateComponent = functionalComponent<GenerateComponentProps>("Generate") { props ->
 
+    val windowsUtils = useWindowsUtils()
     var loaded by useState(false)
     var initDb by useState<SqlJsStatic?>(null)
     var generating by useState(false)
@@ -61,6 +63,7 @@ val generateComponent = functionalComponent<GenerateComponentProps>("Generate") 
         else -> {
             button({
                 id = "generate-project"
+                hotkey = windowsUtils.symb + " + I"
                 primary = true
                 disabled = generating
                 onClick = onSubmit
