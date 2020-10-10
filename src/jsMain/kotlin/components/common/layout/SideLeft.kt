@@ -35,9 +35,11 @@ val sideLeftComponent = functionalComponent<RProps>("SideLeft") {
     transitionGroup {
         if (nav) {
             cssTransition {
-                attrs.timeout = 500
-                attrs.onEnter = { open = true }
-                attrs.onExited = { open = false }
+                attrs {
+                    timeout = 500
+                    onEnter = { open = true }
+                    onExited = { open = false }
+                }
                 navigationContent(wrapper)
             }
         }

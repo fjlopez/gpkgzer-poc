@@ -2,7 +2,7 @@ package components.common.builder
 
 import components.utils.disableTab
 import components.utils.functionalComponent
-import kotlinext.js.js
+import kotlinext.js.jsObject
 import kotlinx.html.ButtonType
 import kotlinx.html.SPAN
 import kotlinx.html.id
@@ -25,22 +25,22 @@ external interface ButtonProps : RProps {
 private val buttonComponent = { block: RDOMBuilder<SPAN>.() -> Unit ->
     functionalComponent(
         displayName = "Button",
-        defaultProps = js {
+        defaultProps = jsObject<ButtonProps> {
             hotkey = ""
             primary = false
             disabled = false
             onClick = { console.info("Clicked!") }
-        }.unsafeCast<ButtonProps>()
+        }
     ) { props ->
         button(
             classes = "button ${if (props.primary) "primary" else ""}",
             type = ButtonType.button
         ) {
-            props.id?.let { attrs.id = it }
-            attrs.disabled = props.disabled
-            attrs.onClickFunction = props.onClick
-            props.refButton?.let {
-                ref = it
+            attrs {
+                props.id?.let { id = it }
+                disabled = props.disabled
+                onClickFunction = props.onClick
+                props.refButton?.let { ref = it }
             }
             span("button-content") {
                 attrs.disableTab()

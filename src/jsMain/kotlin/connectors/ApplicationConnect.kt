@@ -24,7 +24,6 @@ external interface ApplicationStateProps : RProps {
 
 external interface ApplicationDispatchProps : RProps {
     var onCloseExtensions: (Event) -> Unit
-    var onCloseExplorer: (Event) -> Unit
 }
 
 private val mapStateToProps: ApplicationStateProps.(AppState, RProps) -> Unit = { state, _ ->
@@ -35,10 +34,6 @@ private val mapDispatchToProps: ApplicationDispatchProps.((RAction) -> WrapperAc
     onCloseExtensions = { event: Event ->
         event.preventDefault()
         dispatch(CloseExtensions)
-    }
-    onCloseExplorer = { event: Event ->
-        event.preventDefault()
-        dispatch(CloseExplorer)
     }
 }
 

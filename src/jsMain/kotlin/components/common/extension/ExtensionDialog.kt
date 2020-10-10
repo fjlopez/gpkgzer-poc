@@ -54,10 +54,11 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogComponentProps
     var search by useState<Search<Document>?>(null)
 
     useEffect(listOf(props.extensions)) {
-        val newSearch = Search<Document>("name")
-        newSearch.addIndex("name")
-        newSearch.addIndex("description")
-        newSearch.addIndex("group")
+        val newSearch = Search<Document>("name").apply {
+            addIndex("name")
+            addIndex("description")
+            addIndex("group")
+        }
         props.extensions.map {
             jsObject<Document> {
                 instance = it
@@ -71,7 +72,8 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogComponentProps
 
     useEffect(listOf(query)) {
         groups = computeGroups(if (query.isNotEmpty()) {
-            search?.search(query.trim())?.map { it.instance } ?: emptyList()
+            search?.search(query.trim())
+                ?.map { it.instance } ?: emptyList()
         } else {
             props.extensions
         })

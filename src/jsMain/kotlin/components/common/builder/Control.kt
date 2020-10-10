@@ -2,7 +2,7 @@ package components.common.builder
 
 import components.utils.attrsHtmlFor
 import components.utils.functionalComponent
-import kotlinext.js.js
+import kotlinext.js.jsObject
 import react.RBuilder
 import react.RProps
 import react.buildElement
@@ -18,9 +18,9 @@ external interface ControlProps : RProps {
 private val controlComponent = { children: RBuilder.() -> Unit ->
     functionalComponent(
         displayName = "Control",
-        defaultProps = js {
+        defaultProps = jsObject<ControlProps> {
             labelFor = ""
-        }.unsafeCast<ControlProps>()
+        }
     ) { props ->
         div("control") {
             label("label") {

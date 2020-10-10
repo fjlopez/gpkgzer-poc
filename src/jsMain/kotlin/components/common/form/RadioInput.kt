@@ -1,5 +1,6 @@
 package components.common.form
 
+import components.common.form.TickType.*
 import components.utils.disableTab
 import components.utils.functionalComponent
 import kotlinext.js.jsObject
@@ -24,8 +25,8 @@ external interface TickInputProps<T : Any> : RProps {
 
 internal fun <T : Any> tickInput(type: TickType) = functionalComponent(
     displayName = when (type) {
-        TickType.RADIO -> "Radio"
-        TickType.CHECKBOX -> "CheckBox"
+        RADIO -> "Radio"
+        CHECKBOX -> "CheckBox"
     },
     defaultProps = jsObject<TickInputProps<T>> {
         checked = false
@@ -36,8 +37,8 @@ internal fun <T : Any> tickInput(type: TickType) = functionalComponent(
     }
 ) { props ->
     val className = when (type) {
-        TickType.RADIO -> "radio"
-        TickType.CHECKBOX -> "checkbox"
+        RADIO -> "radio"
+        CHECKBOX -> "checkbox"
     }
 
     fun onClick(value: T) = { event: Event ->
