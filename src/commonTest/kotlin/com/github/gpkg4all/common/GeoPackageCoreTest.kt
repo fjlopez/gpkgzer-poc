@@ -122,6 +122,10 @@ class GeoPackageCoreTest {
                 gpkg_spatial_ref_sys_12_13 +
                 gpkg_contents
         val result = builder(Specs.spec130)
+            .children
+            .filterIsInstance<File<*, List<String>>>()
+            .filter { it.filename == "metadata.sql" }
+            .flatMap { it.content }
         assertEquals(expected.size, result.size)
         expected.zip(result).mapIndexed { idx, pair ->
             assertEquals(pair.first, pair.second, "$idx term differs")
@@ -146,6 +150,10 @@ class GeoPackageCoreTest {
                 gpkg_spatial_ref_sys_12_13 +
                 gpkg_contents
         val result = builder(Specs.spec121)
+            .children
+            .filterIsInstance<File<*, List<String>>>()
+            .filter { it.filename == "metadata.sql" }
+            .flatMap { it.content }
         assertEquals(expected.size, result.size)
         expected.zip(result).mapIndexed { idx, pair ->
             assertEquals(pair.first, pair.second, "$idx term differs")
@@ -171,6 +179,10 @@ class GeoPackageCoreTest {
                 gpkg_spatial_ref_sys_12_13 +
                 gpkg_contents
         val result = builder(Specs.spec120)
+            .children
+            .filterIsInstance<File<*, List<String>>>()
+            .filter { it.filename == "metadata.sql" }
+            .flatMap { it.content }
         assertEquals(expected.size, result.size)
         expected.zip(result).mapIndexed { idx, pair ->
             assertEquals(pair.first, pair.second, "$idx term differs")
@@ -195,6 +207,10 @@ class GeoPackageCoreTest {
                 gpkg_spatial_ref_sys_11 +
                 gpkg_contents
         val result = builder(Specs.spec110)
+            .children
+            .filterIsInstance<File<*, List<String>>>()
+            .filter { it.filename == "metadata.sql" }
+            .flatMap { it.content }
         assertEquals(expected.size, result.size)
         expected.zip(result).mapIndexed { idx, pair ->
             assertEquals(pair.first, pair.second, "$idx term differs")
@@ -219,6 +235,10 @@ class GeoPackageCoreTest {
                 gpkg_spatial_ref_sys_10 +
                 gpkg_contents
         val result = builder(Specs.spec101)
+            .children
+            .filterIsInstance<File<*, List<String>>>()
+            .filter { it.filename == "metadata.sql" }
+            .flatMap { it.content }
         assertEquals(expected.size, result.size)
         expected.zip(result).mapIndexed { idx, pair ->
             assertEquals(pair.first, pair.second, "$idx term differs")
