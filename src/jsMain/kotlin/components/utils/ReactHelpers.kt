@@ -17,7 +17,7 @@ operator fun <P : RProps, R : RProps> HOC<P, R>.invoke(
         asDynamic().displayName = displayName?.let { "RConnect ($displayName)" } ?: "RConnect (Component)"
         asDynamic().WrappedComponent.unsafeCast<RClass<P>>().apply {
             this.displayName = displayName ?: "Anonymous"
-            this.defaultProps =  kotlinext.js.js(defaultProps).unsafeCast<P>()
+            this.defaultProps = kotlinext.js.js(defaultProps).unsafeCast<P>()
         }
     }
 

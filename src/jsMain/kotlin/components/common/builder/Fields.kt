@@ -8,9 +8,9 @@ import components.common.form.checkBoxGroup
 import components.common.form.radioGroup
 import connectors.*
 import kotlinx.html.DIV
-import react.*
 import react.dom.RDOMBuilder
 import react.dom.div
+import react.functionalComponent
 
 external interface FieldsComponentProps : FieldsProps, FieldsStateProps, FieldsDispatchProps
 

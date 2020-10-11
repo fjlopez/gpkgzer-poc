@@ -19,7 +19,7 @@ external interface SideRightStateProps : RProps {
 }
 
 external interface SideRightDispatchProps : RProps {
-    var onUpdateTheme : (Theme) -> Unit
+    var onUpdateTheme: (Theme) -> Unit
 }
 
 private val mapStateToProps: SideRightStateProps.(AppState, RProps) -> Unit = { state, _ ->

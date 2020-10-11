@@ -6,6 +6,7 @@
   > div {
     height: 100%;
   }
+
   .close {
     display: block;
     position: absolute;
@@ -16,13 +17,16 @@
     cursor: pointer;
     opacity: 0.7;
     color: $light-color;
+
     svg {
       width: 14px;
     }
+
     &:hover {
       opacity: 1;
     }
   }
+
   .colset-explorer {
     position: relative;
     padding: 0 30px;
@@ -30,6 +34,7 @@
     display: flex;
     max-width: $spring-max-width - ((75 + 30) * 2);
     margin: 0 auto;
+
     .right,
     .left {
       max-width: none;
@@ -39,10 +44,12 @@
       height: 100%;
       position: relative;
     }
+
     .left {
       flex: 0 0 320px;
       // border-right: 1px solid $light-border;
     }
+
     .head {
       border: 1px solid $light-border;
       border-bottom: 0;
@@ -54,19 +61,23 @@
       height: 50px;
       right: 0;
       font-size: 16px;
+
       .divider {
         display: inline-block;
       }
+
       .actions-file {
         display: inline-block;
         height: 40px;
         margin-left: 16px;
         color: rgba(0, 0, 0, 0.2);
+
         .placeholder-button {
           margin-right: 1rem;
           height: 36px;
         }
       }
+
       a.button {
         span.button-content span {
           cursor: pointer;
@@ -74,6 +85,7 @@
           font-size: 13px;
         }
       }
+
       .placeholder-text {
         margin: 18px 0 0;
       }
@@ -84,6 +96,7 @@
         }
       }
     }
+
     .explorer-content {
       position: absolute;
       top: 81px;
@@ -93,15 +106,19 @@
       overflow: auto;
       border: 1px solid $light-border;
     }
+
     .right {
       flex: 1;
+
       .head {
         margin-left: 2rem;
         border: 0 none;
         text-align: center;
+
         strong {
           position: relative;
           padding-left: 20px;
+
           svg {
             position: absolute;
             top: 3px;
@@ -110,23 +127,28 @@
           }
         }
       }
+
       .placeholder-text {
         background: $light-placeholder;
       }
+
       .explorer-content {
         overflow: auto;
         margin-left: 2rem;
+
         &::-webkit-scrollbar {
           height: 6px;
           width: 6px;
           background: transparent;
         }
+
         &::-webkit-scrollbar-thumb {
           background: rgba(black, 0.3);
         }
       }
     }
   }
+
   .icon-download {
     width: 16px;
   }
@@ -139,6 +161,7 @@
   right: 5px;
   height: 35px;
   z-index: 1000;
+
   select {
     display: block;
     position: relative;
@@ -162,6 +185,7 @@
       display: none;
     }
   }
+
   &:before {
     content: '';
     position: absolute;
@@ -175,6 +199,7 @@
     border-right: 6px solid transparent;
     pointer-events: none;
   }
+
   &:after {
     content: '';
     position: absolute;
@@ -213,9 +238,11 @@
     font-size: 15px;
     line-height: 35px;
   }
+
   span {
     display: block;
   }
+
   .file,
   .folder {
     position: relative;
@@ -225,18 +252,22 @@
     color: $light-color;
     word-wrap: normal;
     white-space: nowrap;
+
     .item-content {
       box-shadow: none;
       outline: none;
     }
+
     &:hover {
       background: $light-background-seconday;
     }
+
     .text {
       position: relative;
       padding-left: 50px;
       margin: 0 8px;
     }
+
     .icon {
       display: block;
       position: absolute;
@@ -246,6 +277,7 @@
       width: 20px;
       color: $light-color;
     }
+
     .icon-caret-down {
       display: block;
       position: absolute;
@@ -257,6 +289,7 @@
     }
 
     outline: 1px dotted transparent;
+
     &:focus {
       outline: 1px dotted darken($light-background-seconday, 10);
     }
@@ -264,13 +297,16 @@
     &.disabled {
       opacity: 0.4;
       cursor: not-allowed;
+
       &:hover {
         background: transparent;
       }
+
       &:focus {
         outline: 1px dotted transparent;
       }
     }
+
     &.selected {
       background: $light-background-seconday;
       font-weight: bold;
@@ -282,6 +318,7 @@
     > ul {
       display: none;
     }
+
     > .folder > span > .text > .icon-caret-down {
       transform: rotate(-90deg);
     }
@@ -294,44 +331,53 @@
       margin-left: 0 * $range + 6px;
     }
   }
+
   .level-1 {
     .text {
       margin-left: 1 * $range + 6px;
     }
   }
+
   .level-2 {
     .text {
       margin-left: 2 * $range + 6px;
     }
   }
+
   .level-3 {
     .text {
       margin-left: 3 * $range + 6px;
     }
   }
+
   .level-4 {
     .text {
       margin-left: 4 * $range + 6px;
     }
   }
+
   .level-5 {
     .text {
       margin-left: 5 * $range + 6px;
     }
   }
+
   .level-6 {
     .text {
       margin-left: 6 * $range + 6px;
     }
   }
+
   .level-7 {
     .text {
       margin-left: 7 * $range + 6px;
     }
   }
+
   .icon-folder {
     width: 20px;
   }
+
   .icon-file {
     position: absolute;
     top: 3px;
@@ -344,13 +390,16 @@ ul.explorer-ul-placeholder {
   list-style: none;
   margin: 0;
   padding: 0;
+
   li {
     list-style: none;
     height: 35px;
     line-height: 40px;
+
     .placeholder-text {
       margin-left: 28px;
       margin-top: 8px;
+
       + .placeholder-text {
         margin-left: 5px;
         margin-top: 8px;
@@ -365,6 +414,7 @@ pre.prism-code {
   line-height: 24px;
   font-size: 13px;
   font-family: Monaco, Menlo, Consolas, 'courier new', monospace;
+
   span.explorer-number {
     position: relative;
     display: inline-block;
@@ -374,6 +424,7 @@ pre.prism-code {
     margin-right: 10px;
     font-size: 11px;
     height: 25px;
+
     &:before {
       display: block;
       content: attr(data-value);
@@ -387,17 +438,22 @@ pre.prism-code {
       height: 25px;
     }
   }
+
   .token-line {
     height: 25px;
   }
+
   &.line-3 {
     width: 28px;
+
     span.explorer-number {
       width: 28px;
+
       &:before {
         width: 28px;
       }
     }
+
     &:before {
       width: 38px;
     }
@@ -418,16 +474,20 @@ pre.prism-code {
 .markdown-source {
   position: relative;
   padding: $spring-8points $spring-8points * 4;
+
   a {
     color: $light-link;
+
     &:hover {
       text-decoration: none;
     }
+
     &:focus {
       outline: 1px dotted $light-link;
       box-shadow: none;
     }
   }
+
   .button-source {
     position: absolute;
     right: 0;
@@ -440,6 +500,7 @@ pre.prism-code {
     padding: 2px 12px;
   }
 }
+
 .markdown-source {
   padding: 0;
   height: 100%;
@@ -453,6 +514,7 @@ pre.prism-code {
   background: $light-background;
   height: 100%;
   z-index: 100;
+
   *:focus {
     outline: none;
   }
@@ -488,12 +550,15 @@ pre.prism-code {
   z-index: 400;
   height: 50px;
   vertical-align: top;
+
   .button {
     font-size: $spring-font-size + 1;
     vertical-align: top;
+
     span {
       padding: 0.9rem 1.5rem 0.8rem;
     }
+
     &:focus {
       box-shadow: 0 0 0 4px darken($light-border, 6);
     }
@@ -506,9 +571,11 @@ pre.prism-code {
     box-shadow: inset 0 0 0 2px $light-border;
     margin-right: 1rem;
     vertical-align: top;
+
     &:after {
       background: $light-border;
     }
+
     &:last-child {
       margin-right: 0;
     }

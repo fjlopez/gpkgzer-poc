@@ -9,8 +9,8 @@ import kotlinx.html.LI
 import kotlinx.html.js.onClickFunction
 import modules.react.transitiongroup.cssTransition
 import modules.react.transitiongroup.transitionGroup
-import react.*
 import react.dom.*
+import react.functionalComponent
 
 interface ExtensionListComponentProps : ExtensionListStateProps, ExtensionListDispatchProps
 

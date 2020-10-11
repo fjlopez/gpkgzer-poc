@@ -1,6 +1,7 @@
 package components.common.form
 
-import components.common.form.TickType.*
+import components.common.form.TickType.CHECKBOX
+import components.common.form.TickType.RADIO
 import components.utils.disableTab
 import components.utils.functionalComponent
 import kotlinext.js.jsObject

@@ -17,7 +17,8 @@ operator fun InitDatabaseJsStatic.invoke(data: Uint8Array): Database =
     createInstance(this, data).unsafeCast<Database>()
 
 operator fun InitSqlJsStatic.invoke(): Promise<SqlJsStatic> = asDynamic()().unsafeCast<Promise<SqlJsStatic>>()
-operator fun InitSqlJsStatic.invoke(config: Config?): Promise<SqlJsStatic> = asDynamic()(config).unsafeCast<Promise<SqlJsStatic>>()
+operator fun InitSqlJsStatic.invoke(config: Config?): Promise<SqlJsStatic> =
+    asDynamic()(config).unsafeCast<Promise<SqlJsStatic>>()
 
 @Suppress("UNUSED_VARIABLE", "UNUSED_PARAMETER")
 fun createInstance(type: dynamic, vararg args: dynamic): dynamic {

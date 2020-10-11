@@ -8,7 +8,10 @@ import kotlinx.html.SPAN
 import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.events.Event
-import react.*
+import react.RBuilder
+import react.RProps
+import react.RRef
+import react.child
 import react.dom.RDOMBuilder
 import react.dom.button
 import react.dom.span

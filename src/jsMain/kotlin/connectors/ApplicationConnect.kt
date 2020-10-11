@@ -11,7 +11,6 @@ import react.RProps
 import react.redux.Options
 import react.redux.rConnect
 import reducer.AppState
-import reducer.CloseExplorer
 import reducer.CloseExtensions
 import redux.RAction
 import redux.WrapperAction

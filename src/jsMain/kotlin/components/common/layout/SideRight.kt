@@ -10,11 +10,11 @@ import connectors.SideRightStateProps
 import kotlinx.html.DIV
 import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
-import react.*
 import react.dom.RDOMBuilder
 import react.dom.a
 import react.dom.div
 import react.dom.span
+import react.functionalComponent
 
 interface SideRightComponentProps : SideRightStateProps, SideRightDispatchProps
 

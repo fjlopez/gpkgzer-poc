@@ -44,6 +44,7 @@ open external class Database() {
     open fun export(): Uint8Array
     open fun close()
     open fun getRowsModified(): Number
+
     @Suppress("FunctionName")
     open fun create_function(name: String, func: Function<*>)
 }

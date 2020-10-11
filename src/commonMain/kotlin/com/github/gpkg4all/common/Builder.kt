@@ -14,10 +14,13 @@ fun builder(
     level: ContentTarget = ContentTargets.metadata,
     options: List<Module> = emptyList(),
     extensions: List<Module> = emptyList()
-): RootFileTree<Any?> {
+): RootFileTree {
     return RootFileTree(
-        children = listOf(File(
-        filename = "metadata.sql",
-        content = core.features.map { it.value.definition },
-        properties = null)))
+        children = listOf(
+            File(
+                filename = "metadata.sql",
+                language = "sql",
+                content = core.features.map { it.value.definition })
+        )
+    )
 }

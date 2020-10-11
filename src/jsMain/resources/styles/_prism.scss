@@ -40,6 +40,7 @@ pre[class*='language-'] {
 .token.attr-value {
   color: #e3116c;
 }
+
 .token.punctuation,
 .token.operator {
   color: #393a34; /* no highlight */
@@ -108,13 +109,16 @@ pre.language-xml {
   .language-autohotkey .token.keyword {
     color: #e3116c;
   }
+
   .token {
     &.attr-value {
       color: rgb(80, 161, 79);
     }
+
     &.attr-name {
       color: rgb(193, 132, 1);
     }
+
     &.punctuation {
       color: #888;
     }

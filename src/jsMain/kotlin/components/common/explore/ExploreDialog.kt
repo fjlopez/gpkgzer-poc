@@ -1,22 +1,23 @@
 package components.common.explore
 
+import com.github.gpkg4all.common.FileItem
+import com.github.gpkg4all.common.RootFileTree
+import com.github.gpkg4all.common.builder
 import components.common.builder.button
 import connectors.ExploreDialogDispatchProps
 import connectors.ExploreDialogProps
 import connectors.ExploreDialogStateProps
 import kotlinext.js.jsObject
+import kotlinx.browser.window
 import modules.bodyscrolllock.clearAllBodyScrollLocks
 import modules.bodyscrolllock.disableBodyScroll
 import modules.react.hotkeys.hotKeys
 import modules.react.transitiongroup.cssTransition
 import modules.react.transitiongroup.transitionGroup
 import org.w3c.dom.HTMLElement
+import react.*
 import react.dom.div
 import react.dom.strong
-import react.functionalComponent
-import react.useEffect
-import react.useEffectWithCleanup
-import react.useRef
 
 interface ExploreDialogComponentProps : ExploreDialogProps, ExploreDialogStateProps, ExploreDialogDispatchProps
 
@@ -24,8 +25,14 @@ val ExploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
 
     val wrapper = useRef<HTMLElement?>(null)
 
-    useEffect {
+    var selected by useState<FileItem?>(null)
+    var tree by useState<RootFileTree?>(null)
+
+    useEffect(listOf(props.isShown)) {
         wrapper.current?.focus()
+        tree = props.project.spec?.let { spec ->
+            builder(spec)
+        }
     }
 
     useEffectWithCleanup {
@@ -42,47 +49,60 @@ val ExploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
             cssTransition {
                 attrs {
                     classNames = "explorer"
-                    timeout = 300
+                    timeout = 500
+                    onExit = {
+                        window.setTimeout({
+                            tree = null
+                            selected = null
+                            clearAllBodyScrollLocks()
+                        }, timeout = 350)
+                    }
                 }
                 div("explorer") {
-                    hotKeys {
-                        attrs {
-                            keyMap = jsObject {
-                                close = arrayOf("Escape")
+                    if (tree != null) {
+                        hotKeys {
+                            attrs {
+                                keyMap = jsObject {
+                                    close = arrayOf("Escape")
+                                }
+                                handlers = jsObject {
+                                    close = props.onClose
+                                }
+                                innerRef = wrapper
                             }
-                            handlers = jsObject {
-                                close = props.onClose
-                            }
-                            innerRef = wrapper
-                        }
-                        div("colset-explorer") {
-                            div("left") {
-                                div("head") {
-                                    strong {
-                                        +"{ProjectName}"
+                            div("colset-explorer") {
+                                div("left") {
+                                    div("head") {
+                                        strong {
+                                            +"{ProjectName}"
+                                        }
+                                    }
+                                    div("explorer-content") {
+                                        tree(
+                                            selected = selected,
+                                            onClickItem = { item -> selected = if (selected == item) null else item },
+                                            tree = tree
+                                        )
                                     }
                                 }
-                                div("explorer-content") {
-
-                                }
-                            }
-                            div("right") {
-                                div("head") {
-                                    div("actions-file") {
-                                        +"Some actions"
+                                div("right") {
+                                    div("head") {
+                                        div("actions-file") {
+                                            +"Some actions"
+                                        }
+                                    }
+                                    div("explorer-content") {
+                                        +"Code"
                                     }
                                 }
-                                div("explorer-content") {
-                                    +"Code"
-                                }
-                            }
-                            div("explorer-actions") {
-                                button({
-                                    hotkey = "esc"
-                                    primary = true
-                                    onClick = props.onClose
-                                }) {
-                                    +"Close"
+                                div("explorer-actions") {
+                                    button({
+                                        hotkey = "esc"
+                                        primary = true
+                                        onClick = props.onClose
+                                    }) {
+                                        +"Close"
+                                    }
                                 }
                             }
                         }

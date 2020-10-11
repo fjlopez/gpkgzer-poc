@@ -28,7 +28,7 @@ val applicationComponent = functionalComponent<ApplicationComponentProps> { prop
 
     hotkeys {
         onExtensions = { buttonExtensions.current?.click() }
-        onGenerate = {  buttonGenerate.current?.click() }
+        onGenerate = { buttonGenerate.current?.click() }
         onExplore = { buttonExplore.current?.click() }
     }
     sideLeft()

@@ -75,22 +75,28 @@ val generateComponent = functionalComponent<GenerateComponentProps>("Generate") 
     }
 }
 
-fun launchGenerator(initDb: SqlJsStatic?, project: Project) : suspend CoroutineScope.()->Unit =
+fun launchGenerator(initDb: SqlJsStatic?, project: Project): suspend CoroutineScope.() -> Unit =
     when {
-        initDb == null -> {{}}
-        project.spec == null -> {{}}
-        else -> {{
-            generateGeoPackage(initDb, project.spec) { export: Uint8Array ->
-                val blob = Blob(arrayOf(export), BlobPropertyBag(type = "octet/stream"))
-                val url = URL.createObjectURL(blob)
-                val link = document.create.a()
-                link.style.display = "none"
-                link.href = url
-                link.download = "sqlite.db"
-                link.click()
-                URL.revokeObjectURL(url)
+        initDb == null -> {
+            {}
+        }
+        project.spec == null -> {
+            {}
+        }
+        else -> {
+            {
+                generateGeoPackage(initDb, project.spec) { export: Uint8Array ->
+                    val blob = Blob(arrayOf(export), BlobPropertyBag(type = "octet/stream"))
+                    val url = URL.createObjectURL(blob)
+                    val link = document.create.a()
+                    link.style.display = "none"
+                    link.href = url
+                    link.download = "sqlite.db"
+                    link.click()
+                    URL.revokeObjectURL(url)
+                }
             }
-        }}
+        }
     }
 
 

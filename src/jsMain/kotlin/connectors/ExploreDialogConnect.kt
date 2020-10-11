@@ -1,5 +1,6 @@
 package connectors
 
+import com.github.gpkg4all.common.Project
 import components.common.explore.ExploreDialogComponent
 import components.common.explore.ExploreDialogComponentProps
 import components.utils.invoke
@@ -19,6 +20,7 @@ external interface ExploreDialogProps : RProps {
 
 external interface ExploreDialogStateProps : RProps {
     var isShown: Boolean
+    var project: Project
 }
 
 external interface ExploreDialogDispatchProps : RProps {
@@ -27,10 +29,11 @@ external interface ExploreDialogDispatchProps : RProps {
 
 private val mapStateToProps: ExploreDialogStateProps.(AppState, RProps) -> Unit = { state, _ ->
     isShown = state.showExplorerDialog
+    project = state.project
 }
 
 private val mapDispatchToProps: ExploreDialogDispatchProps.((RAction) -> WrapperAction, RProps) -> Unit =
-    {dispatch, _ ->
+    { dispatch, _ ->
         onClose = { event: Event ->
             event.preventDefault()
             dispatch(CloseExplorer)

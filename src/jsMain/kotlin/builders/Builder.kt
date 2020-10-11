@@ -12,7 +12,7 @@ fun generateGeoPackage(sqlJs: SqlJsStatic, spec: Spec, exporter: (Uint8Array) ->
     with(SqliteDriver(sqlJs)) {
         val fileSystem = builder(spec)
         fileSystem.children
-            .filterIsInstance<File<*, List<String>>>()
+            .filterIsInstance<File<List<String>>>()
             .filter { it.filename == "metadata.sql" }
             .flatMap { it.content }
             .forEach { stmt -> exec(stmt) }

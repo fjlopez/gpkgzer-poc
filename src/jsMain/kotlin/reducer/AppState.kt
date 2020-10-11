@@ -79,7 +79,6 @@ object Reducers {
 }
 
 
-
 val store = createStore(
     with(Reducers) { stateReducer + validateState },
     AppState(),
@@ -94,7 +93,8 @@ fun <S> rEnhancer(): Enhancer<S, Action, Action, RAction, WrapperAction> = { nex
             }
         }
 
-        val store = (next.unsafeCast<StoreCreator<S, WrapperAction, WrapperAction>>())(wrapperReducer(reducer), initialState)
+        val store =
+            (next.unsafeCast<StoreCreator<S, WrapperAction, WrapperAction>>())(wrapperReducer(reducer), initialState)
         val dispatch = { action: RAction ->
             val result = store.dispatch(kotlinext.js.js {
                 type = action::class.simpleName

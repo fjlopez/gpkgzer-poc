@@ -1,9 +1,9 @@
 package components.utils
 
-import kotlinx.html.SPAN
+import kotlinx.html.HtmlBlockInlineTag
 import kotlinx.html.tabIndex
 
 
-fun SPAN.disableTab() {
+fun HtmlBlockInlineTag.disableTab() {
     tabIndex = "-1"
 }

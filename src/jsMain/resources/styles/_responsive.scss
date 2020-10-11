@@ -24,22 +24,27 @@
     #header {
       width: auto;
     }
+
     .colset-main {
       background: none;
     }
+
     .colset-main {
       > .right {
         padding-bottom: 2rem;
       }
     }
+
     .colset {
       display: block;
+
       > .left,
       > .right {
         flex: none;
         padding-right: 0;
       }
     }
+
     .desktop-only {
       display: none !important;
     }
@@ -48,12 +53,15 @@
     &-explore {
       width: 125px;
     }
+
     &-submit {
       width: 136px;
     }
+
     &-dep {
       width: 85.45px;
     }
+
     &-download {
       width: 148.13px;
     }
@@ -73,6 +81,7 @@
     width: 87.45px;
   }
 }
+
 @media (min-width: 1000px) and (max-width: 1200px) {
   .placeholder-button-dep {
     width: 134.73px;
@@ -85,6 +94,7 @@
 .not-mobile {
   display: block;
 }
+
 .is-mobile {
   display: none;
 }
@@ -109,13 +119,16 @@
     right: 0;
     padding-left: 0;
     padding-right: 0;
+
     .actions-container {
       padding: 8px 0;
       height: 44px;
     }
+
     .button > span > span {
       padding: 0.7rem 0.6rem 0.6rem;
     }
+
     .button {
       font-size: 14px;
     }
@@ -130,9 +143,11 @@
   button.button {
     margin-right: 6px;
     font-size: 14px;
+
     &:last-child {
       margin-right: 0;
     }
+
     > span > span {
       padding: 0.7rem 0.6rem 0.6rem;
     }
@@ -145,15 +160,19 @@
     left: 0;
     right: 0;
     bottom: 0;
+
     .colset-explorer {
       padding: 0 5px;
+
       .left {
         display: none;
       }
+
       .right {
         .head {
           display: none;
         }
+
         .explorer-content {
           top: 45px;
           right: 0;
@@ -178,9 +197,11 @@
   .navigation .navigation-content {
     padding: 0 10px;
     margin: 0 auto;
+
     .navigation-content-wrap {
       margin: 0;
     }
+
     #header {
       h2,
       .header-mobile {
@@ -188,11 +209,14 @@
         border-bottom: 1px solid rgba(#fff, 0.4);
       }
     }
+
     ul {
       margin: 0 -10px;
       padding: 0;
+
       li {
         border-bottom: 1px solid rgba(#fff, 0.2);
+
         a {
           display: block;
           font-size: 16px;
@@ -209,13 +233,16 @@
     margin: 0;
     bottom: 0;
     width: auto;
+
     .control-input {
       .input {
         padding: 7px 45px 3px 10px;
+
         &::placeholder {
           font-size: $spring-font-size - 2;
         }
       }
+
       .help {
         display: none;
       }
@@ -224,6 +251,7 @@
     ul li a.dependency.selected .icon-enter {
       display: none;
     }
+
     ul li a.dependency {
       padding: 13px 10px;
     }
@@ -232,6 +260,7 @@
   .explorer-actions .placeholder-button {
     height: 41.5px;
     margin-right: 6px;
+
     &:last-child {
       margin-right: 0;
     }
@@ -263,10 +292,12 @@
     h2 {
       text-align: center;
       padding: 0.5rem 0;
+
       strong {
         font-size: 32px;
         line-height: 2rem;
       }
+
       span {
         font-size: 22px;
         line-height: 2rem;
@@ -280,11 +311,13 @@
   .control-inline,
   .control-placeholder {
     display: block;
+
     label,
     .placeholder-label {
       flex: none;
       text-align: left;
     }
+
     input,
     .group-radio,
     .placeholder-input {

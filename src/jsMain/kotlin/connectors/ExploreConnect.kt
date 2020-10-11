@@ -26,7 +26,7 @@ external interface ExploreStateProps : RProps {
 }
 
 external interface ExploreDispatchProps : RProps {
-    var onClick : (Event) -> Unit
+    var onClick: (Event) -> Unit
 }
 
 private val mapStateToProps: ExploreStateProps.(AppState, RProps) -> Unit = { state, _ ->
