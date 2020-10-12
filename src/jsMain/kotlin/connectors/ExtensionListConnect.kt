@@ -3,7 +3,7 @@ package connectors
 import com.github.gpkg4all.common.ModuleInstance
 import components.common.extension.ExtensionListComponentProps
 import components.common.extension.extensionListComponent
-import components.utils.invoke
+import components.utils.connects
 import org.w3c.dom.events.Event
 import react.RBuilder
 import react.RHandler
@@ -41,4 +41,7 @@ private val options: Options<AppState, RProps, ExtensionListStateProps, Extensio
     {}
 
 fun RBuilder.extensionList(handler: RHandler<RProps> = {}) =
-    rConnect(mapStateToProps, mapDispatchToProps, options)(extensionListComponent, "ExtensionList")(handler)
+    rConnect(mapStateToProps, mapDispatchToProps, options).connects(
+        displayName = "ExtensionList",
+        component = extensionListComponent
+    )(handler)

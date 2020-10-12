@@ -4,7 +4,7 @@ interface FileTree {
     val children: List<FileItem>
 }
 
-data class RootFileTree (
+data class RootFileTree(
     override val children: List<FileItem> = emptyList()
 ) : FileTree
 
@@ -14,6 +14,7 @@ sealed class FileItem(
      */
     open val filename: String,
 )
+
 data class Folder(
     override val filename: String,
     override val children: List<FileItem> = emptyList()

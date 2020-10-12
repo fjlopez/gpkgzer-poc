@@ -1,7 +1,8 @@
 package modules.prism.reactrenderer
 
-import react.*
-import kotlin.js.*
+import react.RClass
+import react.RProps
+import react.ReactElement
 
 external interface PrismTheme
 
@@ -93,12 +94,12 @@ external interface HighlightClass : RClass<HighlightProps> {
 }
 
 @JsModule("prism-react-renderer")
-external val HighlightModule : dynamic
+external val HighlightModule: dynamic
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
 val Highlight = HighlightModule.default as HighlightClass
 
 @JsModule("prism-react-renderer/prism")
-external val PrismModule : dynamic
+external val PrismModule: dynamic
 val PrismDefault = PrismModule.default
 

@@ -3,7 +3,7 @@ package connectors
 import components.common.ApplicationComponentProps
 import components.common.Theme
 import components.common.applicationComponent
-import components.utils.invoke
+import components.utils.connects
 import org.w3c.dom.events.Event
 import react.RBuilder
 import react.RHandler
@@ -40,4 +40,7 @@ private val options: Options<AppState, ApplicationProps, ApplicationStateProps, 
     {}
 
 fun RBuilder.app(handler: RHandler<ApplicationProps> = {}) =
-    rConnect(mapStateToProps, mapDispatchToProps, options)(applicationComponent, "Application")(handler)
+    rConnect(mapStateToProps, mapDispatchToProps, options).connects(
+        displayName = "Application",
+        component = applicationComponent
+    )(handler)

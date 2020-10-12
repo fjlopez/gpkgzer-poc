@@ -3,7 +3,7 @@ package connectors
 import components.common.Theme
 import components.common.layout.SideRightComponentProps
 import components.common.layout.sideRightComponent
-import components.utils.invoke
+import components.utils.connects
 import react.RBuilder
 import react.RHandler
 import react.RProps
@@ -34,4 +34,7 @@ private val options: Options<AppState, RProps, SideRightStateProps, SideRightCom
     {}
 
 fun RBuilder.sideRight(handler: RHandler<RProps> = {}) =
-    rConnect(mapStateToProps, mapDispatchToProps, options)(sideRightComponent, "SideRight")(handler)
+    rConnect(mapStateToProps, mapDispatchToProps, options).connects(
+        displayName = "SideRight",
+        component = sideRightComponent
+    )(handler)

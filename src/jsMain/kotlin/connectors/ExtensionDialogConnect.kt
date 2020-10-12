@@ -3,7 +3,7 @@ package connectors
 import com.github.gpkg4all.common.ModuleInstance
 import components.common.extension.ExtensionDialogComponentProps
 import components.common.extension.extensionDialogComponent
-import components.utils.invoke
+import components.utils.connects
 import org.w3c.dom.events.Event
 import react.RBuilder
 import react.RHandler
@@ -43,4 +43,7 @@ private val options: Options<AppState, ExtensionDialogProps, ExtensionDialogStat
     }
 
 fun RBuilder.extensionDialog(handler: RHandler<ExtensionDialogProps> = {}) =
-    rConnect(mapStateToProps, mapDispatchToProps, options)(extensionDialogComponent, "ExtensionDialog")(handler)
+    rConnect(mapStateToProps, mapDispatchToProps, options).connects(
+        displayName = "ExtensionDialog",
+        component = extensionDialogComponent
+    )(handler)

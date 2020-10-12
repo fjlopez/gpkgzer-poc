@@ -1,38 +1,49 @@
 package components.utils
 
-import kotlinext.js.Object
-import kotlinext.js.jsObject
 import kotlinx.html.LABEL
 import react.*
 import react.dom.RDOMBuilder
 
-operator fun <P : RProps, R : RProps> HOC<P, R>.invoke(
-    component: FunctionalComponent<P>,
+/**
+ * Get a React Connect class connected to a functional [component].
+ */
+fun <P : RProps, R : RProps> HOC<P, R>.connects(
     displayName: String? = null,
-    defaultProps: P.() -> Unit = {}
-): RClass<R> =
-    call(null, { props: P ->
+    defaultProps: P? = null,
+    component: FunctionalComponent<P>
+): RClass<R> {
+    val rc = call(null, { props: P ->
         component(props)
-    }).apply {
-        asDynamic().displayName = displayName?.let { "RConnect ($displayName)" } ?: "RConnect (Component)"
-        asDynamic().WrappedComponent.unsafeCast<RClass<P>>().apply {
-            this.displayName = displayName ?: "Anonymous"
-            this.defaultProps = kotlinext.js.js(defaultProps).unsafeCast<P>()
-        }
+    })
+    val wrapped = rc.asDynamic().WrappedComponent.unsafeCast<RClass<P>>()
+    val wrappedName = wrapped.asDynamic().displayName.unsafeCast<String?>()
+
+    rc.asDynamic().displayName = "RConnect (${displayName ?: wrappedName ?: "Component"})"
+
+    if (displayName != null) {
+        wrapped.asDynamic().displayName = displayName
     }
+    if (defaultProps != null) {
+        wrapped.asDynamic().defaultProps = defaultProps
+    }
+    return rc
+}
 
-
+/**
+ * Get functional component from [func].
+ *
+ * This function wraps [react.functionalComponent].
+ */
 fun <P : RProps> functionalComponent(
-    displayName: String,
+    displayName: String? = null,
     defaultProps: P? = null,
     func: RBuilder.(props: P) -> Unit
-): FunctionalComponent<P> = functionalComponent(func).also {
-    Object.assign(
-        it.unsafeCast<RClass<P>>(),
-        jsObject {
-            this.displayName = displayName
-            this.defaultProps = defaultProps
-        })
+): FunctionalComponent<P> {
+    val fc = functionalComponent(displayName, func)
+    if (defaultProps != null) {
+        fc.asDynamic().defaultProps = defaultProps
+    }
+    return fc
 }
 
 /**

@@ -3,7 +3,7 @@ package connectors
 import com.github.gpkg4all.common.Project
 import components.common.builder.GenerateComponentProps
 import components.common.builder.generateComponent
-import components.utils.invoke
+import components.utils.connects
 import org.w3c.dom.HTMLElement
 import react.RBuilder
 import react.RHandler
@@ -29,4 +29,7 @@ private val options: Options<AppState, GenerateProps, GenerateComponentProps, Ge
     {}
 
 fun RBuilder.generate(handler: RHandler<GenerateProps> = {}) =
-    rConnect(mapStateToProps, options)(generateComponent, "Generate")(handler)
+    rConnect(mapStateToProps, options).connects(
+        displayName = "Generate",
+        component = generateComponent
+    )(handler)

@@ -1,20 +1,23 @@
 plugins {
     kotlin("multiplatform") version "1.4.10"
+    kotlin("plugin.serialization") version "1.4.10"
 }
 
 val kotlinVersion = "1.4.10"
 val reactVersion = "16.13.1"
 val reduxVersion = "5.0.7"
 val extensionsVersion = "1.0.1"
-val preVersion = "115"
+val preVersion = "124"
 
 group = "es.iaaa"
 version = "0.1-SNAPSHOT"
 
 repositories {
     jcenter()
-    mavenCentral()
-    maven("https://kotlin.bintray.com/kotlin-js-wrappers/")
+    maven("https://kotlin.bintray.com/kotlinx")
+    maven("https://kotlin.bintray.com/kotlin-js-wrappers")
+    maven("https://kotlin.bintray.com/kotlin-eap")
+    maven("https://kotlin.bintray.com/kotlin-dev")
 }
 
 kotlin {

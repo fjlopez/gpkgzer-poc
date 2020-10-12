@@ -8,8 +8,10 @@ class GraphTest {
 
     @Test
     fun provideTopologicalSortedOrder() {
-        val expected = listOf("std", "ieee", "dware", "dw02", "dw05", "dw06", "dw07", "gtech", "dw01",
-            "dw04", "ramlib", "std_cell_lib", "synopsys", "des_system_lib", "dw03")
+        val expected = listOf(
+            "std", "ieee", "dware", "dw02", "dw05", "dw06", "dw07", "gtech", "dw01",
+            "dw04", "ramlib", "std_cell_lib", "synopsys", "des_system_lib", "dw03"
+        )
         assertEquals(expected, sut.topoSortOrNull())
         assertNull(sut.copy(edges = sut.edges + listOf("dw01" to "dw04")).topoSortOrNull())
     }

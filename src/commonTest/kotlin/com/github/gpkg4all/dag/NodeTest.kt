@@ -37,11 +37,13 @@ class NodeTest {
         class FixtureAddFeature(
             private val name: String,
             override val before: List<Node<Any>> = emptyList(),
-            override val after: List<Node<Any>> = emptyList()) : Node<Any> {
+            override val after: List<Node<Any>> = emptyList()
+        ) : Node<Any> {
             override fun toString(): String = name
             override val value: Any
                 get() = TODO("Not yet implemented")
         }
+
         class FixtureNodeUpdate(
             private val name: String,
             override val before: List<Node<Any>> = emptyList(),

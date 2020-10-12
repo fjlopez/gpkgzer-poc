@@ -3,7 +3,7 @@ package connectors
 import com.github.gpkg4all.common.Project
 import components.common.explore.ExploreDialogComponent
 import components.common.explore.ExploreDialogComponentProps
-import components.utils.invoke
+import components.utils.connects
 import org.w3c.dom.events.Event
 import react.RBuilder
 import react.RHandler
@@ -15,8 +15,7 @@ import reducer.CloseExplorer
 import redux.RAction
 import redux.WrapperAction
 
-external interface ExploreDialogProps : RProps {
-}
+external interface ExploreDialogProps : RProps
 
 external interface ExploreDialogStateProps : RProps {
     var isShown: Boolean
@@ -45,4 +44,7 @@ private val options: Options<AppState, ExploreDialogProps, ExploreDialogStatePro
     }
 
 fun RBuilder.exploreDialog(handler: RHandler<ExploreDialogProps> = {}) =
-    rConnect(mapStateToProps, mapDispatchToProps, options)(ExploreDialogComponent, "ExploreDialog")(handler)
+    rConnect(mapStateToProps, mapDispatchToProps, options).connects(
+        displayName = "ExploreDialog",
+        component = ExploreDialogComponent
+    )(handler)

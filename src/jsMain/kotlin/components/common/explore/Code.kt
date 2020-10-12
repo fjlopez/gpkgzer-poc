@@ -1,7 +1,6 @@
 package components.common.explore
 
 import com.github.gpkg4all.common.File
-import com.github.gpkg4all.common.FileItem
 import components.utils.functionalComponent
 import kotlinext.js.jsObject
 import modules.prism.reactrenderer.Highlight
@@ -62,12 +61,6 @@ private val codeComponent = functionalComponent<CodeProps<Any>>(displayName = "T
             }
         }
     }
-//    console.info(highlight)
-//    highlight {
-//        attrs {
-//            language = "jsx"
-//        }
-//    }
 }
 
 fun RBuilder.code(item: File<Any>, onChange: () -> Unit) {

@@ -6,7 +6,8 @@ import com.github.gpkg4all.common.OutputTarget
 import com.github.gpkg4all.common.Spec
 import components.common.builder.FieldsComponentProps
 import components.common.builder.fieldsComponent
-import components.utils.invoke
+import components.utils.connects
+import kotlinext.js.jsObject
 import org.w3c.dom.HTMLElement
 import react.RBuilder
 import react.RHandler
@@ -64,9 +65,13 @@ private val options: Options<AppState, FieldsProps, FieldsStateProps, FieldsComp
 
 
 fun RBuilder.fields(handler: RHandler<FieldsProps> = {}) =
-    rConnect(mapStateToProps, mapDispatchToProps, options)(fieldsComponent, "Fields") {
-        availableSpecs = emptyList()
-        availableTargets = emptyList()
-        availableContents = emptyList()
-        availableOptions = emptyList()
-    }(handler)
+    rConnect(mapStateToProps, mapDispatchToProps, options).connects(
+        displayName = "Fields",
+        defaultProps = jsObject {
+            availableSpecs = emptyList()
+            availableTargets = emptyList()
+            availableContents = emptyList()
+            availableOptions = emptyList()
+        },
+        component = fieldsComponent
+    )(handler)

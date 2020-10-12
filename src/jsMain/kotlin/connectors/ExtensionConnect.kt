@@ -2,7 +2,7 @@ package connectors
 
 import components.common.extension.ExtensionComponentProps
 import components.common.extension.extensionComponent
-import components.utils.invoke
+import components.utils.connects
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import react.RBuilder
@@ -33,4 +33,7 @@ private val mapDispatchToProps: ExtensionDispatchProps.((RAction) -> WrapperActi
 private val options: Options<Any, ExtensionProps, RProps, ExtensionComponentProps>.() -> Unit = {}
 
 fun RBuilder.extension(handler: RHandler<ExtensionProps> = {}) =
-    rConnect(mapDispatchToProps, options)(extensionComponent, "Extension")(handler)
+    rConnect(mapDispatchToProps, options).connects(
+        displayName = "Extension",
+        component = extensionComponent
+    )(handler)

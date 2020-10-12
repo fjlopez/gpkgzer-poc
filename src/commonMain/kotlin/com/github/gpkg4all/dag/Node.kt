@@ -25,7 +25,6 @@ fun <T> List<Node<T>>.prune(): List<Node<T>> {
 }
 
 
-
 fun <T> List<Node<T>>.topoSort(): List<Node<T>>? {
     val nodes = (this + flatMap { it.before } + flatMap { it.after }).distinct()
     val edges = flatMap { u -> u.before.map { v -> u before v } + u.after.map { v -> u after v } }

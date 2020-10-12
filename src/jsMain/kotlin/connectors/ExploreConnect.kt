@@ -3,7 +3,7 @@ package connectors
 import com.github.gpkg4all.common.Project
 import components.common.builder.ExploreComponentProps
 import components.common.builder.exploreComponent
-import components.utils.invoke
+import components.utils.connects
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import react.RBuilder
@@ -44,4 +44,7 @@ private val options: Options<AppState, ExploreProps, ExploreStateProps, ExploreC
     {}
 
 fun RBuilder.explore(handler: RHandler<ExploreProps> = {}) =
-    rConnect(mapStateToProps, mapDispatchToProps, options)(exploreComponent, "Explore")(handler)
+    rConnect(mapStateToProps, mapDispatchToProps, options).connects(
+        displayName = "Explore",
+        component = exploreComponent
+    )(handler)
