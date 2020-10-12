@@ -20,7 +20,9 @@ fun builder(
             File(
                 filename = "metadata.sql",
                 language = "sql",
-                content = core.features.map { it.value.definition })
+                content = core.features.map { it.value.definition },
+                asText = { it.joinToString("\n") }
+            )
         )
     )
 }

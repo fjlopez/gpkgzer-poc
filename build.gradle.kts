@@ -52,6 +52,7 @@ kotlin {
                 implementation(npm("react-toastify", "6.0.8"))
                 implementation(npm("react-transition-group", "4.3.0"))
                 implementation(npm("react-hotkeys", "2.0.0"))
+                implementation(npm("prism-react-renderer", "1.1.1"))
 
                 // jsearch
                 implementation(npm("js-search", "2.0.0"))

@@ -14,7 +14,6 @@ sealed class FileItem(
      */
     open val filename: String,
 )
-
 data class Folder(
     override val filename: String,
     override val children: List<FileItem> = emptyList()
@@ -23,5 +22,6 @@ data class Folder(
 data class File<T>(
     override val filename: String,
     val language: String? = null,
-    val content: T
+    val content: T,
+    val asText: (T) -> String = { "" }
 ) : FileItem(filename)

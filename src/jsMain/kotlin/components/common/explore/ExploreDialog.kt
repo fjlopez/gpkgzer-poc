@@ -1,5 +1,6 @@
 package components.common.explore
 
+import com.github.gpkg4all.common.File
 import com.github.gpkg4all.common.FileItem
 import com.github.gpkg4all.common.RootFileTree
 import com.github.gpkg4all.common.builder
@@ -92,7 +93,14 @@ val ExploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
                                         }
                                     }
                                     div("explorer-content") {
-                                        +"Code"
+                                        attrs["ref"] = wrapper
+                                        val file = selected
+                                        if (file is File<*>) {
+                                            code(
+                                                item = file.unsafeCast<File<Any>>(),
+                                                onChange = {}
+                                            )
+                                        }
                                     }
                                 }
                                 div("explorer-actions") {
