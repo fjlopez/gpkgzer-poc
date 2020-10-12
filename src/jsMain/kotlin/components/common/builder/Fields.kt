@@ -58,6 +58,12 @@ private fun RDOMBuilder<DIV>.packagingField(props: FieldsComponentProps) {
             onChange = props.onChangeTarget
             asText = { it.description }
         }
+        fieldInput {
+            id = "input-name"
+            text = "Name"
+            value = props.projectName
+            onChange = props.onChangeName
+        }
     }
 }
 

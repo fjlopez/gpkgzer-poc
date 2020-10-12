@@ -15,7 +15,8 @@ data class AppState(
         spec = Configuration.supportedSpecifications.find { it.default },
         content = Configuration.supportedContents.find { it.default },
         options = Configuration.options.filter { it.default },
-        extensions = Configuration.supportedExtensions.filter { it.default }
+        extensions = Configuration.supportedExtensions.filter { it.default },
+        name = "sample"
     ),
     val showExtensionsDialog: Boolean = false,
     val showExplorerDialog: Boolean = false,
@@ -26,6 +27,7 @@ class UpdateTheme(val theme: Theme) : RAction
 class UpdateProjectSpecification(val spec: Spec) : RAction
 class UpdateProjectTarget(val outputTarget: OutputTarget) : RAction
 class UpdateProjectContent(val target: ContentTarget) : RAction
+class UpdateProjectName(val name: String) : RAction
 class ToggleProjectOption(val target: ModuleInstance) : RAction
 class RemoveExtension(val target: ModuleInstance) : RAction
 class AddExtension(val target: ModuleInstance) : RAction
@@ -62,6 +64,7 @@ object Reducers {
             is CloseExtensions -> state.copy(showExtensionsDialog = false)
             is ShowExplorer -> state.copy(showExplorerDialog = true)
             is CloseExplorer -> state.copy(showExplorerDialog = false)
+            is UpdateProjectName -> state.copy(project = state.project.copy(name = action.name))
             else -> state
         }
     }

@@ -7,7 +7,7 @@ object Configuration {
     val theme: Theme = Theme.LIGHT
     val supportedTargets = listOf(
         OutputTargets.gpkg,
-        OutputTargets.sql,
+        OutputTargets.zip,
     )
     val supportedSpecifications = listOf(
         Specs.spec130, Specs.spec121, Specs.spec120, Specs.spec110, Specs.spec101,

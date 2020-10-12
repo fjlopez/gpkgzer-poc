@@ -3,10 +3,7 @@ package components.common.builder
 import components.utils.attrsHtmlFor
 import components.utils.functionalComponent
 import kotlinext.js.jsObject
-import react.RBuilder
-import react.RProps
-import react.buildElement
-import react.child
+import react.*
 import react.dom.div
 import react.dom.label
 
@@ -28,7 +25,7 @@ private val controlComponent = { children: RBuilder.() -> Unit ->
                 +props.text
             }
             div("control-element") {
-                child(buildElement(children))
+                childList.addAll(RBuilder().apply(children).childList)
             }
         }
     }

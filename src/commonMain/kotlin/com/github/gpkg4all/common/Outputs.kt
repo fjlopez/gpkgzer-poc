@@ -8,5 +8,5 @@ data class OutputTarget(
 
 object OutputTargets {
     val gpkg = OutputTarget("gpkg", "SQLite database file (gpkg)", default = true)
-    val sql = OutputTarget("sql", "SQL files (sql)")
+    val zip = OutputTarget("zip", "SQL files (zip)")
 }

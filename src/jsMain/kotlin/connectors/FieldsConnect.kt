@@ -34,6 +34,7 @@ external interface FieldsStateProps : RProps {
     var selectedTarget: OutputTarget?
     var selectedContent: ContentTarget?
     var selectedOptions: List<ModuleInstance>
+    var projectName: String
 }
 
 external interface FieldsDispatchProps : RProps {
@@ -41,6 +42,7 @@ external interface FieldsDispatchProps : RProps {
     var onChangeSpecs: (Spec) -> Unit
     var onChangeContent: (ContentTarget) -> Unit
     var onChangeTarget: (OutputTarget) -> Unit
+    var onChangeName: (String) -> Unit
 }
 
 private val mapStateToProps: FieldsStateProps.(AppState, RProps) -> Unit = { state, _ ->
@@ -49,6 +51,7 @@ private val mapStateToProps: FieldsStateProps.(AppState, RProps) -> Unit = { sta
         selectedTarget = outputTarget
         selectedContent = content
         selectedOptions = options
+        projectName = name
     }
 }
 
@@ -57,6 +60,7 @@ private val mapDispatchToProps: FieldsDispatchProps.((RAction) -> WrapperAction,
     onChangeSpecs = { dispatch(UpdateProjectSpecification(it)) }
     onChangeContent = { dispatch(UpdateProjectContent(it)) }
     onChangeTarget = { dispatch(UpdateProjectTarget(it)) }
+    onChangeName = { dispatch(UpdateProjectName(it)) }
 }
 
 private val options: Options<AppState, FieldsProps, FieldsStateProps, FieldsComponentProps>.() -> Unit =

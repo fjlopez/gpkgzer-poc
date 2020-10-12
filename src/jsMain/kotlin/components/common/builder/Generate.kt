@@ -91,7 +91,7 @@ fun launchGenerator(initDb: SqlJsStatic?, project: Project): suspend CoroutineSc
                     val link = document.create.a()
                     link.style.display = "none"
                     link.href = url
-                    link.download = "sqlite.db"
+                    link.download = project.name + ".gpkg"
                     link.click()
                     URL.revokeObjectURL(url)
                 }

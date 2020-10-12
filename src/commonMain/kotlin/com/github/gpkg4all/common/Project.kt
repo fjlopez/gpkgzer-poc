@@ -7,7 +7,8 @@ data class Project(
     val spec: Spec?,
     val content: ContentTarget?,
     val options: List<ModuleInstance>,
-    val extensions: List<ModuleInstance>
+    val extensions: List<ModuleInstance>,
+    val name: String
 )
 
 val updateSpec: ProjectReducer<Spec?> = { newSpec ->
