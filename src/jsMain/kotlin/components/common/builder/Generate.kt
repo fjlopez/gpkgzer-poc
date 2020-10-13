@@ -1,25 +1,21 @@
 package components.common.builder
 
-import builders.generateGeoPackage
-import com.github.gpkg4all.common.Project
+import builders.buildGeoPackage
+import builders.buildZip
+import com.github.gpkg4all.common.*
 import components.utils.functionalComponent
+import components.utils.saveAs
 import components.utils.useWindowsUtils
 import connectors.GenerateProps
 import connectors.GenerateStateProps
-import kotlinx.browser.document
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.await
 import kotlinx.coroutines.launch
-import kotlinx.html.dom.create
-import kotlinx.html.js.a
 import modules.sqljs.SqlJsStatic
 import modules.sqljs.initDb
 import org.khronos.webgl.Uint8Array
 import org.w3c.dom.events.Event
-import org.w3c.dom.url.URL
-import org.w3c.files.Blob
-import org.w3c.files.BlobPropertyBag
 import react.getValue
 import react.setValue
 import react.useEffect
@@ -85,15 +81,15 @@ fun launchGenerator(initDb: SqlJsStatic?, project: Project): suspend CoroutineSc
         }
         else -> {
             {
-                generateGeoPackage(initDb, project.spec) { export: Uint8Array ->
-                    val blob = Blob(arrayOf(export), BlobPropertyBag(type = "octet/stream"))
-                    val url = URL.createObjectURL(blob)
-                    val link = document.create.a()
-                    link.style.display = "none"
-                    link.href = url
-                    link.download = project.name + ".gpkg"
-                    link.click()
-                    URL.revokeObjectURL(url)
+                when(project.outputTarget) {
+                    OutputTargets.gpkg -> buildGeoPackage(initDb, project.spec) { export: Uint8Array ->
+                        saveAs(export, project.name + ".gpkg")
+                    }
+                    OutputTargets.zip -> buildZip(project.spec) {
+                        if (it is Uint8Array) {
+                            saveAs(it.unsafeCast<Uint8Array>(), project.name + ".zip")
+                        }
+                    }
                 }
             }
         }

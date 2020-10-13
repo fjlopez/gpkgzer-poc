@@ -15,8 +15,8 @@ val updateSpec: ProjectReducer<Spec?> = { newSpec ->
     if (spec != newSpec) copy(spec = newSpec) else this
 }
 
-val updateOutputTarget: ProjectReducer<OutputTarget?> = { outputTarget ->
-    if (outputTarget != outputTarget) copy(outputTarget = outputTarget) else this
+val updateOutputTarget: ProjectReducer<OutputTarget?> = { newOutputTarget ->
+    if (outputTarget != newOutputTarget) copy(outputTarget = newOutputTarget) else this
 }
 
 val updateContent: ProjectReducer<ContentTarget?> = { contentTarget ->

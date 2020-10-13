@@ -69,6 +69,9 @@ kotlin {
                 implementation(npm("sql.js", "1.3.0"))
                 implementation(npm("copy-webpack-plugin", "6.0.3"))
 
+                // JSZip
+                implementation(npm("jszip", "3.2.0"))
+
                 // loaders
                 implementation(npm("style-loader", "1.2.1"))
                 implementation(npm("css-loader", "4.2.1"))
