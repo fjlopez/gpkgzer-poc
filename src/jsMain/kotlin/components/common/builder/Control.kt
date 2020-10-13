@@ -3,7 +3,9 @@ package components.common.builder
 import components.utils.attrsHtmlFor
 import components.utils.functionalComponent
 import kotlinext.js.jsObject
-import react.*
+import react.RBuilder
+import react.RProps
+import react.child
 import react.dom.div
 import react.dom.label
 

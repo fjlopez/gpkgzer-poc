@@ -7,10 +7,10 @@ import kotlinx.html.InputType
 import kotlinx.html.id
 import kotlinx.html.js.onBlurFunction
 import kotlinx.html.js.onChangeFunction
-import react.RBuilder
-import react.RProps
 import react.*
-import react.dom.*
+import react.dom.div
+import react.dom.input
+import react.dom.label
 
 external interface FieldInputProps : RProps {
     var id: String
@@ -31,7 +31,7 @@ private val fieldInputComponent =
         div("control control-inline") {
             label {
                 attrsHtmlFor(props.id)
-                + props.text
+                +props.text
             }
             input(InputType.text, classes = "input") {
                 attrs {

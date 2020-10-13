@@ -1,7 +1,3 @@
-/**
- * See https://fkhadra.github.io/react-toastify/introduction
- */
-
 @file:JsModule("js-search")
 @file:JsNonModule
 

@@ -2,7 +2,8 @@ package components.common.builder
 
 import builders.buildGeoPackage
 import builders.buildZip
-import com.github.gpkg4all.common.*
+import com.github.gpkg4all.common.OutputTargets
+import com.github.gpkg4all.common.Project
 import components.utils.functionalComponent
 import components.utils.saveAs
 import components.utils.useWindowsUtils
@@ -81,7 +82,7 @@ fun launchGenerator(initDb: SqlJsStatic?, project: Project): suspend CoroutineSc
         }
         else -> {
             {
-                when(project.outputTarget) {
+                when (project.outputTarget) {
                     OutputTargets.gpkg -> buildGeoPackage(initDb, project.spec) { export: Uint8Array ->
                         saveAs(export, project.name + ".gpkg")
                     }

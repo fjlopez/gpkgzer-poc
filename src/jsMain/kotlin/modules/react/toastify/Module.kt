@@ -1,7 +1,3 @@
-/**
- * See https://fkhadra.github.io/react-toastify/introduction
- */
-
 @file:JsModule("react-toastify")
 @file:JsNonModule
 
@@ -10,6 +6,9 @@ package modules.react.toastify
 import react.RClass
 import react.RProps
 
+/**
+ * See https://fkhadra.github.io/react-toastify/introduction
+ */
 @JsName("ToastContainer")
 external val toastContainer: RClass<ToastContainerProps>
 

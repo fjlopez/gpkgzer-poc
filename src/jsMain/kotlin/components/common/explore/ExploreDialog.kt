@@ -75,7 +75,7 @@ val ExploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
                                 div("left") {
                                     div("head") {
                                         strong {
-                                            + (props.project.name + ".zip")
+                                            +(props.project.name + ".zip")
                                         }
                                     }
                                     div("explorer-content") {
