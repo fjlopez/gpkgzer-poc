@@ -6,6 +6,7 @@ import com.github.gpkg4all.common.FileItem
 import com.github.gpkg4all.common.RootFileTree
 import com.github.gpkg4all.common.builder
 import components.common.builder.button
+import components.utils.downloadFile
 import components.utils.useWindowsUtils
 import connectors.ExploreDialogDispatchProps
 import connectors.ExploreDialogProps
@@ -93,7 +94,23 @@ val ExploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
                                 div("right") {
                                     div("head") {
                                         div("actions-file") {
-                                            +"Some actions"
+                                            button({
+                                                primary = true
+                                                onClick = { event: Event ->
+                                                    event.preventDefault()
+                                                    (selected as? File<*>)?.let {
+                                                        val file = it.unsafeCast<File<Any>>()
+                                                        downloadFile(
+                                                            filename = file.filename,
+                                                            mimetype = "text/plain;charset=utf-8",
+                                                            content = file.asText(file.content)
+                                                        )
+                                                    }
+                                                }
+                                                disabled = selected !is File<*>
+                                            }) {
+                                                +"Download"
+                                            }
                                         }
                                     }
                                     div("explorer-content") {

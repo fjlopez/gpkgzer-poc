@@ -4,7 +4,7 @@ import com.github.gpkg4all.common.File
 import com.github.gpkg4all.common.Project
 import com.github.gpkg4all.common.Spec
 import com.github.gpkg4all.common.builder
-import components.utils.saveAs
+import components.utils.downloadFile
 import kotlinext.js.jsObject
 import modules.jszip.jszip
 import modules.sqljs.SqlJsStatic
@@ -33,8 +33,12 @@ fun buildGeoPackage(sqlJs: SqlJsStatic, spec: Spec, exporter: (Uint8Array) -> Un
  */
 fun downloadGeoPackage(sqlJs: SqlJsStatic, project: Project) {
     project.spec?.let { spec ->
-        buildGeoPackage(sqlJs, spec) { export: Uint8Array ->
-            saveAs(export, project.name + ".gpkg")
+        buildGeoPackage(sqlJs, spec) {
+            downloadFile(
+                filename = "${project.name}.gpkg",
+                mimetype = "octet/stream",
+                content = it
+            )
         }
     }
 }
@@ -62,9 +66,11 @@ fun buildZip(spec: Spec, exporter: (dynamic) -> Unit) {
 fun downloadZip(project: Project) {
     project.spec?.let { spec ->
         buildZip(spec) {
-            if (it is Uint8Array) {
-                saveAs(it.unsafeCast<Uint8Array>(), project.name + ".zip")
-            }
+            downloadFile(
+                filename = "${project.name}.zip",
+                mimetype = "octet/stream",
+                content = it
+            )
         }
     }
 }
