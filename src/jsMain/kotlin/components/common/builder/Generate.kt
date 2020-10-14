@@ -1,11 +1,10 @@
 package components.common.builder
 
-import builders.buildGeoPackage
-import builders.buildZip
+import builders.downloadGeoPackage
+import builders.downloadZip
 import com.github.gpkg4all.common.OutputTargets
 import com.github.gpkg4all.common.Project
 import components.utils.functionalComponent
-import components.utils.saveAs
 import components.utils.useWindowsUtils
 import connectors.GenerateProps
 import connectors.GenerateStateProps
@@ -15,7 +14,6 @@ import kotlinx.coroutines.await
 import kotlinx.coroutines.launch
 import modules.sqljs.SqlJsStatic
 import modules.sqljs.initDb
-import org.khronos.webgl.Uint8Array
 import org.w3c.dom.events.Event
 import react.getValue
 import react.setValue
@@ -72,28 +70,11 @@ val generateComponent = functionalComponent<GenerateComponentProps>("Generate") 
     }
 }
 
-fun launchGenerator(initDb: SqlJsStatic?, project: Project): suspend CoroutineScope.() -> Unit =
-    when {
-        initDb == null -> {
-            {}
-        }
-        project.spec == null -> {
-            {}
-        }
-        else -> {
-            {
-                when (project.outputTarget) {
-                    OutputTargets.gpkg -> buildGeoPackage(initDb, project.spec) { export: Uint8Array ->
-                        saveAs(export, project.name + ".gpkg")
-                    }
-                    OutputTargets.zip -> buildZip(project.spec) {
-                        if (it is Uint8Array) {
-                            saveAs(it.unsafeCast<Uint8Array>(), project.name + ".zip")
-                        }
-                    }
-                }
-            }
-        }
+fun launchGenerator(initDb: SqlJsStatic?, project: Project): suspend CoroutineScope.() -> Unit = {
+    when (project.outputTarget) {
+        OutputTargets.gpkg -> initDb?.let { downloadGeoPackage(it, project) }
+        OutputTargets.zip -> downloadZip(project)
     }
+}
 
 

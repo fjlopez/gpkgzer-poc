@@ -1,10 +1,12 @@
 package components.common.explore
 
+import builders.downloadZip
 import com.github.gpkg4all.common.File
 import com.github.gpkg4all.common.FileItem
 import com.github.gpkg4all.common.RootFileTree
 import com.github.gpkg4all.common.builder
 import components.common.builder.button
+import components.utils.useWindowsUtils
 import connectors.ExploreDialogDispatchProps
 import connectors.ExploreDialogProps
 import connectors.ExploreDialogStateProps
@@ -16,6 +18,7 @@ import modules.react.hotkeys.hotKeys
 import modules.react.transitiongroup.cssTransition
 import modules.react.transitiongroup.transitionGroup
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.events.Event
 import react.*
 import react.dom.div
 import react.dom.strong
@@ -28,6 +31,7 @@ val ExploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
 
     var selected by useState<FileItem?>(null)
     var tree by useState<RootFileTree?>(null)
+    val windowsUtils = useWindowsUtils()
 
     useEffect(listOf(props.isShown)) {
         wrapper.current?.focus()
@@ -104,6 +108,16 @@ val ExploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
                                     }
                                 }
                                 div("explorer-actions") {
+                                    button({
+                                        hotkey = "${windowsUtils.symb} + ⏎"
+                                        primary = true
+                                        onClick = { event: Event ->
+                                            event.preventDefault()
+                                            downloadZip(props.project)
+                                        }
+                                    }) {
+                                        +"Download"
+                                    }
                                     button({
                                         hotkey = "esc"
                                         primary = true
