@@ -8,16 +8,13 @@ import components.utils.functionalComponent
 import components.utils.useWindowsUtils
 import connectors.GenerateProps
 import connectors.GenerateStateProps
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.await
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import modules.sqljs.SqlJsStatic
 import modules.sqljs.initDb
 import org.w3c.dom.events.Event
 import react.getValue
 import react.setValue
-import react.useEffect
+import react.useEffectWithCleanup
 import react.useState
 
 external interface GenerateComponentProps : GenerateProps, GenerateStateProps
@@ -29,11 +26,16 @@ val generateComponent = functionalComponent<GenerateComponentProps>("Generate") 
     var initDb by useState<SqlJsStatic?>(null)
     var generating by useState(false)
 
-    useEffect(listOf(loaded)) {
-        CoroutineScope(Dispatchers.Default).launch {
-            initDb = initDb().await()
-            loaded = true
+    useEffectWithCleanup(listOf(loaded)) {
+        val scope = CoroutineScope(Dispatchers.Default)
+        val cleanup = { scope.cancel() }
+        if (!loaded) {
+            scope.launch {
+                initDb = initDb().await()
+                loaded = true
+            }
         }
+        cleanup
     }
 
     val onSubmit = { event: Event ->
@@ -48,15 +50,15 @@ val generateComponent = functionalComponent<GenerateComponentProps>("Generate") 
 
     when {
         !loaded -> {
-            button({ disabled = true }) {
+            Button({ disabled = true }) {
                 +"Loading SQLite driver ..."
             }
         }
-        generating -> button({ disabled = true }) {
+        generating -> Button({ disabled = true }) {
             +"Building GeoPackage ..."
         }
         else -> {
-            button({
+            Button({
                 id = "generate-project"
                 hotkey = windowsUtils.symb + " + I"
                 primary = true

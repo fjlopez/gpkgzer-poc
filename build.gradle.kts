@@ -31,6 +31,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
             }
         }
         val commonTest by getting {
@@ -61,6 +62,8 @@ kotlin {
                 implementation(npm("js-search", "2.0.0"))
 
                 implementation(npm("body-scroll-lock", "3.0.1"))
+
+                implementation(npm("query-string", "6.13.5"))
 
                 // css
                 implementation(npm("hamburgers", "1.1.3"))

@@ -25,8 +25,6 @@ external interface FieldsProps : RProps {
     var availableContents: List<ContentTarget>
     var availableOptions: List<ModuleInstance>
     var refExtensions: RMutableRef<HTMLElement?>
-    var refGenerate: RMutableRef<HTMLElement?>
-    var refExplore: RMutableRef<HTMLElement?>
 }
 
 external interface FieldsStateProps : RProps {

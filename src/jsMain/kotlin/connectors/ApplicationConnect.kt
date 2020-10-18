@@ -1,7 +1,7 @@
 package connectors
 
+import com.github.gpkg4all.common.Project
 import components.common.ApplicationComponentProps
-import components.common.Theme
 import components.common.applicationComponent
 import components.utils.connects
 import org.w3c.dom.events.Event
@@ -18,19 +18,19 @@ import redux.WrapperAction
 external interface ApplicationProps : RProps
 
 external interface ApplicationStateProps : RProps {
-    var theme: Theme
+    var project: Project
 }
 
 external interface ApplicationDispatchProps : RProps {
-    var onCloseExtensions: (Event) -> Unit
+    var onEscape: (Event) -> Unit
 }
 
 private val mapStateToProps: ApplicationStateProps.(AppState, RProps) -> Unit = { state, _ ->
-    theme = state.theme
+    project = state.project
 }
 
 private val mapDispatchToProps: ApplicationDispatchProps.((RAction) -> WrapperAction, RProps) -> Unit = { dispatch, _ ->
-    onCloseExtensions = { event: Event ->
+    onEscape = { event: Event ->
         event.preventDefault()
         dispatch(CloseExtensions)
     }

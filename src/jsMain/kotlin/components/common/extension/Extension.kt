@@ -1,6 +1,6 @@
 package components.common.extension
 
-import components.common.builder.button
+import components.common.builder.Button
 import components.utils.functionalComponent
 import components.utils.useWindowsUtils
 import connectors.ExtensionDispatchProps
@@ -20,7 +20,7 @@ val extensionComponent = functionalComponent<ExtensionComponentProps>("Extension
             span("label") {
                 +"Extensions"
             }
-            button({
+            Button({
                 id = "explore-dependencies"
                 hotkey = windowsUtils.symb + " + B"
                 onClick = props.onShowExtensions

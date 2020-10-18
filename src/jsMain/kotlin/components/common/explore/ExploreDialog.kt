@@ -5,7 +5,7 @@ import com.github.gpkg4all.common.File
 import com.github.gpkg4all.common.FileItem
 import com.github.gpkg4all.common.RootFileTree
 import com.github.gpkg4all.common.builder
-import components.common.builder.button
+import components.common.builder.Button
 import components.utils.downloadFile
 import components.utils.useWindowsUtils
 import connectors.ExploreDialogDispatchProps
@@ -26,7 +26,7 @@ import react.dom.strong
 
 interface ExploreDialogComponentProps : ExploreDialogProps, ExploreDialogStateProps, ExploreDialogDispatchProps
 
-val ExploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { props ->
+val exploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { props ->
 
     val wrapper = useRef<HTMLElement?>(null)
 
@@ -94,7 +94,7 @@ val ExploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
                                 div("right") {
                                     div("head") {
                                         div("actions-file") {
-                                            button({
+                                            Button({
                                                 primary = true
                                                 onClick = { event: Event ->
                                                     event.preventDefault()
@@ -125,7 +125,7 @@ val ExploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
                                     }
                                 }
                                 div("explorer-actions") {
-                                    button({
+                                    Button({
                                         hotkey = "${windowsUtils.symb} + ⏎"
                                         primary = true
                                         onClick = { event: Event ->
@@ -135,7 +135,7 @@ val ExploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
                                     }) {
                                         +"Download"
                                     }
-                                    button({
+                                    Button({
                                         hotkey = "esc"
                                         primary = true
                                         onClick = props.onClose

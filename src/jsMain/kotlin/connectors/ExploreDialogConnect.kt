@@ -1,8 +1,8 @@
 package connectors
 
 import com.github.gpkg4all.common.Project
-import components.common.explore.ExploreDialogComponent
 import components.common.explore.ExploreDialogComponentProps
+import components.common.explore.exploreDialogComponent
 import components.utils.connects
 import org.w3c.dom.events.Event
 import react.RBuilder
@@ -46,5 +46,5 @@ private val options: Options<AppState, ExploreDialogProps, ExploreDialogStatePro
 fun RBuilder.exploreDialog(handler: RHandler<ExploreDialogProps> = {}) =
     rConnect(mapStateToProps, mapDispatchToProps, options).connects(
         displayName = "ExploreDialog",
-        component = ExploreDialogComponent
+        component = exploreDialogComponent
     )(handler)

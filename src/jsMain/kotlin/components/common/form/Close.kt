@@ -15,7 +15,7 @@ class Close : RComponent<CloseProps, RState>() {
                 href = "/#"
                 onClickFunction = { event ->
                     event.preventDefault()
-                    props.onClose.invoke()
+                    props.onClose()
                 }
             }
             iconTime()

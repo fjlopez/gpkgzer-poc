@@ -1,7 +1,6 @@
 package reducer
 
 import com.github.gpkg4all.common.*
-import components.common.Theme
 import config.Configuration
 import kotlinext.js.Object
 import kotlinext.js.assign
@@ -9,7 +8,6 @@ import modules.react.toastify.warning
 import redux.*
 
 data class AppState(
-    val theme: Theme = Configuration.theme,
     val project: Project = Project(
         outputTarget = Configuration.supportedTargets.find { it.default },
         spec = Configuration.supportedSpecifications.find { it.default },
@@ -23,7 +21,6 @@ data class AppState(
     val availableExtensions: List<ModuleInstance> = Configuration.supportedExtensions.filter { !it.default }
 )
 
-class UpdateTheme(val theme: Theme) : RAction
 class UpdateProjectSpecification(val spec: Spec) : RAction
 class UpdateProjectTarget(val outputTarget: OutputTarget) : RAction
 class UpdateProjectContent(val target: ContentTarget) : RAction
@@ -39,7 +36,6 @@ object CloseExplorer : RAction
 object Reducers {
     val stateReducer = { state: AppState, action: RAction ->
         when (action) {
-            is UpdateTheme -> state.copy(theme = action.theme)
             is UpdateProjectSpecification -> {
                 when {
                     action.spec.deprecated -> warning("Version ${action.spec.description} is a deprecated version")

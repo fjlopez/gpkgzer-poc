@@ -8,7 +8,7 @@ import connectors.ExploreStateProps
 external interface ExploreComponentProps : ExploreProps, ExploreStateProps, ExploreDispatchProps
 
 val exploreComponent = functionalComponent<ExploreComponentProps>("Generate") { props ->
-    button({
+    Button({
         id = "explore-project"
         hotkey = "ctrl + space"
         primary = true

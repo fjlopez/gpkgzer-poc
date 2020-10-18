@@ -7,7 +7,6 @@ import components.utils.connects
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import react.RBuilder
-import react.RHandler
 import react.RMutableRef
 import react.RProps
 import react.redux.Options
@@ -43,8 +42,10 @@ private val mapDispatchToProps: ExploreDispatchProps.((RAction) -> WrapperAction
 private val options: Options<AppState, ExploreProps, ExploreStateProps, ExploreComponentProps>.() -> Unit =
     {}
 
-fun RBuilder.explore(handler: RHandler<ExploreProps> = {}) =
+fun RBuilder.explore(refButton: RMutableRef<HTMLElement?>) =
     rConnect(mapStateToProps, mapDispatchToProps, options).connects(
         displayName = "Explore",
         component = exploreComponent
-    )(handler)
+    ).invoke {
+        attrs.refButton = refButton
+    }

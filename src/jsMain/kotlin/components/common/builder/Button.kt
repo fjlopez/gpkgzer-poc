@@ -60,9 +60,11 @@ private val buttonComponent = { block: RDOMBuilder<SPAN>.() -> Unit ->
     }
 }
 
-fun RBuilder.button(handler: ButtonProps.() -> Unit, block: RDOMBuilder<SPAN>.() -> Unit) =
+@Suppress("FunctionName")
+fun RBuilder.Button(handler: ButtonProps.() -> Unit, block: RDOMBuilder<SPAN>.() -> Unit) =
     child(buttonComponent(block)) {
         attrs {
             handler()
         }
     }
+

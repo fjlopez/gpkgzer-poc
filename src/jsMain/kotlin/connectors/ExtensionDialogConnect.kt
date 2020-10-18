@@ -6,7 +6,6 @@ import components.common.extension.extensionDialogComponent
 import components.utils.connects
 import org.w3c.dom.events.Event
 import react.RBuilder
-import react.RHandler
 import react.RProps
 import react.redux.Options
 import react.redux.rConnect
@@ -42,8 +41,10 @@ private val options: Options<AppState, ExtensionDialogProps, ExtensionDialogStat
     {
     }
 
-fun RBuilder.extensionDialog(handler: RHandler<ExtensionDialogProps> = {}) =
+fun RBuilder.extensionDialog(onClose: (Event) -> Unit) =
     rConnect(mapStateToProps, mapDispatchToProps, options).connects(
         displayName = "ExtensionDialog",
         component = extensionDialogComponent
-    )(handler)
+    ).invoke {
+        attrs.onClose = onClose
+    }

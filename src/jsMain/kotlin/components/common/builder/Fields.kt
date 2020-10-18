@@ -6,7 +6,10 @@ import com.github.gpkg4all.common.OutputTarget
 import com.github.gpkg4all.common.Spec
 import components.common.form.checkBoxGroup
 import components.common.form.radioGroup
-import connectors.*
+import connectors.FieldsDispatchProps
+import connectors.FieldsProps
+import connectors.FieldsStateProps
+import connectors.extension
 import kotlinx.html.DIV
 import react.dom.RDOMBuilder
 import react.dom.div
@@ -28,20 +31,6 @@ val fieldsComponent = functionalComponent<FieldsComponentProps> { props ->
             extension {
                 attrs {
                     refButton = props.refExtensions
-                }
-            }
-        }
-    }
-    div("actions") {
-        div("actions-container") {
-            generate {
-                attrs {
-                    refButton = props.refGenerate
-                }
-            }
-            explore {
-                attrs {
-                    refButton = props.refExplore
                 }
             }
         }

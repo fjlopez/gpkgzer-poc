@@ -5,6 +5,7 @@ import kotlinx.html.HtmlBlockInlineTag
 import kotlinx.html.dom.create
 import kotlinx.html.js.a
 import kotlinx.html.tabIndex
+import org.w3c.dom.events.Event
 import org.w3c.dom.url.URL
 import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
@@ -26,4 +27,12 @@ fun downloadFile(filename: String, mimetype: String, content: dynamic) {
     link.download = filename
     link.click()
     URL.revokeObjectURL(url)
+}
+
+/**
+ * Prevent default behaviour of the event.
+ */
+fun preventDefault(block: (Event) -> Unit): (Event) -> Unit = {
+    it.preventDefault()
+    block(it)
 }
