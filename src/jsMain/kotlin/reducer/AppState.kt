@@ -17,7 +17,6 @@ data class AppState(
         name = "sample"
     ),
     val showExtensionsDialog: Boolean = false,
-    val showExplorerDialog: Boolean = false,
     val availableExtensions: List<ModuleInstance> = Configuration.supportedExtensions.filter { !it.default }
 )
 
@@ -30,8 +29,6 @@ class RemoveExtension(val target: ModuleInstance) : RAction
 class AddExtension(val target: ModuleInstance) : RAction
 object ShowExtensions : RAction
 object CloseExtensions : RAction
-object ShowExplorer : RAction
-object CloseExplorer : RAction
 
 object Reducers {
     val stateReducer = { state: AppState, action: RAction ->
@@ -58,8 +55,6 @@ object Reducers {
                 )
             is ShowExtensions -> state.copy(showExtensionsDialog = true)
             is CloseExtensions -> state.copy(showExtensionsDialog = false)
-            is ShowExplorer -> state.copy(showExplorerDialog = true)
-            is CloseExplorer -> state.copy(showExplorerDialog = false)
             is UpdateProjectName -> state.copy(project = state.project.copy(name = action.name))
             else -> state
         }

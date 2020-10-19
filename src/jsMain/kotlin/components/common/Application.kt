@@ -30,7 +30,8 @@ val applicationComponent = functionalComponent<ApplicationComponentProps> { prop
     val buttonGenerate = useRef<HTMLElement?>(null)
     val buttonExplore = useRef<HTMLElement?>(null)
 
-    var showShare by useState(false)
+    var openShare by useState(false)
+    var openExplore by useState(false)
 
     var hash by useState(window.location.hash)
 
@@ -84,19 +85,26 @@ val applicationComponent = functionalComponent<ApplicationComponentProps> { prop
         div("actions") {
             div("actions-container") {
                 generate(buttonGenerate)
-                explore(buttonExplore)
+                Button({
+                    id = "explore-project"
+                    hotkey = "ctrl + space"
+                    primary = true
+                    onClick = { openExplore = true }
+                }) {
+                    +"Explore"
+                }
                 Button({
                     id = "share-project"
                     primary = true
-                    onClick = { showShare = true }
+                    onClick = { openShare = true }
                 }) {
                     +"Share"
                 }
             }
         }
-        shareDialog(showShare) { showShare = false }
-        extensionDialog(props.onEscape)
-        exploreDialog()
+        Share(show = openShare, onClose = { openShare = false })
+        Extension(props.onEscape)
+        Explore(show = openExplore, onClose = { openExplore = false })
     }
     SideRight(Configuration.theme)
     toastContainer {

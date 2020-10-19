@@ -28,7 +28,7 @@ import react.useRef
 
 interface ShareComponentProps : ShareProps, ShareStateProps, ShareDispatchProps
 
-val shareComponent = functionalComponent<ShareComponentProps> { props ->
+val shareComponent = functionalComponent<ShareComponentProps>("Share") { props ->
 
     val wrapper = useRef<HTMLElement?>(null)
     val urlToShare = window.location.origin

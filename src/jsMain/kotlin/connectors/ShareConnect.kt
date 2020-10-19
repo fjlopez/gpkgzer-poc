@@ -33,7 +33,8 @@ private val mapDispatchToProps: ShareDispatchProps.((RAction) -> WrapperAction, 
 private val options: Options<AppState, ShareProps, ShareStateProps, ShareComponentProps>.() -> Unit =
     {}
 
-fun RBuilder.shareDialog(show: Boolean, onClose: (Event) -> Unit) =
+@Suppress("FunctionName")
+fun RBuilder.Share(show: Boolean, onClose: (Event) -> Unit) =
     rConnect(mapStateToProps, mapDispatchToProps, options).connects(
         displayName = "Share",
         component = shareComponent

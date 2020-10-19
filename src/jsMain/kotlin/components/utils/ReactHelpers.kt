@@ -16,9 +16,8 @@ fun <P : RProps, R : RProps> HOC<P, R>.connects(
         component(props)
     })
     val wrapped = rc.asDynamic().WrappedComponent.unsafeCast<RClass<P>>()
-    val wrappedName = wrapped.asDynamic().displayName.unsafeCast<String?>()
-
-    rc.asDynamic().displayName = "RConnect (${displayName ?: wrappedName ?: "Component"})"
+    val wrappedName = displayName ?: component.asDynamic().displayName ?: "Component"
+    rc.asDynamic().displayName = "RConnect ($wrappedName)"
 
     if (displayName != null) {
         wrapped.asDynamic().displayName = displayName

@@ -8,9 +8,9 @@ import com.github.gpkg4all.common.builder
 import components.common.builder.Button
 import components.utils.downloadFile
 import components.utils.useWindowsUtils
-import connectors.ExploreDialogDispatchProps
-import connectors.ExploreDialogProps
-import connectors.ExploreDialogStateProps
+import connectors.ExploreDispatchProps
+import connectors.ExploreProps
+import connectors.ExploreStateProps
 import kotlinext.js.jsObject
 import kotlinx.browser.window
 import modules.bodyscrolllock.clearAllBodyScrollLocks
@@ -24,9 +24,9 @@ import react.*
 import react.dom.div
 import react.dom.strong
 
-interface ExploreDialogComponentProps : ExploreDialogProps, ExploreDialogStateProps, ExploreDialogDispatchProps
+interface ExploreComponentProps : ExploreProps, ExploreStateProps, ExploreDispatchProps
 
-val exploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { props ->
+val exploreComponent = functionalComponent<ExploreComponentProps> { props ->
 
     val wrapper = useRef<HTMLElement?>(null)
 
@@ -34,7 +34,7 @@ val exploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
     var tree by useState<RootFileTree?>(null)
     val windowsUtils = useWindowsUtils()
 
-    useEffect(listOf(props.isShown)) {
+    useEffect(listOf(props.open)) {
         wrapper.current?.focus()
         tree = props.project.spec?.let { spec ->
             builder(spec)
@@ -43,7 +43,7 @@ val exploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
 
     useEffectWithCleanup {
         wrapper.current?.let { htmlElement ->
-            if (props.isShown) {
+            if (props.open) {
                 disableBodyScroll(htmlElement)
             }
         };
@@ -51,7 +51,7 @@ val exploreDialogComponent = functionalComponent<ExploreDialogComponentProps> { 
     }
 
     transitionGroup {
-        if (props.isShown) {
+        if (props.open) {
             cssTransition {
                 attrs {
                     classNames = "explorer"

@@ -41,7 +41,7 @@ private val options: Options<AppState, ExtensionDialogProps, ExtensionDialogStat
     {
     }
 
-fun RBuilder.extensionDialog(onClose: (Event) -> Unit) =
+fun RBuilder.Extension(onClose: (Event) -> Unit) =
     rConnect(mapStateToProps, mapDispatchToProps, options).connects(
         displayName = "ExtensionDialog",
         component = extensionDialogComponent
