@@ -41,7 +41,7 @@ val shareComponent = functionalComponent<ShareComponentProps>("Share") { props -
 
     @Suppress("EXPERIMENTAL_API_USAGE")
     val descriptor = Json.encodeToDynamic(props.project.toDescriptor())
-    val urlToShare = window.location.origin + "/#" + stringify(descriptor)
+    val urlToShare = window.location.href + "#" + stringify(descriptor)
 
     useEffectWithCleanup {
         wrapper.current?.let { htmlElement ->

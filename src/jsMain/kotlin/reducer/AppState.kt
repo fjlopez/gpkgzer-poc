@@ -29,12 +29,12 @@ class RemoveExtension(val target: ModuleInstance) : RAction
 class AddExtension(val target: ModuleInstance) : RAction
 object ShowExtensions : RAction
 object CloseExtensions : RAction
-class LoadExtenalConfiguration(val descriptor: ProjectDescriptor) : RAction
+class LoadExternalConfiguration(val descriptor: ProjectDescriptor) : RAction
 
 object Reducers {
     val stateReducer = { state: AppState, action: RAction ->
         when (action) {
-            is LoadExtenalConfiguration -> {
+            is LoadExternalConfiguration -> {
                 val project = Project(
                     outputTarget = Configuration.supportedTargets.find { it.key == action.descriptor.outputTarget },
                     spec = Configuration.supportedSpecifications.find { it.key == action.descriptor.spec },

@@ -13,7 +13,7 @@ import react.redux.Options
 import react.redux.rConnect
 import reducer.AppState
 import reducer.CloseExtensions
-import reducer.LoadExtenalConfiguration
+import reducer.LoadExternalConfiguration
 import redux.RAction
 import redux.WrapperAction
 
@@ -38,7 +38,7 @@ private val mapDispatchToProps: ApplicationDispatchProps.((RAction) -> WrapperAc
         dispatch(CloseExtensions)
     }
     loadExternalConfiguration = {
-        dispatch(LoadExtenalConfiguration(it))
+        dispatch(LoadExternalConfiguration(it))
     }
 }
 
