@@ -3,7 +3,6 @@ package components.common
 import com.github.gpkg4all.common.ProjectDescriptor
 import components.common.builder.Button
 import components.common.builder.hotkeys
-import components.common.form.close
 import components.common.layout.SideRight
 import components.common.layout.header
 import components.common.layout.sideLeft
@@ -118,7 +117,6 @@ val applicationComponent = functionalComponent<ApplicationComponentProps> { prop
         attrs {
             position = "top-center"
             hideProgressBar = true
-            closeButton = close { }
         }
     }
 }
