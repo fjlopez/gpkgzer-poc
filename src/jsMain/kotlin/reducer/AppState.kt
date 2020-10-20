@@ -29,10 +29,22 @@ class RemoveExtension(val target: ModuleInstance) : RAction
 class AddExtension(val target: ModuleInstance) : RAction
 object ShowExtensions : RAction
 object CloseExtensions : RAction
+class LoadExtenalConfiguration(val descriptor: ProjectDescriptor) : RAction
 
 object Reducers {
     val stateReducer = { state: AppState, action: RAction ->
         when (action) {
+            is LoadExtenalConfiguration -> {
+                val project = Project(
+                    outputTarget = Configuration.supportedTargets.find { it.key == action.descriptor.outputTarget },
+                    spec = Configuration.supportedSpecifications.find { it.key == action.descriptor.spec },
+                    content = Configuration.supportedContents.find { it.key == action.descriptor.content },
+                    options = Configuration.options.filter { it.module.key in action.descriptor.options },
+                    extensions = Configuration.supportedExtensions.filter { it.module.key in action.descriptor.extensions },
+                    name = action.descriptor.name
+                )
+                state.copy(project = project)
+            }
             is UpdateProjectSpecification -> {
                 when {
                     action.spec.deprecated -> warning("Version ${action.spec.description} is a deprecated version")

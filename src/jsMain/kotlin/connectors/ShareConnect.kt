@@ -4,7 +4,6 @@ import com.github.gpkg4all.common.Project
 import components.common.share.ShareComponentProps
 import components.common.share.shareComponent
 import components.utils.connects
-import org.w3c.dom.events.Event
 import react.RBuilder
 import react.RProps
 import react.redux.Options
@@ -15,7 +14,7 @@ import redux.WrapperAction
 
 external interface ShareProps : RProps {
     var open: Boolean
-    var onClose: (Event) -> Unit
+    var onClose: () -> Unit
 }
 
 external interface ShareStateProps : RProps {
@@ -34,7 +33,7 @@ private val options: Options<AppState, ShareProps, ShareStateProps, ShareCompone
     {}
 
 @Suppress("FunctionName")
-fun RBuilder.Share(show: Boolean, onClose: (Event) -> Unit) =
+fun RBuilder.Share(show: Boolean, onClose: () -> Unit) =
     rConnect(mapStateToProps, mapDispatchToProps, options).connects(
         displayName = "Share",
         component = shareComponent

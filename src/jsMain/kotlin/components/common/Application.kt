@@ -9,11 +9,14 @@ import components.common.layout.header
 import components.common.layout.sideLeft
 import config.Configuration
 import connectors.*
+import kotlinext.js.jsObject
 import kotlinx.browser.window
 import kotlinx.html.id
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromDynamic
 import modules.querystring.parse
+import modules.react.toastify.ToastContainerProps
+import modules.react.toastify.toast
 import modules.react.toastify.toastContainer
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
@@ -45,17 +48,21 @@ val applicationComponent = functionalComponent<ApplicationComponentProps> { prop
     useEffect(listOf(hash)) {
         if (hash.isNotEmpty()) {
             window.history.pushState(null, "", window.location.pathname)
-            runCatching {
+            val result = runCatching {
                 val params = parse(hash)
 
                 @Suppress("EXPERIMENTAL_API_USAGE")
                 val projectDescription = Json.decodeFromDynamic<ProjectDescriptor>(params)
-                // project = build from projectDescription
-            }.onSuccess {
-                // dispatch new project description
-                // if we are here toast.success("Configuration loaded")
-            }.onFailure {
-                // if we are here toast.error("Configuration not loaded")
+                props.loadExternalConfiguration(projectDescription)
+            }
+            if (result.isSuccess) {
+                toast.success("Configuration loaded.", jsObject<ToastContainerProps> {
+                    autoClose = 3000
+                })
+            } else {
+                toast.error("Configuration not loaded.", jsObject<ToastContainerProps> {
+                    autoClose = 3000
+                })
             }
             hash = ""
         }

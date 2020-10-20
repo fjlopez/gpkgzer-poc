@@ -1,6 +1,7 @@
 package connectors
 
 import com.github.gpkg4all.common.Project
+import com.github.gpkg4all.common.ProjectDescriptor
 import components.common.ApplicationComponentProps
 import components.common.applicationComponent
 import components.utils.connects
@@ -12,6 +13,7 @@ import react.redux.Options
 import react.redux.rConnect
 import reducer.AppState
 import reducer.CloseExtensions
+import reducer.LoadExtenalConfiguration
 import redux.RAction
 import redux.WrapperAction
 
@@ -23,6 +25,7 @@ external interface ApplicationStateProps : RProps {
 
 external interface ApplicationDispatchProps : RProps {
     var onEscape: (Event) -> Unit
+    var loadExternalConfiguration: (ProjectDescriptor) -> Unit
 }
 
 private val mapStateToProps: ApplicationStateProps.(AppState, RProps) -> Unit = { state, _ ->
@@ -33,6 +36,9 @@ private val mapDispatchToProps: ApplicationDispatchProps.((RAction) -> WrapperAc
     onEscape = { event: Event ->
         event.preventDefault()
         dispatch(CloseExtensions)
+    }
+    loadExternalConfiguration = {
+        dispatch(LoadExtenalConfiguration(it))
     }
 }
 
