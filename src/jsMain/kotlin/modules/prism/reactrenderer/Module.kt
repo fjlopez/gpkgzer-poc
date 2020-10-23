@@ -94,12 +94,14 @@ external interface HighlightClass : RClass<HighlightProps> {
 }
 
 @JsModule("prism-react-renderer")
+@JsNonModule
 external val HighlightModule: dynamic
 
 @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
 val Highlight = HighlightModule.default as HighlightClass
 
 @JsModule("prism-react-renderer/prism")
+@JsNonModule
 external val PrismModule: dynamic
 val PrismDefault = PrismModule.default
 

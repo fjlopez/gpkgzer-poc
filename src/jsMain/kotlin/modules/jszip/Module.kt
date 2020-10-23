@@ -12,4 +12,5 @@ external class JSZip {
 }
 
 @JsModule("jszip")
+@JsNonModule
 external fun jszip(): JSZip
