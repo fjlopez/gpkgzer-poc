@@ -17,7 +17,7 @@ object Configuration {
         ContentTargets.schema,
         ContentTargets.data,
     )
-    val options = listOf(
+    val supportedOptions = listOf(
         ModuleInstance(Modules.features, default = true),
         ModuleInstance(Modules.tiles),
         ModuleInstance(Modules.attributes),

@@ -7,6 +7,7 @@ import components.utils.preventDefault
 import connectors.ShareDispatchProps
 import connectors.ShareProps
 import connectors.ShareStateProps
+import kotlinext.js.js
 import kotlinx.browser.window
 import kotlinx.html.id
 import kotlinx.html.js.onFocusFunction
@@ -41,7 +42,7 @@ val shareComponent = functionalComponent<ShareComponentProps>("Share") { props -
 
     @Suppress("EXPERIMENTAL_API_USAGE")
     val descriptor = Json.encodeToDynamic(props.project.toDescriptor())
-    val urlToShare = window.location.href + "#" + stringify(descriptor)
+    val urlToShare = window.location.href + "#" + stringify(descriptor, js { arrayFormat = "bracket" })
 
     useEffectWithCleanup {
         wrapper.current?.let { htmlElement ->

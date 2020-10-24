@@ -2,12 +2,18 @@ package components.common
 
 import com.github.gpkg4all.common.ProjectDescriptor
 import components.common.builder.Button
+import components.common.builder.Fields
 import components.common.builder.hotkeys
 import components.common.layout.SideRight
 import components.common.layout.header
 import components.common.layout.sideLeft
 import config.Configuration
+import config.Configuration.supportedContents
+import config.Configuration.supportedOptions
+import config.Configuration.supportedSpecifications
+import config.Configuration.supportedTargets
 import connectors.*
+import kotlinext.js.js
 import kotlinext.js.jsObject
 import kotlinx.browser.window
 import kotlinx.html.id
@@ -48,7 +54,7 @@ val applicationComponent = functionalComponent<ApplicationComponentProps> { prop
         if (hash.isNotEmpty()) {
             window.history.pushState(null, "", window.location.pathname)
             val result = runCatching {
-                val params = parse(hash)
+                val params = parse(hash, js { arrayFormat = "bracket" })
 
                 @Suppress("EXPERIMENTAL_API_USAGE")
                 val projectDescription = Json.decodeFromDynamic<ProjectDescriptor>(params)
@@ -78,14 +84,12 @@ val applicationComponent = functionalComponent<ApplicationComponentProps> { prop
         header()
         hr("divider") { }
         form("form") {
-            fields {
-                attrs {
-                    availableSpecs = Configuration.supportedSpecifications
-                    availableTargets = Configuration.supportedTargets
-                    availableContents = Configuration.supportedContents
-                    availableOptions = Configuration.options
-                    refExtensions = buttonExtensions
-                }
+            Fields {
+                availableSpecs = supportedSpecifications
+                availableTargets = supportedTargets
+                availableContents = supportedContents
+                availableOptions = supportedOptions
+                refExtensions = buttonExtensions
             }
         }
         div("actions") {

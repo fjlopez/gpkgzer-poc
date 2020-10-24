@@ -1,30 +1,37 @@
 package components.common.builder
 
-import com.github.gpkg4all.common.ContentTarget
-import com.github.gpkg4all.common.ModuleInstance
-import com.github.gpkg4all.common.OutputTarget
-import com.github.gpkg4all.common.Spec
+import com.github.gpkg4all.common.*
 import components.common.form.checkBoxGroup
 import components.common.form.radioGroup
-import connectors.FieldsDispatchProps
-import connectors.FieldsProps
-import connectors.FieldsStateProps
 import connectors.extension
 import kotlinx.html.DIV
+import org.w3c.dom.HTMLElement
+import react.*
 import react.dom.RDOMBuilder
 import react.dom.div
-import react.functionalComponent
+import react.redux.useDispatch
+import react.redux.useSelector
+import reducer.*
+import redux.RAction
+import redux.WrapperAction
 
-external interface FieldsComponentProps : FieldsProps, FieldsStateProps, FieldsDispatchProps
+external interface FieldsProps : RProps {
+    var availableSpecs: List<Spec>
+    var availableTargets: List<OutputTarget>
+    var availableContents: List<ContentTarget>
+    var availableOptions: List<ModuleInstance>
+    var refExtensions: RMutableRef<HTMLElement?>
+}
 
-val fieldsComponent = functionalComponent<FieldsComponentProps> { props ->
+val fieldsComponent = functionalComponent<FieldsProps>("Fields") { props ->
+    val project = useSelector { state: AppState -> state.project }
     div("colset colset-main") {
         div("left") {
             div("col-sticky") {
-                conformanceField(props)
-                optionsField(props)
-                contentField(props)
-                packagingField(props)
+                conformanceField(props, project)
+                optionsField(props, project)
+                contentField(props, project)
+                packagingField(props, project)
             }
         }
         div("right") {
@@ -38,57 +45,68 @@ val fieldsComponent = functionalComponent<FieldsComponentProps> { props ->
 }
 
 
-private fun RDOMBuilder<DIV>.packagingField(props: FieldsComponentProps) {
+private fun RDOMBuilder<DIV>.packagingField(props: FieldsProps, project: Project) {
+    val dispatch = useDispatch<RAction, WrapperAction>()
     control("Packaging") {
         radioGroup<OutputTarget> {
             name = "packaging"
-            selected = props.selectedTarget
+            selected = project.outputTarget
             options = props.availableTargets
-            onChange = props.onChangeTarget
+            onChange = { dispatch(UpdateProjectTarget(it)) }
             asText = { it.description }
         }
         fieldInput {
             id = "input-name"
             text = "Name"
-            value = props.projectName
-            onChange = props.onChangeName
+            value = project.name
+            onChange = { dispatch(UpdateProjectName(it)) }
         }
     }
 }
 
-private fun RDOMBuilder<DIV>.contentField(props: FieldsComponentProps) {
+private fun RDOMBuilder<DIV>.contentField(props: FieldsProps, project: Project) {
+    val dispatch = useDispatch<UpdateProjectContent, WrapperAction>()
     control("GeoPackage content") {
         radioGroup<ContentTarget> {
             name = "content"
-            selected = props.selectedContent
+            selected = project.content
             options = props.availableContents
-            onChange = props.onChangeContent
+            onChange = { dispatch(UpdateProjectContent(it)) }
             asText = { it.description }
         }
     }
 }
 
-private fun RDOMBuilder<DIV>.conformanceField(props: FieldsComponentProps) {
+private fun RDOMBuilder<DIV>.conformanceField(props: FieldsProps, project: Project) {
+    val dispatch = useDispatch<UpdateProjectSpecification, WrapperAction>()
     control("GeoPackage conformance") {
         radioGroup<Spec> {
             name = "conformance"
-            selected = props.selectedSpec
+            selected = project.spec
             options = props.availableSpecs
-            onChange = props.onChangeSpecs
+            onChange = { dispatch(UpdateProjectSpecification(it)) }
             asText = { it.description }
         }
     }
 }
 
-private fun RDOMBuilder<DIV>.optionsField(props: FieldsComponentProps) {
+private fun RDOMBuilder<DIV>.optionsField(props: FieldsProps, project: Project) {
+    val dispatch = useDispatch<ToggleProjectOption, WrapperAction>()
     control("GeoPackage options") {
         checkBoxGroup<ModuleInstance> {
             name = "options"
-            selected = props.selectedOptions
+            selected = project.options
             options = props.availableOptions
-            onChange = props.onChangeOptions
+            onChange = { dispatch(ToggleProjectOption(it)) }
             asText = { it.module.title }
         }
     }
+}
+
+@Suppress("FunctionName")
+fun RBuilder.Fields(
+    block: FieldsProps.() -> Unit
+) = child(fieldsComponent) {
+    block(attrs)
 }
 

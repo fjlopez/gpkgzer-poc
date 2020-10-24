@@ -12,7 +12,7 @@ data class AppState(
         outputTarget = Configuration.supportedTargets.find { it.default },
         spec = Configuration.supportedSpecifications.find { it.default },
         content = Configuration.supportedContents.find { it.default },
-        options = Configuration.options.filter { it.default },
+        options = Configuration.supportedOptions.filter { it.default },
         extensions = Configuration.supportedExtensions.filter { it.default },
         name = "sample"
     ),
@@ -39,7 +39,7 @@ object Reducers {
                     outputTarget = Configuration.supportedTargets.find { it.key == action.descriptor.outputTarget },
                     spec = Configuration.supportedSpecifications.find { it.key == action.descriptor.spec },
                     content = Configuration.supportedContents.find { it.key == action.descriptor.content },
-                    options = Configuration.options.filter { it.module.key in action.descriptor.options },
+                    options = Configuration.supportedOptions.filter { it.module.key in action.descriptor.options },
                     extensions = Configuration.supportedExtensions.filter { it.module.key in action.descriptor.extensions },
                     name = action.descriptor.name
                 )
