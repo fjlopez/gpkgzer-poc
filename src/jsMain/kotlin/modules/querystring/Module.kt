@@ -1,5 +1,6 @@
 @file:JsModule("query-string")
 @file:JsNonModule
+
 package modules.querystring
 
 external fun stringify(obj: dynamic, options: dynamic = definedExternally): String

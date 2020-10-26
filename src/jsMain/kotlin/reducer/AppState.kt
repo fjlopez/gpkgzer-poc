@@ -27,8 +27,8 @@ class UpdateProjectName(val name: String) : RAction
 class ToggleProjectOption(val target: ModuleInstance) : RAction
 class RemoveExtension(val target: ModuleInstance) : RAction
 class AddExtension(val target: ModuleInstance) : RAction
-object ShowExtensions : RAction
-object CloseExtensions : RAction
+object ShowExtensionsDialog : RAction
+object CloseExtensionsDialog : RAction
 class LoadExternalConfiguration(val descriptor: ProjectDescriptor) : RAction
 
 object Reducers {
@@ -65,8 +65,8 @@ object Reducers {
                     project = addExtension(state.project, action.target),
                     availableExtensions = state.availableExtensions - action.target
                 )
-            is ShowExtensions -> state.copy(showExtensionsDialog = true)
-            is CloseExtensions -> state.copy(showExtensionsDialog = false)
+            is ShowExtensionsDialog -> state.copy(showExtensionsDialog = true)
+            is CloseExtensionsDialog -> state.copy(showExtensionsDialog = false)
             is UpdateProjectName -> state.copy(project = state.project.copy(name = action.name))
             else -> state
         }

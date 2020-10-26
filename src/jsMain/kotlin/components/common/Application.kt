@@ -3,16 +3,19 @@ package components.common
 import com.github.gpkg4all.common.ProjectDescriptor
 import components.common.builder.Button
 import components.common.builder.Fields
+import components.common.builder.Generate
 import components.common.builder.hotkeys
+import components.common.explore.Explore
+import components.common.extension.ExtensionsDialog
 import components.common.layout.SideRight
 import components.common.layout.header
 import components.common.layout.sideLeft
+import components.common.share.Share
 import config.Configuration
 import config.Configuration.supportedContents
 import config.Configuration.supportedOptions
 import config.Configuration.supportedSpecifications
 import config.Configuration.supportedTargets
-import connectors.*
 import kotlinext.js.js
 import kotlinext.js.jsObject
 import kotlinx.browser.window
@@ -29,17 +32,26 @@ import react.*
 import react.dom.div
 import react.dom.form
 import react.dom.hr
+import react.redux.useDispatch
+import react.redux.useSelector
+import reducer.AppState
+import reducer.LoadExternalConfiguration
+import redux.WrapperAction
 
-interface ApplicationComponentProps : ApplicationStateProps, ApplicationDispatchProps
+external interface ApplicationProps : RProps
 
-val applicationComponent = functionalComponent<ApplicationComponentProps> { props ->
+
+val applicationComponent = functionalComponent<ApplicationProps>("Application") { _ ->
 
     val buttonExtensions = useRef<HTMLElement?>(null)
     val buttonGenerate = useRef<HTMLElement?>(null)
     val buttonExplore = useRef<HTMLElement?>(null)
 
+    val dispatch = useDispatch<LoadExternalConfiguration, WrapperAction>()
+
     var openShare by useState(false)
     var openExplore by useState(false)
+    val openExtensionsDialog = useSelector { state: AppState -> state.showExtensionsDialog }
 
     var hash by useState(window.location.hash)
 
@@ -58,7 +70,7 @@ val applicationComponent = functionalComponent<ApplicationComponentProps> { prop
 
                 @Suppress("EXPERIMENTAL_API_USAGE")
                 val projectDescription = Json.decodeFromDynamic<ProjectDescriptor>(params)
-                props.loadExternalConfiguration(projectDescription)
+                dispatch(LoadExternalConfiguration(projectDescription))
             }
             if (result.isSuccess) {
                 toast.success("Configuration loaded.", jsObject<ToastContainerProps> {
@@ -94,7 +106,7 @@ val applicationComponent = functionalComponent<ApplicationComponentProps> { prop
         }
         div("actions") {
             div("actions-container") {
-                generate(buttonGenerate)
+                Generate(ref = buttonGenerate)
                 Button({
                     id = "explore-project"
                     hotkey = "ctrl + space"
@@ -112,17 +124,24 @@ val applicationComponent = functionalComponent<ApplicationComponentProps> { prop
                 }
             }
         }
-        Share(show = openShare, onClose = { openShare = false })
-        Extension(props.onEscape)
-        Explore(show = openExplore, onClose = { openExplore = false })
+        openExtensionsDialog && ExtensionsDialog()
+        openShare && Share(onClose = { openShare = false })
+        openExplore && Explore(onClose = { openExplore = false })
     }
-    SideRight(Configuration.theme)
+    SideRight(theme = Configuration.theme)
     toastContainer {
         attrs {
             position = "top-center"
             hideProgressBar = true
         }
     }
+}
+
+@Suppress("FunctionName")
+fun RBuilder.Application(
+): Boolean {
+    child(applicationComponent) {}
+    return true
 }
 
 

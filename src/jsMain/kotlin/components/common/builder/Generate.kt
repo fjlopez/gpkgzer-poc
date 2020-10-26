@@ -6,25 +6,26 @@ import com.github.gpkg4all.common.OutputTargets
 import com.github.gpkg4all.common.Project
 import components.utils.functionalComponent
 import components.utils.useWindowsUtils
-import connectors.GenerateProps
-import connectors.GenerateStateProps
 import kotlinx.coroutines.*
 import modules.sqljs.SqlJsStatic
 import modules.sqljs.initDb
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
-import react.getValue
-import react.setValue
-import react.useEffectWithCleanup
-import react.useState
+import react.*
+import react.redux.useSelector
+import reducer.AppState
 
-external interface GenerateComponentProps : GenerateProps, GenerateStateProps
+external interface GenerateProps : RProps {
+    var refButton: RMutableRef<HTMLElement?>
+}
 
-val generateComponent = functionalComponent<GenerateComponentProps>("Generate") { props ->
+val generateComponent = functionalComponent<GenerateProps>("Generate") { props ->
 
     val windowsUtils = useWindowsUtils()
     var loaded by useState(false)
     var initDb by useState<SqlJsStatic?>(null)
     var generating by useState(false)
+    val project = useSelector { state: AppState -> state.project }
 
     useEffectWithCleanup(listOf(loaded)) {
         val scope = CoroutineScope(Dispatchers.Default)
@@ -43,7 +44,7 @@ val generateComponent = functionalComponent<GenerateComponentProps>("Generate") 
         if (loaded && !generating) {
             generating = true
             CoroutineScope(Dispatchers.Default)
-                .launch(block = launchGenerator(initDb, props.project))
+                .launch(block = launchGenerator(initDb, project))
                 .invokeOnCompletion { generating = false }
         }
     }
@@ -77,6 +78,16 @@ fun launchGenerator(initDb: SqlJsStatic?, project: Project): suspend CoroutineSc
         OutputTargets.gpkg -> initDb?.let { downloadGeoPackage(it, project) }
         OutputTargets.zip -> downloadZip(project)
     }
+}
+
+@Suppress("FunctionName")
+fun RBuilder.Generate(
+    ref: RMutableRef<HTMLElement?>
+): Boolean {
+    child(generateComponent) {
+        attrs.refButton = ref
+    }
+    return true
 }
 
 

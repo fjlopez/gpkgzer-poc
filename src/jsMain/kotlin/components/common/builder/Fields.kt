@@ -1,9 +1,9 @@
 package components.common.builder
 
 import com.github.gpkg4all.common.*
+import components.common.extension.Extensions
 import components.common.form.checkBoxGroup
 import components.common.form.radioGroup
-import connectors.extension
 import kotlinx.html.DIV
 import org.w3c.dom.HTMLElement
 import react.*
@@ -35,11 +35,7 @@ val fieldsComponent = functionalComponent<FieldsProps>("Fields") { props ->
             }
         }
         div("right") {
-            extension {
-                attrs {
-                    refButton = props.refExtensions
-                }
-            }
+            Extensions(ref = props.refExtensions)
         }
     }
 }

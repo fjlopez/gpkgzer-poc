@@ -4,10 +4,8 @@ import com.github.gpkg4all.common.ModuleInstance
 import components.common.form.overlay
 import components.common.iconEnter
 import components.utils.KeyCodes
+import components.utils.preventDefault
 import components.utils.useWindowsUtils
-import connectors.ExtensionDialogDispatchProps
-import connectors.ExtensionDialogProps
-import connectors.ExtensionDialogStateProps
 import kotlinext.js.jsObject
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -25,8 +23,15 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import react.*
 import react.dom.*
+import react.redux.useDispatch
+import react.redux.useSelector
+import reducer.AddExtension
+import reducer.AppState
+import reducer.CloseExtensionsDialog
+import redux.RAction
+import redux.WrapperAction
 
-interface ExtensionDialogComponentProps : ExtensionDialogProps, ExtensionDialogStateProps, ExtensionDialogDispatchProps
+external interface ExtensionsDialogProps : RProps
 
 external interface Document {
     var instance: ModuleInstance
@@ -35,7 +40,11 @@ external interface Document {
     var group: String
 }
 
-val extensionDialogComponent = functionalComponent<ExtensionDialogComponentProps> { props ->
+val extensionsDialogComponent = functionalComponent<ExtensionsDialogProps>("ExtensionsDialog") { _ ->
+
+    val extensions = useSelector { state: AppState -> state.availableExtensions }
+    val dispatch = useDispatch<RAction, WrapperAction>()
+
     val computeGroups = { list: List<ModuleInstance> ->
         list.groupBy { it.module.group }
             .entries
@@ -50,16 +59,16 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogComponentProps
     var query by useState("")
     var multiple by useState(false)
     var selected by useState(0)
-    var groups by useState(computeGroups(props.extensions))
+    var groups by useState(computeGroups(extensions))
     var search by useState<Search<Document>?>(null)
 
-    useEffect(listOf(props.extensions)) {
+    useEffect(listOf(extensions)) {
         val newSearch = Search<Document>("name").apply {
             addIndex("name")
             addIndex("description")
             addIndex("group")
         }
-        props.extensions.map {
+        extensions.map {
             jsObject<Document> {
                 instance = it
                 name = it.module.title
@@ -75,7 +84,7 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogComponentProps
             search?.search(query.trim())
                 ?.map { it.instance } ?: emptyList()
         } else {
-            props.extensions
+            extensions
         })
     }
 
@@ -108,22 +117,19 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogComponentProps
         val keyboardEvent = event.asDynamic().nativeEvent.unsafeCast<KeyboardEvent>()
         when (keyboardEvent.keyCode) {
             KeyCodes.K -> if (keyboardEvent.ctrlKey || keyboardEvent.metaKey) {
-                props.onClose(event)
+                dispatch(CloseExtensionsDialog)
             }
-            KeyCodes.ARROW_DOWN -> {
-                event.preventDefault()
+            KeyCodes.ARROW_DOWN -> preventDefault(event) {
                 groups.flatMap { it.value }.withIndex().drop(selected + 1).find { it.value.valid }
                     ?.let { selected = it.index }
                 window.setTimeout(updateScroll)
             }
-            KeyCodes.ARROW_UP -> { // Up
-                event.preventDefault()
+            KeyCodes.ARROW_UP -> preventDefault(event) { // Up
                 groups.flatMap { it.value }.withIndex().take(selected).findLast { it.value.valid }
                     ?.let { selected = it.index }
                 window.setTimeout(updateScroll)
             }
-            KeyCodes.ENTER -> {
-                event.preventDefault()
+            KeyCodes.ENTER -> preventDefault(event) {
                 groups.flatMap { it.value }.getOrNull(selected)
                     ?.let { instance ->
                         if (instance.valid) {
@@ -133,18 +139,18 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogComponentProps
                                 .toMap()
                                 .entries
                                 .sortedBy { it.key }
-                            props.onAddExtension(instance)
+                            dispatch(AddExtension(instance))
                         }
                     }
                 if (!multiple) {
-                    props.onClose(event)
+                    dispatch(CloseExtensionsDialog)
                 } else {
                     textFocus()
                 }
+                Unit
             }
-            KeyCodes.ESC -> { // Escape
-                event.preventDefault()
-                props.onClose(event)
+            KeyCodes.ESC -> preventDefault(event) {
+                dispatch(CloseExtensionsDialog)
             }
             KeyCodes.TAB -> event.preventDefault()
             KeyCodes.SELECT,
@@ -162,7 +168,7 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogComponentProps
         val clickOutside: (Event) -> Unit = { event: Event ->
             wrapper.current?.let {
                 if (!it.contains(event.target as? Node?) && (event.target as? HTMLElement)?.id != "input-quicksearch") {
-                    props.onClose(event)
+                    dispatch(CloseExtensionsDialog)
                 }
             }
         }
@@ -177,91 +183,89 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogComponentProps
 
     var currentIndex = -1
     transitionGroup {
-        if (props.isShown) {
-            cssTransition {
-                attrs {
-                    onEnter = {
-                        multiple = false
-                        query = ""
-                        selected = 0
-                        groups = computeGroups(props.extensions)
-                        textFocus()
-                        Unit
-                    }
-                    classNames = "dialog-dependencies"
-                    timeout = 300
+        cssTransition {
+            attrs {
+                onEnter = {
+                    multiple = false
+                    query = ""
+                    selected = 0
+                    groups = computeGroups(extensions)
+                    textFocus()
+                    Unit
                 }
-                div("dialog-dependencies") {
-                    ref = dialog
-                    div("control-input") {
-                        input(classes = "input") {
-                            attrs {
-                                id = "input-quicksearch"
-                                placeholder = "Metadata, Schema, Features, Tiles, ..."
-                                onKeyUpFunction = keyUp
-                                onKeyDownFunction = keyDown
-                                value = query
-                                onChangeFunction = { event ->
-                                    query = event.target.asDynamic().value as String
-                                    selected = 0
-                                }
+                classNames = "dialog-dependencies"
+                timeout = 300
+            }
+            div("dialog-dependencies") {
+                ref = dialog
+                div("control-input") {
+                    input(classes = "input") {
+                        attrs {
+                            id = "input-quicksearch"
+                            placeholder = "Metadata, Schema, Features, Tiles, ..."
+                            onKeyUpFunction = keyUp
+                            onKeyDownFunction = keyDown
+                            value = query
+                            onChangeFunction = { event ->
+                                query = event.target.asDynamic().value as String
+                                selected = 0
                             }
-                            ref = input
-                            attrs["query"] = query
                         }
-                        span("help") {
-                            +"Press ${windowsUtils.symb} for multiple adds "
-                        }
+                        ref = input
+                        attrs["query"] = query
                     }
-                    ul {
-                        ref = wrapper
-                        groups.forEach { group ->
-                            li("group-title") {
-                                span {
-                                    +group.key.title
-                                }
+                    span("help") {
+                        +"Press ${windowsUtils.symb} for multiple adds "
+                    }
+                }
+                ul {
+                    ref = wrapper
+                    groups.forEach { group ->
+                        li("group-title") {
+                            span {
+                                +group.key.title
                             }
-                            group.value.forEach { itemGroup ->
-                                val onClick = { event: Event ->
-                                    event.preventDefault()
-                                    textFocus()
-                                    if (itemGroup.valid) {
-                                        props.onAddExtension(itemGroup)
-                                        if (!multiple) {
-                                            props.onClose(event)
-                                        } else {
-                                            groups = groups
-                                                .map { (key, value) -> key to value.filter { it != itemGroup } }
-                                                .filter { (_, value) -> value.isNotEmpty() }
-                                                .toMap()
-                                                .entries
-                                                .sortedBy { it.key }
-                                            selected = -1
-                                        }
+                        }
+                        group.value.forEach { itemGroup ->
+                            val onClick = { event: Event ->
+                                event.preventDefault()
+                                textFocus()
+                                if (itemGroup.valid) {
+                                    dispatch(AddExtension(itemGroup))
+                                    if (!multiple) {
+                                        dispatch(CloseExtensionsDialog)
+                                    } else {
+                                        groups = groups
+                                            .map { (key, value) -> key to value.filter { it != itemGroup } }
+                                            .filter { (_, value) -> value.isNotEmpty() }
+                                            .toMap()
+                                            .entries
+                                            .sortedBy { it.key }
+                                        selected = -1
                                     }
                                 }
-                                li {
-                                    val selectedLi = ++currentIndex == selected
-                                    a(
-                                        href = "/",
-                                        classes = "dependency ${if (selectedLi) "selected" else ""} ${if (!itemGroup.valid) "disabled" else ""}"
-                                    ) {
-                                        if (itemGroup.valid) {
-                                            attrs.onClickFunction = onClick
+                            }
+                            li {
+                                val selectedLi = ++currentIndex == selected
+                                a(
+                                    href = "/",
+                                    classes = "dependency ${if (selectedLi) "selected" else ""} ${if (!itemGroup.valid) "disabled" else ""}"
+                                ) {
+                                    if (itemGroup.valid) {
+                                        attrs.onClickFunction = onClick
+                                    }
+                                    strong {
+                                        +(itemGroup.module.title + " ")
+                                    }
+                                    if (itemGroup.module.description != null) {
+                                        span("description") {
+                                            +itemGroup.module.description
                                         }
-                                        strong {
-                                            +(itemGroup.module.title + " ")
-                                        }
-                                        if (itemGroup.module.description != null) {
-                                            span("description") {
-                                                +itemGroup.module.description
-                                            }
-                                        }
-                                        iconEnter()
-                                        if (!itemGroup.valid && itemGroup.invalid != null) {
-                                            span("invalid") {
-                                                +itemGroup.invalid
-                                            }
+                                    }
+                                    iconEnter()
+                                    if (!itemGroup.valid && itemGroup.invalid != null) {
+                                        span("invalid") {
+                                            +itemGroup.invalid
                                         }
                                     }
                                 }
@@ -273,7 +277,15 @@ val extensionDialogComponent = functionalComponent<ExtensionDialogComponentProps
         }
     }
     overlay {
-        open = props.isShown
+        open = true
     }
+}
+
+@Suppress("FunctionName")
+fun RBuilder.ExtensionsDialog(
+): Boolean {
+    child(extensionsDialogComponent) {
+    }
+    return true
 }
 

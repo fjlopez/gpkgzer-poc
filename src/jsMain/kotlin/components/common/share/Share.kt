@@ -4,9 +4,6 @@ import com.github.gpkg4all.common.toDescriptor
 import components.common.builder.Button
 import components.common.form.overlay
 import components.utils.preventDefault
-import connectors.ShareDispatchProps
-import connectors.ShareProps
-import connectors.ShareStateProps
 import kotlinext.js.js
 import kotlinx.browser.window
 import kotlinx.html.id
@@ -29,97 +26,96 @@ import react.dom.div
 import react.dom.h1
 import react.dom.input
 import react.dom.label
+import react.redux.useSelector
+import reducer.AppState
 
-interface ShareComponentProps : ShareProps, ShareStateProps, ShareDispatchProps
+external interface ShareProps : RProps {
+    var onClose: () -> Unit
+}
 
-val shareComponent = functionalComponent<ShareComponentProps>("Share") { props ->
+val shareComponent = functionalComponent<ShareProps>("Share") { props ->
 
+    val project = useSelector { state: AppState -> state.project }
     var button by useState("Copy")
-
     val input = useRef<HTMLInputElement?>(null)
-
     val wrapper = useRef<HTMLElement?>(null)
 
     @Suppress("EXPERIMENTAL_API_USAGE")
-    val descriptor = Json.encodeToDynamic(props.project.toDescriptor())
+    val descriptor = Json.encodeToDynamic(project.toDescriptor())
     val urlToShare = window.location.href + "#" + stringify(descriptor, js { arrayFormat = "bracket" })
 
     useEffectWithCleanup {
         wrapper.current?.let { htmlElement ->
-            if (props.open) {
-                disableBodyScroll(htmlElement)
-            }
+            disableBodyScroll(htmlElement)
         };
         { clearAllBodyScrollLocks() }
     }
 
     transitionGroup {
-        if (props.open) {
-            cssTransition {
-                attrs {
-                    classNames = "popup"
-                    timeout = 300
-                }
-                div("popup-share") {
-                    div("popup-share-container") {
-                        div("popup-header") {
-                            h1 {
-                                +"Share your configuration"
-                            }
+        cssTransition {
+            attrs {
+                classNames = "popup"
+                timeout = 300
+            }
+            div("popup-share") {
+                div("popup-share-container") {
+                    div("popup-header") {
+                        h1 {
+                            +"Share your configuration"
                         }
-                        div("popup-content") {
-                            label {
-                                attrs["htmlFor"] = "input-share"
-                                +"""
+                    }
+                    div("popup-content") {
+                        label {
+                            attrs["htmlFor"] = "input-share"
+                            +"""
                                         Use this link to share the current configuration. Attributes
                                         can be removed from the URL if you want to rely on our
                                         defaults.
                                     """.trimIndent()
+                        }
+                        div("control") {
+                            input(
+                                classes = "input${if (button == "Copied!") " padding-lg" else ""}"
+                            ) {
+                                attrs {
+                                    id = "input-share"
+                                    onFocusFunction = preventDefault { e: Event ->
+                                        when (val target = e.target) {
+                                            is HTMLInputElement -> target.select()
+                                        }
+                                    }
+                                    onKeyDownFunction = { e: Event ->
+                                        when (e) {
+                                            is KeyboardEvent -> if (e.key == "Escape") props.onClose()
+                                        }
+                                    }
+                                    value = urlToShare
+                                    readonly = true
+                                }
                             }
-                            div("control") {
-                                input(
-                                    classes = "input${if (button == "Copied!") " padding-lg" else ""}"
-                                ) {
-                                    attrs {
-                                        id = "input-share"
-                                        onFocusFunction = preventDefault { e: Event ->
-                                            when (val target = e.target) {
-                                                is HTMLInputElement -> target.select()
-                                            }
-                                        }
-                                        onKeyDownFunction = { e: Event ->
-                                            when (e) {
-                                                is KeyboardEvent -> if (e.key == "Escape") props.onClose()
-                                            }
-                                        }
-                                        value = urlToShare
-                                        readonly = true
+                            CopyToClipboard {
+                                attrs {
+                                    text = urlToShare
+                                    onCopy = {
+                                        button = "Copied!"
+                                        input.current?.focus()
+                                        window.setTimeout({ props.onClose() }, 1000)
                                     }
                                 }
-                                CopyToClipboard {
-                                    attrs {
-                                        text = urlToShare
-                                        onCopy = {
-                                            button = "Copied!"
-                                            input.current?.focus()
-                                            window.setTimeout({ props.onClose() }, 1000)
-                                        }
-                                    }
-                                    Button({
-                                        onClick = preventDefault { }
-                                    }) {
-                                        +button
-                                    }
+                                Button({
+                                    onClick = preventDefault { }
+                                }) {
+                                    +button
                                 }
                             }
                         }
-                        div("popup-action") {
-                            Button({
-                                hotkey = "ESC"
-                                onClick = { props.onClose() }
-                            }) {
-                                +"Close"
-                            }
+                    }
+                    div("popup-action") {
+                        Button({
+                            hotkey = "ESC"
+                            onClick = { props.onClose() }
+                        }) {
+                            +"Close"
                         }
                     }
                 }
@@ -127,8 +123,17 @@ val shareComponent = functionalComponent<ShareComponentProps>("Share") { props -
         }
     }
     overlay {
-        open = props.open
+        open = true
     }
 }
 
+@Suppress("FunctionName")
+fun RBuilder.Share(
+    onClose: () -> Unit
+): Boolean {
+    child(shareComponent) {
+        attrs.onClose = onClose
+    }
+    return true
+}
 
