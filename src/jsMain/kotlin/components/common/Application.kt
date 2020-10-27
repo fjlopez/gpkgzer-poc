@@ -11,13 +11,14 @@ import components.common.layout.SideRight
 import components.common.layout.header
 import components.common.layout.sideLeft
 import components.common.share.Share
-import config.Configuration
 import config.Configuration.supportedContents
 import config.Configuration.supportedOptions
 import config.Configuration.supportedSpecifications
 import config.Configuration.supportedTargets
+import config.Configuration.theme
 import kotlinext.js.js
 import kotlinext.js.jsObject
+import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.html.id
 import kotlinx.serialization.json.Json
@@ -40,8 +41,16 @@ import redux.WrapperAction
 
 external interface ApplicationProps : RProps
 
+val ThemeContext = createContext<Pair<Theme, RSetState<Theme>>>()
 
-val applicationComponent = functionalComponent<ApplicationProps>("Application") { _ ->
+val applicationComponent = functionalComponent<ApplicationProps>("Application") {
+
+    val themeState = useState(theme)
+    val theme by themeState
+
+    useEffect(listOf(theme)) {
+        document.body?.className = theme.className
+    }
 
     val buttonExtensions = useRef<HTMLElement?>(null)
     val buttonGenerate = useRef<HTMLElement?>(null)
@@ -128,7 +137,9 @@ val applicationComponent = functionalComponent<ApplicationProps>("Application") 
         openShare && Share(onClose = { openShare = false })
         openExplore && Explore(onClose = { openExplore = false })
     }
-    SideRight(theme = Configuration.theme)
+    ThemeContext.Provider(themeState) {
+        SideRight()
+    }
     toastContainer {
         attrs {
             position = "top-center"

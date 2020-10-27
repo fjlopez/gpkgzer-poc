@@ -3,11 +3,11 @@ package components.common.layout
 import components.common.Theme
 import components.common.Theme.DARK
 import components.common.Theme.LIGHT
+import components.common.ThemeContext
 import components.common.iconMoon
 import components.common.iconSun
 import components.utils.disableTab
 import components.utils.preventDefault
-import kotlinx.browser.document
 import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import react.*
@@ -15,15 +15,9 @@ import react.dom.a
 import react.dom.div
 import react.dom.span
 
-external interface SideRightProps : RProps {
-    var theme: Theme
-}
+val sideRightComponent = functionalComponent<RProps>("SideRight") {
 
-val sideRightComponent = functionalComponent<SideRightProps>("SideRight") { props ->
-
-    var theme by useState(props.theme)
-
-    document.body?.className = theme.className
+    var theme by useContext(ThemeContext)
 
     fun activeWhen(target: Theme) = if (theme == target) "active" else ""
     fun setTheme(target: Theme) = preventDefault { theme = target }
@@ -52,10 +46,6 @@ val sideRightComponent = functionalComponent<SideRightProps>("SideRight") { prop
 }
 
 @Suppress("FunctionName")
-fun RBuilder.SideRight(theme: Theme) {
-    child(sideRightComponent) {
-        attrs {
-            this.theme = theme
-        }
-    }
+fun RBuilder.SideRight() {
+    child(sideRightComponent)
 }
