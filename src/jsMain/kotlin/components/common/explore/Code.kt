@@ -23,7 +23,7 @@ private val codeComponent = functionalComponent<CodeProps<Any>>(displayName = "T
         attrs {
             Prism = PrismDefault
             language = props.item.language ?: "none"
-            code = props.item.asText(props.item.content)
+            code = props.item.toText()
             children = { renderProps ->
                 val groupLine = when {
                     renderProps.tokens.size > 999 -> 4

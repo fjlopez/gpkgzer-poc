@@ -6,11 +6,13 @@ import com.github.gpkg4all.common.FileItem
 import com.github.gpkg4all.common.builder
 import components.common.builder.Button
 import components.utils.downloadFile
+import components.utils.preventDefault
 import components.utils.useWindowsUtils
 import kotlinext.js.jsObject
 import kotlinx.browser.window
 import modules.bodyscrolllock.clearAllBodyScrollLocks
 import modules.bodyscrolllock.disableBodyScroll
+import modules.react.copytoclipboard.CopyToClipboard
 import modules.react.hotkeys.hotKeys
 import modules.react.transitiongroup.cssTransition
 import modules.react.transitiongroup.transitionGroup
@@ -31,6 +33,7 @@ val exploreComponent = functionalComponent<ExploreProps>("Explore") { props ->
     val wrapper = useRef<HTMLElement?>(null)
 
     val project = useSelector { state: AppState -> state.project }
+    var copyButtonText by useState("Copy!")
     var selected by useState<FileItem?>(null)
     var tree by useState(project.spec?.let { spec ->
         builder(spec)
@@ -89,20 +92,35 @@ val exploreComponent = functionalComponent<ExploreProps>("Explore") { props ->
                                     div("actions-file") {
                                         Button({
                                             primary = true
-                                            onClick = { event: Event ->
-                                                event.preventDefault()
+                                            onClick = preventDefault {
                                                 (selected as? File<*>)?.let {
-                                                    val file = it.unsafeCast<File<Any>>()
                                                     downloadFile(
-                                                        filename = file.filename,
+                                                        filename = it.filename,
                                                         mimetype = "text/plain;charset=utf-8",
-                                                        content = file.asText(file.content)
+                                                        content = it.toText()
                                                     )
                                                 }
                                             }
                                             disabled = selected !is File<*>
                                         }) {
                                             +"Download"
+                                        }
+                                        CopyToClipboard {
+                                            attrs {
+                                                (selected as? File<*>)?.let {
+                                                    text = it.toText()
+                                                }
+                                                onCopy = {
+                                                    copyButtonText = "Copied!"
+                                                    window.setTimeout({ copyButtonText = "Copy!" }, 3000)
+                                                }
+                                            }
+                                            Button({
+                                                onClick = preventDefault()
+                                                disabled = selected !is File<*>
+                                            }) {
+                                                +copyButtonText
+                                            }
                                         }
                                     }
                                 }

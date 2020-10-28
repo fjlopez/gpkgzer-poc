@@ -51,8 +51,7 @@ fun buildZip(spec: Spec, exporter: (dynamic) -> Unit) {
     val tree = builder(spec)
     tree.children.forEach {
         if (it is File<*>) {
-            val file = it.unsafeCast<File<List<String>>>()
-            zip.file(file.filename, file.asText(file.content))
+            zip.file(it.filename, it.toText())
         }
     }
     zip.generateAsync(jsObject {

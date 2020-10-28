@@ -25,4 +25,6 @@ data class File<T>(
     val language: String? = null,
     val content: T,
     val asText: (T) -> String = { "" }
-) : FileItem(filename)
+) : FileItem(filename) {
+    fun toText() = asText(content)
+}

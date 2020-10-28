@@ -32,7 +32,7 @@ fun downloadFile(filename: String, mimetype: String, content: dynamic) {
 /**
  * Prevent default behaviour of the event.
  */
-fun preventDefault(block: (Event) -> Unit): (Event) -> Unit = {
+fun preventDefault(block: (Event) -> Unit = {}): (Event) -> Unit = {
     it.preventDefault()
     block(it)
     Unit
