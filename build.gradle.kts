@@ -62,6 +62,7 @@ kotlin {
                 implementation(npm("query-string", "6.13.5"))
                 implementation(npm("react-copy-to-clipboard", "5.0.2"))
                 implementation(npm("react-hotkeys", "2.0.0"))
+                implementation(npm("react-markdown", "5.0.2"))
                 implementation(npm("react-toastify", "6.0.8"))
                 implementation(npm("react-transition-group", "4.3.0"))
                 implementation(npm("sql.js", "1.3.0"))

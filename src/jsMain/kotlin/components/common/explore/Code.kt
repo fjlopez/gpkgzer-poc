@@ -5,6 +5,7 @@ import components.utils.functionalComponent
 import kotlinext.js.jsObject
 import modules.prism.reactrenderer.Highlight
 import modules.prism.reactrenderer.PrismDefault
+import modules.react.markdown.ReactMarkdown
 import react.RBuilder
 import react.RProps
 import react.child
@@ -18,7 +19,16 @@ external interface CodeProps<T> : RProps {
     var onChange: () -> Unit
 }
 
-private val codeComponent = functionalComponent<CodeProps<Any>>(displayName = "Tree") { props ->
+private val markdownComponent = functionalComponent<CodeProps<String>>(displayName = "Markdown") { props ->
+    div("markdown") {
+        ReactMarkdown(
+            children = props.item.content,
+            linkTarget = "_blank"
+        )
+    }
+}
+
+private val sqlComponent = functionalComponent<CodeProps<Any>>(displayName = "SQL") { props ->
     Highlight {
         attrs {
             Prism = PrismDefault
@@ -63,11 +73,18 @@ private val codeComponent = functionalComponent<CodeProps<Any>>(displayName = "T
     }
 }
 
-fun RBuilder.code(item: File<Any>, onChange: () -> Unit) {
-    child(codeComponent) {
-        attrs {
-            this.item = item
-            this.onChange = onChange
+@Suppress("FunctionName")
+fun RBuilder.Code(item: File<Any>, onChange: () -> Unit) {
+    when (item.language) {
+        "sql" -> sqlComponent
+        "markdown" -> markdownComponent
+        else -> null
+    }?.let {
+        child(it) {
+            attrs {
+                this.item = item
+                this.onChange = onChange
+            }
         }
     }
 }

@@ -128,7 +128,7 @@ val exploreComponent = functionalComponent<ExploreProps>("Explore") { props ->
                                     attrs["ref"] = wrapper
                                     val file = selected
                                     if (file is File<*>) {
-                                        code(
+                                        Code(
                                             item = file.unsafeCast<File<Any>>(),
                                             onChange = {}
                                         )

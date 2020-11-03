@@ -22,6 +22,14 @@ fun builder(
                 language = "sql",
                 content = core.features.map { it.value.definition },
                 asText = { it.joinToString("\n") }
+            ),
+            File(
+                filename = "README.md",
+                language = "markdown",
+                content = """
+                    # README.md
+                """.trimIndent(),
+                asText = { it }
             )
         )
     )

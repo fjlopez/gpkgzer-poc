@@ -123,7 +123,7 @@ class GeoPackageCoreTest {
                 gpkg_contents
         val result = builder(Specs.spec130)
             .children
-            .filterIsInstance<File<*, List<String>>>()
+            .filterIsInstance<File<List<String>>>()
             .filter { it.filename == "metadata.sql" }
             .flatMap { it.content }
         assertEquals(expected.size, result.size)
@@ -151,7 +151,7 @@ class GeoPackageCoreTest {
                 gpkg_contents
         val result = builder(Specs.spec121)
             .children
-            .filterIsInstance<File<*, List<String>>>()
+            .filterIsInstance<File<List<String>>>()
             .filter { it.filename == "metadata.sql" }
             .flatMap { it.content }
         assertEquals(expected.size, result.size)
@@ -180,7 +180,7 @@ class GeoPackageCoreTest {
                 gpkg_contents
         val result = builder(Specs.spec120)
             .children
-            .filterIsInstance<File<*, List<String>>>()
+            .filterIsInstance<File<List<String>>>()
             .filter { it.filename == "metadata.sql" }
             .flatMap { it.content }
         assertEquals(expected.size, result.size)
@@ -208,7 +208,7 @@ class GeoPackageCoreTest {
                 gpkg_contents
         val result = builder(Specs.spec110)
             .children
-            .filterIsInstance<File<*, List<String>>>()
+            .filterIsInstance<File<List<String>>>()
             .filter { it.filename == "metadata.sql" }
             .flatMap { it.content }
         assertEquals(expected.size, result.size)
@@ -236,7 +236,7 @@ class GeoPackageCoreTest {
                 gpkg_contents
         val result = builder(Specs.spec101)
             .children
-            .filterIsInstance<File<*, List<String>>>()
+            .filterIsInstance<File<List<String>>>()
             .filter { it.filename == "metadata.sql" }
             .flatMap { it.content }
         assertEquals(expected.size, result.size)
