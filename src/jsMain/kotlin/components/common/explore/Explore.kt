@@ -2,7 +2,6 @@ package components.common.explore
 
 import builders.downloadZip
 import com.github.gpkg4all.common.File
-import com.github.gpkg4all.common.FileItem
 import com.github.gpkg4all.common.builder
 import components.common.builder.Button
 import components.utils.downloadFile
@@ -34,10 +33,10 @@ val exploreComponent = functionalComponent<ExploreProps>("Explore") { props ->
 
     val project = useSelector { state: AppState -> state.project }
     var copyButtonText by useState("Copy!")
-    var selected by useState<FileItem?>(null)
     var tree by useState(project.spec?.let { spec ->
-        builder(spec)
+        builder(spec, name = project.name)
     })
+    var selected by useState(tree?.children?.find { it.filename == "README.md" })
     val windowsUtils = useWindowsUtils()
 
     useEffectWithCleanup {

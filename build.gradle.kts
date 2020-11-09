@@ -65,6 +65,7 @@ kotlin {
                 implementation(npm("react-markdown", "5.0.2"))
                 implementation(npm("react-toastify", "6.0.8"))
                 implementation(npm("react-transition-group", "4.3.0"))
+                implementation(npm("react-syntax-highlighter", "15.3.0"))
                 implementation(npm("sql.js", "1.3.0"))
 
                 // webpack

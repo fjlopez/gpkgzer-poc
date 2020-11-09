@@ -11,15 +11,27 @@ import react.ReactElement
 @Suppress("FunctionName")
 external fun ReactMarkdown(props: ReactMarkdownProps): ReactElement
 
+external interface RendererProps : RProps {
+    var language: String?
+    var value: String?
+}
+
+external interface Renderers {
+    var code: ((RendererProps) -> ReactElement)?
+}
+
 external interface ReactMarkdownProps : RProps {
     var children: String
     var linkTarget: String?
+    var renderers: Renderers
 }
 
 @Suppress("FunctionName")
-fun RBuilder.ReactMarkdown(children: String = "", linkTarget: String? = null) {
-    child(modules.react.markdown.ReactMarkdown(jsObject {
+fun RBuilder.ReactMarkdown(children: String = "", linkTarget: String? = null, renderers: Renderers? = null) {
+    val props = jsObject<ReactMarkdownProps> {
         this.children = children
-        this.linkTarget = linkTarget
-    }))
+        linkTarget?.let { this.linkTarget = it }
+        renderers?.let { this.renderers = it }
+    }
+    child(ReactMarkdown(props))
 }

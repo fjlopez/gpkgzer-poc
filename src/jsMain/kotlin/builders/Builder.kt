@@ -46,9 +46,9 @@ fun downloadGeoPackage(sqlJs: SqlJsStatic, project: Project) {
 /**
  * Builds a zipped file with SQL definitions derived from the [spec] and uses an [exporter] to emit the result.
  */
-fun buildZip(spec: Spec, exporter: (dynamic) -> Unit) {
+fun buildZip(name: String, spec: Spec, exporter: (dynamic) -> Unit) {
     val zip = jszip()
-    val tree = builder(spec)
+    val tree = builder(spec, name = name)
     tree.children.forEach {
         if (it is File<*>) {
             zip.file(it.filename, it.toText())
@@ -64,7 +64,7 @@ fun buildZip(spec: Spec, exporter: (dynamic) -> Unit) {
  */
 fun downloadZip(project: Project) {
     project.spec?.let { spec ->
-        buildZip(spec) {
+        buildZip(project.name, spec) {
             downloadFile(
                 filename = "${project.name}.zip",
                 mimetype = "octet/stream",

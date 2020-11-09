@@ -6,6 +6,10 @@ import kotlinext.js.jsObject
 import modules.prism.reactrenderer.Highlight
 import modules.prism.reactrenderer.PrismDefault
 import modules.react.markdown.ReactMarkdown
+import modules.react.markdown.RendererProps
+import modules.react.syntaxhighlighter.Prism
+import modules.react.syntaxhighlighter.PrismProps
+import modules.react.syntaxhighlighter.styles.prism.okaidia
 import react.RBuilder
 import react.RProps
 import react.child
@@ -19,11 +23,22 @@ external interface CodeProps<T> : RProps {
     var onChange: () -> Unit
 }
 
+
 private val markdownComponent = functionalComponent<CodeProps<String>>(displayName = "Markdown") { props ->
     div("markdown") {
         ReactMarkdown(
             children = props.item.content,
-            linkTarget = "_blank"
+            linkTarget = "_blank",
+            renderers = jsObject {
+                code = { props: RendererProps ->
+                    val prismProps = jsObject<PrismProps> {
+                        this.language = props.language
+                        this.children = props.value
+                        this.style = okaidia
+                    }
+                    Prism(prismProps)
+                }
+            }
         )
     }
 }
