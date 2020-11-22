@@ -4,7 +4,6 @@ import com.github.gpkg4all.common.ProjectDescriptor
 import components.common.builder.Button
 import components.common.builder.Fields
 import components.common.builder.Generate
-import components.common.builder.hotkeys
 import components.common.explore.Explore
 import components.common.extension.ExtensionsDialog
 import components.common.layout.SideRight
@@ -27,7 +26,6 @@ import modules.querystring.parse
 import modules.react.toastify.ToastContainerProps
 import modules.react.toastify.toast
 import modules.react.toastify.toastContainer
-import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import react.*
 import react.dom.div
@@ -51,10 +49,6 @@ val applicationComponent = functionalComponent<ApplicationProps>("Application") 
     useEffect(listOf(theme)) {
         document.body?.className = theme.className
     }
-
-    val buttonExtensions = useRef<HTMLElement?>(null)
-    val buttonGenerate = useRef<HTMLElement?>(null)
-    val buttonExplore = useRef<HTMLElement?>(null)
 
     val dispatch = useDispatch<LoadExternalConfiguration, WrapperAction>()
 
@@ -94,11 +88,6 @@ val applicationComponent = functionalComponent<ApplicationProps>("Application") 
         }
     }
 
-    hotkeys {
-        onExtensions = { buttonExtensions.current?.click() }
-        onGenerate = { buttonGenerate.current?.click() }
-        onExplore = { buttonExplore.current?.click() }
-    }
     sideLeft()
     div {
         attrs.id = "main"
@@ -110,15 +99,13 @@ val applicationComponent = functionalComponent<ApplicationProps>("Application") 
                 availableTargets = supportedTargets
                 availableContents = supportedContents
                 availableOptions = supportedOptions
-                refExtensions = buttonExtensions
             }
         }
         div("actions") {
             div("actions-container") {
-                Generate(ref = buttonGenerate)
+                Generate()
                 Button({
                     id = "explore-project"
-                    hotkey = "ctrl + space"
                     primary = true
                     onClick = { openExplore = true }
                 }) {

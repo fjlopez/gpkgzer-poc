@@ -5,10 +5,12 @@ import components.common.extension.Extensions
 import components.common.form.checkBoxGroup
 import components.common.form.radioGroup
 import kotlinx.html.DIV
-import org.w3c.dom.HTMLElement
-import react.*
+import react.RBuilder
+import react.RProps
+import react.child
 import react.dom.RDOMBuilder
 import react.dom.div
+import react.functionalComponent
 import react.redux.useDispatch
 import react.redux.useSelector
 import reducer.*
@@ -20,7 +22,6 @@ external interface FieldsProps : RProps {
     var availableTargets: List<OutputTarget>
     var availableContents: List<ContentTarget>
     var availableOptions: List<ModuleInstance>
-    var refExtensions: RMutableRef<HTMLElement?>
 }
 
 val fieldsComponent = functionalComponent<FieldsProps>("Fields") { props ->
@@ -35,7 +36,7 @@ val fieldsComponent = functionalComponent<FieldsProps>("Fields") { props ->
             }
         }
         div("right") {
-            Extensions(ref = props.refExtensions)
+            Extensions()
         }
     }
 }

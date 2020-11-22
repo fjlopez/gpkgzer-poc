@@ -62,6 +62,10 @@ val extensionsDialogComponent = functionalComponent<ExtensionsDialogProps>("Exte
     var groups by useState(computeGroups(extensions))
     var search by useState<Search<Document>?>(null)
 
+    useEffect {
+        input.current?.focus()
+    }
+
     useEffect(listOf(extensions)) {
         val newSearch = Search<Document>("name").apply {
             addIndex("name")
@@ -285,6 +289,7 @@ val extensionsDialogComponent = functionalComponent<ExtensionsDialogProps>("Exte
 fun RBuilder.ExtensionsDialog(
 ): Boolean {
     child(extensionsDialogComponent) {
+
     }
     return true
 }

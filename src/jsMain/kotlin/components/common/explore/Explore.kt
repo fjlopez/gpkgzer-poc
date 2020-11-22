@@ -6,13 +6,10 @@ import com.github.gpkg4all.common.builder
 import components.common.builder.Button
 import components.utils.downloadFile
 import components.utils.preventDefault
-import components.utils.useWindowsUtils
-import kotlinext.js.jsObject
 import kotlinx.browser.window
 import modules.bodyscrolllock.clearAllBodyScrollLocks
 import modules.bodyscrolllock.disableBodyScroll
 import modules.react.copytoclipboard.CopyToClipboard
-import modules.react.hotkeys.hotKeys
 import modules.react.transitiongroup.cssTransition
 import modules.react.transitiongroup.transitionGroup
 import org.w3c.dom.HTMLElement
@@ -37,7 +34,6 @@ val exploreComponent = functionalComponent<ExploreProps>("Explore") { props ->
         builder(spec, name = project.name)
     })
     var selected by useState(tree?.children?.find { it.filename == "README.md" })
-    val windowsUtils = useWindowsUtils()
 
     useEffectWithCleanup {
         wrapper.current?.let { htmlElement ->
@@ -61,97 +57,84 @@ val exploreComponent = functionalComponent<ExploreProps>("Explore") { props ->
             }
             div("explorer") {
                 if (tree != null) {
-                    hotKeys {
-                        attrs {
-                            keyMap = jsObject {
-                                close = arrayOf("Escape")
+                    div("colset-explorer") {
+                        div("left") {
+                            div("head") {
+                                strong {
+                                    +(project.name + ".zip")
+                                }
                             }
-                            handlers = jsObject {
-                                close = props.onClose
+                            div("explorer-content") {
+                                tree(
+                                    selected = selected,
+                                    onClickItem = { item -> selected = if (selected == item) null else item },
+                                    tree = tree
+                                )
                             }
-                            innerRef = wrapper
                         }
-                        div("colset-explorer") {
-                            div("left") {
-                                div("head") {
-                                    strong {
-                                        +(project.name + ".zip")
+                        div("right") {
+                            div("head") {
+                                div("actions-file") {
+                                    Button({
+                                        primary = true
+                                        onClick = preventDefault {
+                                            (selected as? File<*>)?.let {
+                                                downloadFile(
+                                                    filename = it.filename,
+                                                    mimetype = "text/plain;charset=utf-8",
+                                                    content = it.toText()
+                                                )
+                                            }
+                                        }
+                                        disabled = selected !is File<*>
+                                    }) {
+                                        +"Download"
+                                    }
+                                    CopyToClipboard {
+                                        attrs {
+                                            (selected as? File<*>)?.let {
+                                                text = it.toText()
+                                            }
+                                            onCopy = {
+                                                copyButtonText = "Copied!"
+                                                window.setTimeout({ copyButtonText = "Copy!" }, 3000)
+                                            }
+                                        }
+                                        Button({
+                                            onClick = preventDefault()
+                                            disabled = selected !is File<*>
+                                        }) {
+                                            +copyButtonText
+                                        }
                                     }
                                 }
-                                div("explorer-content") {
-                                    tree(
-                                        selected = selected,
-                                        onClickItem = { item -> selected = if (selected == item) null else item },
-                                        tree = tree
+                            }
+                            div("explorer-content") {
+                                attrs["ref"] = wrapper
+                                val file = selected
+                                if (file is File<*>) {
+                                    Code(
+                                        item = file.unsafeCast<File<Any>>(),
+                                        onChange = {}
                                     )
                                 }
                             }
-                            div("right") {
-                                div("head") {
-                                    div("actions-file") {
-                                        Button({
-                                            primary = true
-                                            onClick = preventDefault {
-                                                (selected as? File<*>)?.let {
-                                                    downloadFile(
-                                                        filename = it.filename,
-                                                        mimetype = "text/plain;charset=utf-8",
-                                                        content = it.toText()
-                                                    )
-                                                }
-                                            }
-                                            disabled = selected !is File<*>
-                                        }) {
-                                            +"Download"
-                                        }
-                                        CopyToClipboard {
-                                            attrs {
-                                                (selected as? File<*>)?.let {
-                                                    text = it.toText()
-                                                }
-                                                onCopy = {
-                                                    copyButtonText = "Copied!"
-                                                    window.setTimeout({ copyButtonText = "Copy!" }, 3000)
-                                                }
-                                            }
-                                            Button({
-                                                onClick = preventDefault()
-                                                disabled = selected !is File<*>
-                                            }) {
-                                                +copyButtonText
-                                            }
-                                        }
-                                    }
+                        }
+                        div("explorer-actions") {
+                            Button({
+                                primary = true
+                                onClick = { event: Event ->
+                                    event.preventDefault()
+                                    downloadZip(project)
                                 }
-                                div("explorer-content") {
-                                    attrs["ref"] = wrapper
-                                    val file = selected
-                                    if (file is File<*>) {
-                                        Code(
-                                            item = file.unsafeCast<File<Any>>(),
-                                            onChange = {}
-                                        )
-                                    }
-                                }
+                            }) {
+                                +"Download"
                             }
-                            div("explorer-actions") {
-                                Button({
-                                    hotkey = "${windowsUtils.symb} + ⏎"
-                                    primary = true
-                                    onClick = { event: Event ->
-                                        event.preventDefault()
-                                        downloadZip(project)
-                                    }
-                                }) {
-                                    +"Download"
-                                }
-                                Button({
-                                    hotkey = "esc"
-                                    primary = true
-                                    onClick = props.onClose
-                                }) {
-                                    +"Close"
-                                }
+                            Button({
+                                primary = true
+                                onClick = props.onClose
+                            }) {
+                                +"Close"
                             }
                         }
                     }

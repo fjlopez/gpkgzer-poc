@@ -23,6 +23,7 @@ external interface ExtensionsListProps : RProps
 
 val extensionsListComponent = functionalComponent<ExtensionsListProps>("ExtensionsList") { _ ->
     val extensions = useSelector { state: AppState -> state.project.extensions }
+    val dispatch = useDispatch<RemoveExtension, WrapperAction>()
 
     if (extensions.isEmpty()) {
         div("no-dependency") {
@@ -41,7 +42,7 @@ val extensionsListComponent = functionalComponent<ExtensionsListProps>("Extensio
                         classNames = "fade"
                     }
                     li {
-                        item(item)
+                        item(item, dispatch)
                     }
                 }
             }
@@ -49,8 +50,7 @@ val extensionsListComponent = functionalComponent<ExtensionsListProps>("Extensio
     }
 }
 
-internal fun RDOMBuilder<LI>.item(item: ModuleInstance) {
-    val dispatch = useDispatch<RemoveExtension, WrapperAction>()
+internal fun RDOMBuilder<LI>.item(item: ModuleInstance, dispatch: (RemoveExtension) -> WrapperAction) {
     div("dependency-item ${if (!item.valid) "disabled" else ""}") {
         strong {
             +(item.module.title + " ")

@@ -3,10 +3,7 @@ package components.common.extension
 import components.common.builder.Button
 import components.utils.functionalComponent
 import components.utils.preventDefault
-import components.utils.useWindowsUtils
-import org.w3c.dom.HTMLElement
 import react.RBuilder
-import react.RMutableRef
 import react.RProps
 import react.child
 import react.dom.div
@@ -15,13 +12,10 @@ import react.redux.useDispatch
 import reducer.ShowExtensionsDialog
 import redux.WrapperAction
 
-external interface ExtensionsProps : RProps {
-    var refButton: RMutableRef<HTMLElement?>
-}
+external interface ExtensionsProps : RProps
 
-val extensionsComponent = functionalComponent<ExtensionsProps>("Extensions") { props ->
+val extensionsComponent = functionalComponent<ExtensionsProps>("Extensions") { _ ->
 
-    val windowsUtils = useWindowsUtils()
     val dispatch = useDispatch<ShowExtensionsDialog, WrapperAction>()
 
     div("control") {
@@ -31,9 +25,7 @@ val extensionsComponent = functionalComponent<ExtensionsProps>("Extensions") { p
             }
             Button({
                 id = "explore-dependencies"
-                hotkey = windowsUtils.symb + " + B"
                 onClick = preventDefault { dispatch(ShowExtensionsDialog) }
-                refButton = props.refButton
             }) {
                 +"Add "
                 span(classes = "desktop-only") {
@@ -48,10 +40,8 @@ val extensionsComponent = functionalComponent<ExtensionsProps>("Extensions") { p
 
 @Suppress("FunctionName")
 fun RBuilder.Extensions(
-    ref: RMutableRef<HTMLElement?>
 ): Boolean {
     child(extensionsComponent) {
-        attrs.refButton = ref
     }
     return true
 }

@@ -5,23 +5,18 @@ import builders.downloadZip
 import com.github.gpkg4all.common.OutputTargets
 import com.github.gpkg4all.common.Project
 import components.utils.functionalComponent
-import components.utils.useWindowsUtils
 import kotlinx.coroutines.*
 import modules.sqljs.SqlJsStatic
 import modules.sqljs.initDb
-import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import react.*
 import react.redux.useSelector
 import reducer.AppState
 
-external interface GenerateProps : RProps {
-    var refButton: RMutableRef<HTMLElement?>
-}
+external interface GenerateProps : RProps
 
-val generateComponent = functionalComponent<GenerateProps>("Generate") { props ->
+val generateComponent = functionalComponent<GenerateProps>("Generate") { _ ->
 
-    val windowsUtils = useWindowsUtils()
     var loaded by useState(false)
     var initDb by useState<SqlJsStatic?>(null)
     var generating by useState(false)
@@ -61,11 +56,9 @@ val generateComponent = functionalComponent<GenerateProps>("Generate") { props -
         else -> {
             Button({
                 id = "generate-project"
-                hotkey = windowsUtils.symb + " + I"
                 primary = true
                 disabled = generating
                 onClick = onSubmit
-                refButton = props.refButton
             }) {
                 +"Build GeoPackage"
             }
@@ -82,10 +75,8 @@ fun launchGenerator(initDb: SqlJsStatic?, project: Project): suspend CoroutineSc
 
 @Suppress("FunctionName")
 fun RBuilder.Generate(
-    ref: RMutableRef<HTMLElement?>
 ): Boolean {
     child(generateComponent) {
-        attrs.refButton = ref
     }
     return true
 }
